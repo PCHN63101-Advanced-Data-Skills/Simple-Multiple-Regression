@@ -1,0 +1,12 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: 0.intro
+chapters:
+- file: 1.linear-models-framework
+- file: 2.simple-regression
+- file: 3.multiple-regression
+- file: 4.inference
+- file: 5.regression-R
+- file: summary
