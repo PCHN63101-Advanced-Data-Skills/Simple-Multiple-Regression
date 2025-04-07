@@ -390,14 +390,14 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="the-principles-of-statistical-modelling">
 <h1>The Principles of Statistical Modelling<a class="headerlink" href="#the-principles-of-statistical-modelling" title="Link to this heading">#</a></h1>
-<p>Before we start discussing simple and multiple regression, it is worth taking some time to understand what we are trying to achieve at a much higher level. Both <em>simple</em> and <em>multiple</em> regression are examples of statistical <em>linear models</em>. In effect, every statistical analysis we run is an example of building some form of model. Although your prior experiences may have left the impression that statistics is about <em>hypothesis tests</em>, the reality is that statistics is a science concerned with building <em>models</em> of data. This concept of model building is <em>fundamental</em> to having a much deeper understanding of statistics and is fundamental to your success on the rest of this course. As such, we will spend some time here exploring what we mean by a statistical model. We will then explore simple and multiple regression as our first basic examples of linear models.</p>
+<p>Before we start discussing simple and multiple regression, it is worth taking some time to understand what we are trying to achieve at a much higher level. Both <em>simple</em> and <em>multiple</em> regression are examples of <em>statistical models</em>. Although your prior experiences may have left the impression that statistics is about <em>hypothesis tests</em>, the reality is that statistics is a science concerned with building <em>models</em> of data. This concept of model building is <em>fundamental</em> to a much deeper understanding of statistics and is fundamental to your success on the rest of this course. As such, we will spend some time here exploring what we mean by a statistical model before we go any further.</p>
 <section id="understanding-variance">
 <h2>Understanding Variance<a class="headerlink" href="#understanding-variance" title="Link to this heading">#</a></h2>
-<p>Variance is the basic currency of statistics. It is the fundamental information that data holds, yet students sometimes do not fully appreciate what variance is and why it matters. You will hear about variance throughout this course, so we need to make sure everyone has a solid handle on what exactly it is.</p>
+<p>The starting point for understanding statistical modelling is to understand the purpose of a model in terms of capturing <em>variance</em>. Variance is the basic currency of statistics. It is the fundamental information that data holds, so we need to make sure everyone has a solid handle on what <em>exactly</em> variance is.</p>
 <section id="defining-variance">
 <h3>Defining Variance<a class="headerlink" href="#defining-variance" title="Link to this heading">#</a></h3>
-<p>Informally, the idea of variance is very straight-forward. We want to capture the reason why, for a certain set of data, the measured values are different from each other. In other words, why is data <em>not constant</em>? If data were constant, then every time we take a measurement we would get the same value and would have nothing else to say. The data would be perfectly predictable and there would be no need for statistics. As such, statistics exists <em>because</em> of the presence of variance.</p>
-<p>As an example, consider the plot below of measurements of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset.</p>
+<p>Informally, the idea of variance is very simple. For a given set of data, we want to understand the reason why the measured values are different from each other. In other words, why does the data <em>vary</em>? If data did not vary, it would be constant. Every time we took a measurement we would get the same value and would have nothing else to say. The data would be <em>perfectly predictable</em> and there would be no need for statistics. The fact that data <em>does</em> vary is therefore fundamental for statistics.</p>
+<p>As an example, consider the plot of all the measurements of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset[^foot1].</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="s">&#39;mtcars&#39;</span><span class="p">)</span>
@@ -409,7 +409,12 @@
 <a class="reference internal image-reference" href="_images/71ee3d8e72409965624b67fa606ed97661a052181df80b6a85b0c896ff76445b.png"><img alt="_images/71ee3d8e72409965624b67fa606ed97661a052181df80b6a85b0c896ff76445b.png" src="_images/71ee3d8e72409965624b67fa606ed97661a052181df80b6a85b0c896ff76445b.png" style="width: 600px; height: 360px;" /></a>
 </div>
 </div>
-<p>Clearly, the values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> differ from car-to-car. This is expected, but try to consider all the reasons <em>why</em> these values differ? Some of this variation will be due to limitations in the accuracy of measurement, however, this does not explain <em>all</em> of these variations. The obvious answer is that different cars have different properties, such as their weight or their engine size. By considering these other variables we are effectively considering different <em>sources</em> for these differences. We are doing precisely what a statistical model does: taking all the variance we can see and splitting it into different sources. The larger the chunk of variance associated with a single source, the more <em>importance</em> that source has for explaining these raw differences.</p>
+<p>Clearly, the values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> differ from car-to-car. This is entirely expected, but try to consider all the reasons <em>why</em> this might be the case?</p>
+<div class="attention admonition">
+<p class="admonition-title">Stop and think</p>
+<p>What reasons can you think of for different cars having different MPG values? How many can you think of? What do you think would be the most obvious reason? By doing this, you are starting to build your own theoretical model of the variance in MPG.</p>
+</div>
+<p>Some of this variation will be due to limitations in the accuracy of measurement, however, this does not explain <em>all</em> of these variations. The obvious answer is that different cars have different properties, such as their weight or their engine size. By considering these other variables we are effectively considering different <em>sources</em> for these differences. We are doing precisely what a statistical model does: taking all the variance we can see and splitting it into different sources. The larger the chunk of variance associated with a single source, the more <em>importance</em> that source has for explaining these raw differences.</p>
 </section>
 <section id="measuring-variance">
 <h3>Measuring Variance<a class="headerlink" href="#measuring-variance" title="Link to this heading">#</a></h3>
@@ -447,7 +452,7 @@
 <div class="cell_output docutils container">
 <div class="output text_html">1.4210854715202e-14</div></div>
 </div>
-<p>The problem is that the mean is, by definition, perfectly in the middle of all the data and thus all the positve and negative distances will cancel and we will be left with nothing. As such, we instead <em>square</em> the values[^foot1] before summing them</p>
+<p>The problem is that the mean is, by definition, perfectly in the middle of all the data and thus all the positve and negative distances will cancel and we will be left with nothing. As such, we instead <em>square</em> the values[^foot2] before summing them</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">sum</span><span class="p">((</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
@@ -499,6 +504,7 @@ y_{i} \sim \mathcal{N}\left(\mu,\sigma\right)
 <p class="topic-title">Section Summary</p>
 <p>In this section, we have explored the general framework under which the vast majority of analyses in this course will be based.</p>
 </aside>
+<p>[^foot1] The <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset is included with <code class="docutils literal notranslate"><span class="pre">R</span></code> and contains various measurements from a sample of cars. You can read more about it by typing <code class="docutils literal notranslate"><span class="pre">?mtcars</span></code> at the prompt.</p>
 </section>
 </section>
 
