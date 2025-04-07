@@ -372,6 +372,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-variance">Understanding Variance</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-variance">Defining Variance</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-variance">Measuring Variance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-formal-definition-of-variance">The Formal Definition of Variance</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-probability-models">Normal Probability Models</a></li>
@@ -397,52 +398,42 @@
 <section id="defining-variance">
 <h3>Defining Variance<a class="headerlink" href="#defining-variance" title="Link to this heading">#</a></h3>
 <p>Informally, the idea of variance is very simple. For a given set of data, we want to understand the reason why the measured values are different from each other. In other words, why does the data <em>vary</em>? If data did not vary, it would be constant. Every time we took a measurement we would get the same value and would have nothing else to say. The data would be <em>perfectly predictable</em> and there would be no need for statistics. The fact that data <em>does</em> vary is therefore fundamental for statistics.</p>
-<p>As an example, consider the plot of all the measurements of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset[^foot1].</p>
+<p>As an example, consider the plot of all the measurements of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset<a class="footnote-reference brackets" href="#foot1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="s">&#39;mtcars&#39;</span><span class="p">)</span>
+<span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.5</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.25</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.5</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
 <span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/71ee3d8e72409965624b67fa606ed97661a052181df80b6a85b0c896ff76445b.png"><img alt="_images/71ee3d8e72409965624b67fa606ed97661a052181df80b6a85b0c896ff76445b.png" src="_images/71ee3d8e72409965624b67fa606ed97661a052181df80b6a85b0c896ff76445b.png" style="width: 600px; height: 360px;" /></a>
+<a class="reference internal image-reference" href="_images/d036cf30986cd45900c9c6423871c427758c42a9c01f2113465fc4cc3939a31e.png"><img alt="_images/d036cf30986cd45900c9c6423871c427758c42a9c01f2113465fc4cc3939a31e.png" src="_images/d036cf30986cd45900c9c6423871c427758c42a9c01f2113465fc4cc3939a31e.png" style="width: 720px; height: 480px;" /></a>
 </div>
 </div>
 <p>Clearly, the values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> differ from car-to-car. This is entirely expected, but try to consider all the reasons <em>why</em> this might be the case?</p>
-<div class="attention admonition">
-<p class="admonition-title">Stop and think</p>
-<p>What reasons can you think of for different cars having different MPG values? How many can you think of? What do you think would be the most obvious reason? By doing this, you are starting to build your own theoretical model of the variance in MPG.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">What reasons can you think of for different cars having different miles per-gallon (MPG) measurements?</p>
+<p>The most obvious answer here is that cars have different properties, such as their weight or their engine size. However, there will also be a degree of natural variation due to limitations in the precision of measurement. By considering all the reasons why cars may have different values of MPG, you are starting to building your own theoretical model of the observed variance. All statistical models do is formalise this process.</p>
 </div>
-<p>Some of this variation will be due to limitations in the accuracy of measurement, however, this does not explain <em>all</em> of these variations. The obvious answer is that different cars have different properties, such as their weight or their engine size. By considering these other variables we are effectively considering different <em>sources</em> for these differences. We are doing precisely what a statistical model does: taking all the variance we can see and splitting it into different sources. The larger the chunk of variance associated with a single source, the more <em>importance</em> that source has for explaining these raw differences.</p>
 </section>
 <section id="measuring-variance">
 <h3>Measuring Variance<a class="headerlink" href="#measuring-variance" title="Link to this heading">#</a></h3>
-<p>In order to start breaking variance apart, we need some way of <em>quantifying</em> it. As mentioned above, our question is really about how far these data are from being <em>constant</em>, given that this implies <em>no</em> variance. As such, our measurement needs to be in relation to some constant value. But what value to select? We could pick something arbitrary, like 0 or 100, however (for reasons we will justify further below), the better choice is to use <em>the mean</em>.</p>
-<p>To see this visually, the mean value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> is indicated below as a horizontal line</p>
+<p>In order to start understanding the variance we observe in a particular dataset, we need some way of <em>quantifying</em> it. As mentioned above, our question is really about how far any set of data are from being <em>constant</em>, given that this implies the state of <em>no</em> variance. As such, our measurement of variance needs to be in relation to some constant value. But what value to select? We could pick something arbitrary, like 0 or 100, however (for reasons we will justify further below), the better choice is to use <em>the mean</em>.</p>
+<p>To see this visually, the mean value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> is indicated within the plot below as a horizontal line.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.5</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.25</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.5</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
 <span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/eba9c2595f2feeb47465b82f13330c10535def8eb879d25010e2fb4ee700e75c.png"><img alt="_images/eba9c2595f2feeb47465b82f13330c10535def8eb879d25010e2fb4ee700e75c.png" src="_images/eba9c2595f2feeb47465b82f13330c10535def8eb879d25010e2fb4ee700e75c.png" style="width: 600px; height: 360px;" /></a>
+<a class="reference internal image-reference" href="_images/ed1db51bb45ad15514f23369f49782bbcbe255af78a0c7de85549a2d639e61ce.png"><img alt="_images/ed1db51bb45ad15514f23369f49782bbcbe255af78a0c7de85549a2d639e61ce.png" src="_images/ed1db51bb45ad15514f23369f49782bbcbe255af78a0c7de85549a2d639e61ce.png" style="width: 720px; height: 480px;" /></a>
 </div>
 </div>
-<p>This provides our <em>yardstick</em> to measure variation from. The overall distance of the data from the mean tells us how much variation there is to explain in this dataset. For instance, the distances for the first and seventh cars are</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
-<span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">[</span><span class="m">7</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html">0.909375000000001</div><div class="output text_html">-5.790625</div></div>
-</div>
-<p>In order to get an <em>overall</em> sense of the variation across all the cars, we might first think to <em>sum</em> these distances. However, if we do that then we get a result that is essentially 0</p>
+<p>The mean is therefore our <em>yardstick</em> to measure variation against. The vertical distances from the mean to each data point tells us how much variation there is to explain. In order to get an <em>overall</em> sense of the variation across all the cars, we might first think to <em>sum</em> these distances. However, if we do that then we get a result that is essentially 0</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">sum</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span>
@@ -452,7 +443,7 @@
 <div class="cell_output docutils container">
 <div class="output text_html">1.4210854715202e-14</div></div>
 </div>
-<p>The problem is that the mean is, by definition, perfectly in the middle of all the data and thus all the positve and negative distances will cancel and we will be left with nothing. As such, we instead <em>square</em> the values[^foot2] before summing them</p>
+<p>The problem is that the mean is, by definition, <em>perfectly</em> in the middle of all the data and thus all the positve and negative distances will cancel and we will be left with nothing. As such, we instead <em>square</em> the values<a class="footnote-reference brackets" href="#foot2" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> before summing them</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">sum</span><span class="p">((</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
@@ -472,6 +463,9 @@
 <div class="cell_output docutils container">
 <div class="output text_html">35.188974609375</div><div class="output text_html">36.3241028225806</div></div>
 </div>
+</section>
+<section id="the-formal-definition-of-variance">
+<h3>The Formal Definition of Variance<a class="headerlink" href="#the-formal-definition-of-variance" title="Link to this heading">#</a></h3>
 <p>Formally, the variance of the <em>random variable</em> <span class="math notranslate nohighlight">\(x\)</span> is defined as</p>
 <div class="math notranslate nohighlight">
 \[
@@ -504,7 +498,17 @@ y_{i} \sim \mathcal{N}\left(\mu,\sigma\right)
 <p class="topic-title">Section Summary</p>
 <p>In this section, we have explored the general framework under which the vast majority of analyses in this course will be based.</p>
 </aside>
-<p>[^foot1] The <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset is included with <code class="docutils literal notranslate"><span class="pre">R</span></code> and contains various measurements from a sample of cars. You can read more about it by typing <code class="docutils literal notranslate"><span class="pre">?mtcars</span></code> at the prompt.</p>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="foot1" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset is included with <code class="docutils literal notranslate"><span class="pre">R</span></code> and contains various measurements from a sample of cars. You can read more about it by typing <code class="docutils literal notranslate"><span class="pre">?mtcars</span></code> at the prompt.</p>
+</aside>
+<aside class="footnote brackets" id="foot2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>You might think that taking the <em>absolute value</em> of the data before summing would make more sense. This is a metric known as the <em>… absolute deviation</em> and is not a terrible idea. However, using the square has the useful property of <em>emphasising</em> larger distances in the sum, From a mathematical perspective, they are also easier to work with and manipulate.</p>
+</aside>
+</aside>
 </section>
 </section>
 
@@ -576,6 +580,7 @@ y_{i} \sim \mathcal{N}\left(\mu,\sigma\right)
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-variance">Understanding Variance</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-variance">Defining Variance</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-variance">Measuring Variance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-formal-definition-of-variance">The Formal Definition of Variance</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-probability-models">Normal Probability Models</a></li>
