@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>The Linear Models Framework &#8212; Linear Models I: Simple and Multiple Regression</title>
+    <title>The Principles of Statistical Modelling &#8212; Linear Models I: Simple and Multiple Regression</title>
   
   
   
@@ -60,6 +60,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '1.linear-models-framework';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -169,7 +171,7 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Linear Models Framework</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Principles of Statistical Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.simple-regression.html">Simple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.inference.html">Inference for Regression Models</a></li>
@@ -357,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The Linear Models Framework</h1>
+    <h1>The Principles of Statistical Modelling</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -367,7 +369,14 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#essential-notation">Essential Notation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-variance">Understanding Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-variance">Defining Variance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-variance">Measuring Variance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-probability-models">Normal Probability Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-models">Statistical Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-models">Linear Models</a></li>
 </ul>
             </nav>
         </div>
@@ -379,10 +388,117 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-linear-models-framework">
-<h1>The Linear Models Framework<a class="headerlink" href="#the-linear-models-framework" title="Link to this heading">#</a></h1>
-<section id="essential-notation">
-<h2>Essential Notation<a class="headerlink" href="#essential-notation" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="the-principles-of-statistical-modelling">
+<h1>The Principles of Statistical Modelling<a class="headerlink" href="#the-principles-of-statistical-modelling" title="Link to this heading">#</a></h1>
+<p>Before we start discussing simple and multiple regression, it is worth taking some time to understand what we are trying to achieve at a much higher level. Both <em>simple</em> and <em>multiple</em> regression are examples of statistical <em>linear models</em>. In effect, every statistical analysis we run is an example of building some form of model. Although your prior experiences may have left the impression that statistics is about <em>hypothesis tests</em>, the reality is that statistics is a science concerned with building <em>models</em> of data. This concept of model building is <em>fundamental</em> to having a much deeper understanding of statistics and is fundamental to your success on the rest of this course. As such, we will spend some time here exploring what we mean by a statistical model. We will then explore simple and multiple regression as our first basic examples of linear models.</p>
+<section id="understanding-variance">
+<h2>Understanding Variance<a class="headerlink" href="#understanding-variance" title="Link to this heading">#</a></h2>
+<p>Variance is the basic currency of statistics. It is the fundamental information that data holds, yet students sometimes do not fully appreciate what variance is and why it matters. You will hear about variance throughout this course, so we need to make sure everyone has a solid handle on what exactly it is.</p>
+<section id="defining-variance">
+<h3>Defining Variance<a class="headerlink" href="#defining-variance" title="Link to this heading">#</a></h3>
+<p>Informally, the idea of variance is very straight-forward. We want to capture the reason why, for a certain set of data, the measured values are different from each other. In other words, why is data <em>not constant</em>? If data were constant, then every time we take a measurement we would get the same value and would have nothing else to say. The data would be perfectly predictable and there would be no need for statistics. As such, statistics exists <em>because</em> of the presence of variance.</p>
+<p>As an example, consider the plot below of measurements of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="s">&#39;mtcars&#39;</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/71ee3d8e72409965624b67fa606ed97661a052181df80b6a85b0c896ff76445b.png"><img alt="_images/71ee3d8e72409965624b67fa606ed97661a052181df80b6a85b0c896ff76445b.png" src="_images/71ee3d8e72409965624b67fa606ed97661a052181df80b6a85b0c896ff76445b.png" style="width: 600px; height: 360px;" /></a>
+</div>
+</div>
+<p>Clearly, the values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> differ from car-to-car. This is expected, but try to consider all the reasons <em>why</em> these values differ? Some of this variation will be due to limitations in the accuracy of measurement, however, this does not explain <em>all</em> of these variations. The obvious answer is that different cars have different properties, such as their weight or their engine size. By considering these other variables we are effectively considering different <em>sources</em> for these differences. We are doing precisely what a statistical model does: taking all the variance we can see and splitting it into different sources. The larger the chunk of variance associated with a single source, the more <em>importance</em> that source has for explaining these raw differences.</p>
+</section>
+<section id="measuring-variance">
+<h3>Measuring Variance<a class="headerlink" href="#measuring-variance" title="Link to this heading">#</a></h3>
+<p>In order to start breaking variance apart, we need some way of <em>quantifying</em> it. As mentioned above, our question is really about how far these data are from being <em>constant</em>, given that this implies <em>no</em> variance. As such, our measurement needs to be in relation to some constant value. But what value to select? We could pick something arbitrary, like 0 or 100, however (for reasons we will justify further below), the better choice is to use <em>the mean</em>.</p>
+<p>To see this visually, the mean value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> is indicated below as a horizontal line</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/eba9c2595f2feeb47465b82f13330c10535def8eb879d25010e2fb4ee700e75c.png"><img alt="_images/eba9c2595f2feeb47465b82f13330c10535def8eb879d25010e2fb4ee700e75c.png" src="_images/eba9c2595f2feeb47465b82f13330c10535def8eb879d25010e2fb4ee700e75c.png" style="width: 600px; height: 360px;" /></a>
+</div>
+</div>
+<p>This provides our <em>yardstick</em> to measure variation from. The overall distance of the data from the mean tells us how much variation there is to explain in this dataset. For instance, the distances for the first and seventh cars are</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
+<span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">[</span><span class="m">7</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">0.909375000000001</div><div class="output text_html">-5.790625</div></div>
+</div>
+<p>In order to get an <em>overall</em> sense of the variation across all the cars, we might first think to <em>sum</em> these distances. However, if we do that then we get a result that is essentially 0</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">sum</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">1.4210854715202e-14</div></div>
+</div>
+<p>The problem is that the mean is, by definition, perfectly in the middle of all the data and thus all the positve and negative distances will cancel and we will be left with nothing. As such, we instead <em>square</em> the values[^foot1] before summing them</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">sum</span><span class="p">((</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">1126.0471875</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">mean</span><span class="p">((</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">var</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">use</span><span class="o">=</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">35.188974609375</div><div class="output text_html">36.3241028225806</div></div>
+</div>
+<p>Formally, the variance of the <em>random variable</em> <span class="math notranslate nohighlight">\(x\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Var}\left(x\right) = E\left[\left(x - E\left[x\right]\right)^{2}\right]
+\]</div>
+</section>
+</section>
+<section id="normal-probability-models">
+<h2>Normal Probability Models<a class="headerlink" href="#normal-probability-models" title="Link to this heading">#</a></h2>
+<p>We can think of the <em>mean</em> as a very basic model of the data. It is a model that predicts a constant value for <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from every car. The degree to which this is not true indicates the degree to which the data is <em>not</em> constant and thus quantifies the raw amount of variance in the data.</p>
+</section>
+<section id="statistical-models">
+<h2>Statistical Models<a class="headerlink" href="#statistical-models" title="Link to this heading">#</a></h2>
+<p>The fundamental elements of parametric statistical model are therefore:</p>
+<ul class="simple">
+<li><p>An assumed probability distribution for the data</p></li>
+<li><p>A mean function containing parameters that (potentially) connect the expected value of the distribution to other variables</p></li>
+<li><p>A variance function that captures the deviations from the expected value (the errors)</p></li>
+</ul>
+<p>Our basic example of using the mean as a model would result in</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} \sim \mathcal{N}\left(\mu,\sigma\right)
+\]</div>
+</section>
+<section id="linear-models">
+<h2>Linear Models<a class="headerlink" href="#linear-models" title="Link to this heading">#</a></h2>
+<p>The vast majority of methods we will be considering on this course can be subsumed under the topic of Statistical Linear Models.</p>
+<aside class="topic">
+<p class="topic-title">Section Summary</p>
+<p>In this section, we have explored the general framework under which the vast majority of analyses in this course will be based.</p>
+</aside>
 </section>
 </section>
 
@@ -451,7 +567,14 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#essential-notation">Essential Notation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-variance">Understanding Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-variance">Defining Variance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-variance">Measuring Variance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-probability-models">Normal Probability Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-models">Statistical Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-models">Linear Models</a></li>
 </ul>
   </nav></div>
 
