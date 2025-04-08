@@ -4,7 +4,7 @@
 format: jb-book
 root: 0.intro
 chapters:
-- file: 1.linear-models-framework
+- file: 1.principles-stat-modelling
 - file: 2.simple-regression
 - file: 3.multiple-regression
 - file: 4.inference
