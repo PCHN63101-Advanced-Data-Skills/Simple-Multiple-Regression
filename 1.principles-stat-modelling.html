@@ -369,7 +369,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-variance">Understanding Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-variance">Defining Variance</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-variance">Measuring Variance</a></li>
 </ul>
@@ -400,18 +400,19 @@
   <section class="tex2jax_ignore mathjax_ignore" id="the-principles-of-statistical-modelling">
 <h1>The Principles of Statistical Modelling<a class="headerlink" href="#the-principles-of-statistical-modelling" title="Link to this heading">#</a></h1>
 <p>Before we start discussing simple and multiple regression, it is worth taking some time to understand what we are trying to achieve at a much higher level. Both <em>simple</em> and <em>multiple</em> regression are examples of <em>statistical models</em>. Although your prior experiences may have left the impression that statistics is about <em>hypothesis tests</em>, the reality is that statistics is a science concerned with building <em>models</em> of data. This concept of model building is <em>fundamental</em> to a much deeper understanding of statistics and is fundamental to your success on the rest of this course. As such, we will spend some time here exploring what we mean by a statistical model before we go any further.</p>
-<section id="understanding-variance">
-<h2>Understanding Variance<a class="headerlink" href="#understanding-variance" title="Link to this heading">#</a></h2>
-<p>The starting point for understanding statistical modelling is understanding that the purpose of a model is to capture <em>variance</em>. Variance is the basic currency of statistics. It is the fundamental information that data holds. As such, you need to make sure that you have a solid grasp on what <em>exactly</em> variance is.</p>
+<section id="variance">
+<h2>Variance<a class="headerlink" href="#variance" title="Link to this heading">#</a></h2>
+<p>The starting point for understanding statistical modelling is understanding the concept of <em>variance</em>. Variance is the basic currency of statistics. It is the fundamental information that data holds and is the feature of data that all statistical models aim to capture. Variance is therefore a very important concept and so we need to be clear on what <em>exactly</em> variance is.</p>
 <section id="defining-variance">
 <h3>Defining Variance<a class="headerlink" href="#defining-variance" title="Link to this heading">#</a></h3>
 <p>Informally, the idea of variance is very simple. For a given set of data, we want to understand the reason why the measured values are different from each other. In other words, why does the data <em>vary</em>? If data did not vary, it would be constant. Every time we took a measurement we would get the same value. In this scenario, the data would be <em>perfectly predictable</em> and there would be no need for statistics. The fact that data <em>does</em> vary is therefore fundamental in order for statistics to operate.</p>
-<p>As an example, consider the plot of all the measurements of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset<a class="footnote-reference brackets" href="#foot1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>As an example, consider the plot of all the measurements of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset<a class="footnote-reference brackets" href="#foot1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> shown below. Clearly, the values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> differ from car-to-car. This is expected, but take a moment to consider all the reasons <em>why</em> this is the case?</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="s">&#39;mtcars&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
 <span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -419,7 +420,6 @@
 <a class="reference internal image-reference" href="_images/41a245e03fb44081e0ad4bceb56249c559832d2ddcd17d708501a48966e81af6.png"><img alt="_images/41a245e03fb44081e0ad4bceb56249c559832d2ddcd17d708501a48966e81af6.png" src="_images/41a245e03fb44081e0ad4bceb56249c559832d2ddcd17d708501a48966e81af6.png" style="width: 720px; height: 480px;" /></a>
 </div>
 </div>
-<p>Clearly, the values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> differ from car-to-car. This is expected, but take a moment to consider all the reasons <em>why</em> this is the case?</p>
 <div class="tip dropdown admonition">
 <p class="admonition-title">Why do different cars have different MPG values?</p>
 <p>The most obvious answer here is that cars have different properties, such as their weight or their engine size. However, there will also be a degree of natural variation due to limitations in the precision of measurement. Importantly, some of these sources we can measures, whereas others we cannot. This is an important distinction within statistics and is sometimes known as <em>reducible</em> versus <em>irriducible</em> error.</p>
@@ -429,12 +429,13 @@
 <section id="measuring-variance">
 <h3>Measuring Variance<a class="headerlink" href="#measuring-variance" title="Link to this heading">#</a></h3>
 <p>In order to start understanding the variance we can observe, we need some way of <em>quantifying</em> it. As mentioned above, our question is really about how far any set of data are from being <em>constant</em>. If we consider this to be the definition of <em>no variance</em>, then our measure must capture how far away our data are from a constant state. But what constant value should we pick for the comparisons? We could select something arbitrary (e.g. 0, 100, 1000), however (for reasons we will justify further below) the better choice is to use <em>the mean</em>.</p>
-<p>To see this visually, the mean value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> is indicated as a horizontal line in the plot below.</p>
+<p>To see this visually, the mean value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> is indicated as a horizontal line in the plot below. This provides our <em>yardstick</em> to measure variation against.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
-<span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
+<span class="n">mu</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="n">mu</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -442,7 +443,22 @@
 <a class="reference internal image-reference" href="_images/bddbeb06eb2b7620cc89f8c57f9ca7258e6eee286b72c5ab47a3042cce235884.png"><img alt="_images/bddbeb06eb2b7620cc89f8c57f9ca7258e6eee286b72c5ab47a3042cce235884.png" src="_images/bddbeb06eb2b7620cc89f8c57f9ca7258e6eee286b72c5ab47a3042cce235884.png" style="width: 720px; height: 480px;" /></a>
 </div>
 </div>
-<p>The mean is therefore our <em>yardstick</em> to measure variation against. The vertical distances from the mean to each data point tells us how much variation there is to explain. For instance, the vertical distances for <code class="docutils literal notranslate"><span class="pre">mpg[1]</span></code> and <code class="docutils literal notranslate"><span class="pre">mpg[7]</span></code> are</p>
+<p>The vertical distances from the mean to each data point therefore tells us how much variation there is to explain. For instance, the vertical distances for <code class="docutils literal notranslate"><span class="pre">mpg[1]</span></code> and <code class="docutils literal notranslate"><span class="pre">mpg[7]</span></code> are</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="n">mu</span><span class="p">)</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="p">)){</span>
+<span class="w">    </span><span class="nf">lines</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/13200f78470519ad62704d914d846539f1b400329f52ff626a7ed0615f3d3e12.png"><img alt="_images/13200f78470519ad62704d914d846539f1b400329f52ff626a7ed0615f3d3e12.png" src="_images/13200f78470519ad62704d914d846539f1b400329f52ff626a7ed0615f3d3e12.png" style="width: 720px; height: 480px;" /></a>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
@@ -525,7 +541,7 @@ y \sim \mathcal{N}\left(2,1\right)
 .list-inline>li {display: inline-block}
 .list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
 </style>
-<ol class=list-inline><li>2.09786391597464</li><li>2.67850426981618</li><li>3.04348124353757</li><li>1.91977252645694</li><li>2.27495960613518</li><li>2.10528059797578</li><li>2.33350176010759</li><li>2.66397903527091</li><li>2.54152114738538</li><li>0.216899618108839</li></ol>
+<ol class=list-inline><li>2.88790467268662</li><li>1.95512793710501</li><li>2.12190242548994</li><li>2.95967115351249</li><li>1.85896773664994</li><li>0.264877560001202</li><li>1.13034307696545</li><li>4.00470033762419</li><li>1.87190778101383</li><li>3.12903588610307</li></ol>
 </div></div>
 </div>
 <p>Every variable that we measure can therefore be conceptualised as a <em>random variable</em>, drawn from some distribution. This distribution represents the entire <em>population</em> of possible values we could measure, with some fixed values for its parameters. Our aim, very generally, is to figure out what those parameter values are, given the data we have available.</p>
@@ -555,6 +571,64 @@ E\left(y\right) = \mu
                              &amp;= \sigma^{2}
 \end{align*}
 \end{split}\]</div>
+<div class="cell tag_hide-cell tag_remove-output docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load required packages</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">rgl</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">htmlwidgets</span><span class="p">)</span>
+
+<span class="c1"># Data</span>
+<span class="nf">data</span><span class="p">(</span><span class="s">&#39;mtcars&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
+<span class="n">mu</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
+<span class="n">sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sd</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)</span>
+
+<span class="c1"># Open 3D window</span>
+<span class="nf">open3d</span><span class="p">()</span>
+
+<span class="c1"># Set the desired ranges</span>
+<span class="n">xlim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+<span class="n">ylim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">50</span><span class="p">)</span>
+<span class="n">zlim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">)</span>
+
+<span class="c1"># Plot invisible points to define the bounds</span>
+<span class="nf">plot3d</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span><span class="w"> </span><span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">,</span>
+<span class="w">       </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">axes</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">zlab</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot the 3D scatter plot</span>
+<span class="nf">points3d</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="m">5</span><span class="p">)</span>
+
+<span class="c1"># Overlay the 1D normal distribution curves</span>
+<span class="n">n.norms</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="m">5</span><span class="p">)</span>
+
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">n.norms</span><span class="p">))){</span>
+<span class="w">  </span><span class="n">y_curve</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">ylim</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="m">200</span><span class="p">)</span>
+<span class="w">  </span><span class="n">x_curve</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="n">n.norms</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">y_curve</span><span class="p">))</span>
+<span class="w">  </span><span class="n">z_curve</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">dnorm</span><span class="p">(</span><span class="n">y_curve</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="c1"># Scale height</span>
+<span class="w">  </span><span class="nf">lines3d</span><span class="p">(</span><span class="n">x_curve</span><span class="p">,</span><span class="w"> </span><span class="n">y_curve</span><span class="p">,</span><span class="w"> </span><span class="n">z_curve</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># Add axes and grid for context</span>
+<span class="nf">axes3d</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;x--&quot;</span><span class="p">,</span><span class="s">&quot;y--&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">)</span>
+<span class="nf">grid3d</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;z&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;gray&quot;</span><span class="p">)</span>
+
+<span class="c1"># Add axis labels</span>
+<span class="nf">mtext3d</span><span class="p">(</span><span class="s">&quot;Car&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;x--&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span>
+<span class="nf">mtext3d</span><span class="p">(</span><span class="s">&quot;MPG&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;y--&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="important admonition">
+<p class="admonition-title">Range of visualised distributions</p>
+<p>Be aware that the normal distributions in the plot above have only be drawn for a <em>selection</em> of the values along the <span class="math notranslate nohighlight">\(x\)</span>-axis. However, the model we are using assumes a normal distribution for <em>every</em> <span class="math notranslate nohighlight">\(x\)</span>-value. In this context, this would mean for <em>every</em> car. The plot would be too crowded and difficult to interpret if we visualised this fully, but make sure you understand the real model we are using.</p>
+</div>
 </section>
 <section id="the-formal-definition-of-variance">
 <h3>The Formal Definition of Variance<a class="headerlink" href="#the-formal-definition-of-variance" title="Link to this heading">#</a></h3>
@@ -676,7 +750,7 @@ y_{i} \sim \mathcal{N}\left(\mu,\sigma\right)
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-variance">Understanding Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-variance">Defining Variance</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-variance">Measuring Variance</a></li>
 </ul>
