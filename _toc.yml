@@ -4,9 +4,10 @@
 format: jb-book
 root: 0.intro
 chapters:
-- file: 1.principles-stat-modelling
-- file: 2.simple-regression
-- file: 3.multiple-regression
-- file: 4.inference
-- file: 5.regression-R
+- file: 1.understanding-variance
+- file: 2.stat-modelling
+- file: 3.simple-regression
+- file: 4.multiple-regression
+- file: 5.inference
+- file: 6.regression-R
 - file: summary
