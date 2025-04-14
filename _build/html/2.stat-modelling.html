@@ -415,6 +415,10 @@
 y \sim \mathcal{B}\left(n,p\right).
 \]</div>
 <p>The shape of the distribition is controlled by two <em>parameters</em>, <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(p\)</span>. In this example, <span class="math notranslate nohighlight">\(n\)</span> is the number of coin flips and <span class="math notranslate nohighlight">\(p\)</span> is the probability of <em>heads</em> on a single flip. So, here <span class="math notranslate nohighlight">\(n = 20\)</span> and (assuming the coin is fair) <span class="math notranslate nohighlight">\(p = 0.5\)</span>. Knowing these parameter values allows us to know everything we need to about the behaviour of <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<div class="tip admonition">
+<p class="admonition-title">What is a Parameter?</p>
+<p>A <em>parameter</em>, very generally, is simply a number, but one which has particular <em>importance</em> for understanding some system. In the context of probability distributions, the parameters are numbers that control the <em>shape</em> of the distribution. We typically conceptualise a probability distribution as representing some <em>population</em> where the parameters are constants that describe the behaviour of that population. As such, these are numbers that carry great importance for understanding the variable we are trying to capture. Make sure you have a clear handle on this, because the parameters are the <em>key focus</em> of statistical models.</p>
+</div>
 <p>We can use <code class="docutils literal notranslate"><span class="pre">R</span></code> to simulate realisations of this random variable</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
