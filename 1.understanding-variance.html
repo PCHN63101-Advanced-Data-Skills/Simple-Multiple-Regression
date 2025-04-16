@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Variance &#8212; Linear Models I: Simple and Multiple Regression</title>
+    <title>Understanding Variance &#8212; Linear Models I: Simple and Multiple Regression</title>
   
   
   
@@ -65,7 +65,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '1.understanding-variance';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Probability Models" href="2.stat-modelling.html" />
+    <link rel="next" title="Probability Models" href="2.prob-models.html" />
     <link rel="prev" title="Introduction" href="0.intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -171,12 +171,13 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Variance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2.stat-modelling.html">Probability Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.simple-regression.html">Simple Linear Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.multiple-regression.html">Multiple Linear Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.inference.html">Inference for Regression Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6.regression-R.html">Building Regression Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Understanding Variance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.prob-models.html">Probability Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.stat-models.html">Parametric Statistical Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.simple-regression.html">Simple Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.inference.html">Inference for Regression Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7.regression-R.html">Building Regression Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary and Quiz</a></li>
 </ul>
 
@@ -360,7 +361,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Variance</h1>
+    <h1>Understanding Variance</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -370,7 +371,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-variance">Understanding Variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-variance">Defining Variance</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-variance">Measuring Variance</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-variance">Interpreting Variance</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standardising-distances">Standardising Distances</a></li>
@@ -387,11 +388,11 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="variance">
-<h1>Variance<a class="headerlink" href="#variance" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="understanding-variance">
+<h1>Understanding Variance<a class="headerlink" href="#understanding-variance" title="Link to this heading">#</a></h1>
 <p>Before we start discussing simple and multiple regression, it is worth taking some time to understand what we are trying to achieve at a much higher level. Both <em>simple</em> and <em>multiple</em> regression are examples of <em>statistical models</em>. Although your prior experiences may have left the impression that statistics is about <em>hypothesis tests</em>, the reality is that statistics is a science concerned with building <em>models</em> of data. This concept of model building is <em>fundamental</em> to a much deeper understanding of statistics and is fundamental to your success on the rest of this course. As such, we will spend some time at the beginning of this lesson exploring what we mean by a statistical model before we go any further.</p>
-<section id="understanding-variance">
-<h2>Understanding Variance<a class="headerlink" href="#understanding-variance" title="Link to this heading">#</a></h2>
+<section id="defining-variance">
+<h2>Defining Variance<a class="headerlink" href="#defining-variance" title="Link to this heading">#</a></h2>
 <p>The starting point for understanding statistical modelling is understanding the concept of <em>variance</em>. Variance is the basic currency of statistics. It is the fundamental information that data holds and is the feature of data that all statistical models aim to capture. Variance is therefore a very important concept and so we need to be clear on what <em>exactly</em> variance is.</p>
 <p>Informally, the idea of variance is very simple. For a given set of data, we want to understand the reason why the measured values are different from each other. In other words, why does the data <em>vary</em>? If data did not vary, it would be constant. Every time we took a measurement we would get the same value. In this scenario, the data would be <em>perfectly predictable</em> and there would be no need for statistics.</p>
 <p>As an example, consider the plot of all the measurements of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset<a class="footnote-reference brackets" href="#foot1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> shown below. Clearly, the values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> differ from car-to-car. This is expected, but take a moment to consider <em>why</em> this is the case?</p>
@@ -579,7 +580,7 @@
       </div>
     </a>
     <a class="right-next"
-       href="2.stat-modelling.html"
+       href="2.prob-models.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
@@ -604,7 +605,7 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-variance">Understanding Variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-variance">Defining Variance</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-variance">Measuring Variance</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-variance">Interpreting Variance</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standardising-distances">Standardising Distances</a></li>
