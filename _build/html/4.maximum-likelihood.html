@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Simple and Multiple Linear Regression &#8212; The Principles of Statistical Modelling</title>
+    <title>Maximum Likelihood Estimation &#8212; The Principles of Statistical Modelling</title>
   
   
   
@@ -60,9 +60,13 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'README';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '4.maximum-likelihood';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Simple Linear Regression" href="4.simple-regression.html" />
+    <link rel="prev" title="Parametric Statistical Models" href="3.stat-models.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -113,8 +117,6 @@
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
@@ -168,11 +170,11 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.understanding-variance.html">Understanding Variance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.prob-models.html">Probability Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.stat-models.html">Parametric Statistical Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.maximum-likelihood.html">Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Maximum Likelihood Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.simple-regression.html">Simple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6.inference.html">Classical Inference</a></li>
@@ -254,7 +256,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2FREADME.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2F4.maximum-likelihood.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -284,7 +286,7 @@
       
       
       
-      <li><a href="_sources/README.md" target="_blank"
+      <li><a href="_sources/4.maximum-likelihood.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -294,7 +296,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -358,7 +360,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Simple and Multiple Linear Regression</h1>
+    <h1>Maximum Likelihood Estimation</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -372,9 +374,31 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="simple-and-multiple-linear-regression">
-<h1>Simple and Multiple Linear Regression<a class="headerlink" href="#simple-and-multiple-linear-regression" title="Link to this heading">#</a></h1>
-<p>Lesson on both simple and multiple regression, within the context of the linear models framework.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood-estimation">
+<h1>Maximum Likelihood Estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
+
+<span class="n">y</span><span class="w">          </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">50</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="n">mu.ests</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">40</span><span class="p">,</span><span class="m">60</span><span class="p">,</span><span class="n">length.out</span><span class="o">=</span><span class="m">1000</span><span class="p">)</span><span class="w"> </span><span class="c1"># 1000 possibilities for mu</span>
+<span class="n">likelihood</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">mu.ests</span><span class="p">))</span>
+
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">mu.ests</span><span class="p">)){</span>
+<span class="w">    </span><span class="n">likelihood</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">prod</span><span class="p">(</span><span class="nf">dnorm</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu.ests</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="m">1</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">mu.ests</span><span class="p">,</span><span class="n">likelihood</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;l&quot;</span><span class="p">)</span>
+
+<span class="n">max.idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">which.max</span><span class="p">(</span><span class="n">likelihood</span><span class="p">)</span>
+<span class="n">mu.ests</span><span class="p">[</span><span class="n">max.idx</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">49.9299299299299</div><a class="reference internal image-reference" href="_images/f22a192644361b90c6604e54c8d29ab642ecf83354b5344c9d8ad3c7c7856772.png"><img alt="_images/f22a192644361b90c6604e54c8d29ab642ecf83354b5344c9d8ad3c7c7856772.png" src="_images/f22a192644361b90c6604e54c8d29ab642ecf83354b5344c9d8ad3c7c7856772.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -386,16 +410,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "r"
         },
         kernelOptions: {
-            name: "python3",
+            name: "ir",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'ir'</script>
 
                 </article>
               
@@ -407,6 +431,24 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="3.stat-models.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Parametric Statistical Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="4.simple-regression.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Simple Linear Regression</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               

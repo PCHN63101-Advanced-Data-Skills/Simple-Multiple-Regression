@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: "Linear Models I: Simple and Multiple Regression"
+title: "The Principles of Statistical Modelling"
 author: Dr George Farmer & Dr Martyn McFarquhar
 copyright: "2026"
 logo: logo.png
