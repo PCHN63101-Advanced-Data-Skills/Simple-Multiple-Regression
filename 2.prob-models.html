@@ -377,11 +377,14 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#properties-of-probability-distributions">Properties of Probability Distributions</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-expected-value">The Expected Value</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance">The Variance</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulating-random-variables">Manipulating Random Variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-expected-value">The Expected Value</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-the-expected-value-important">Why is the Expected Value Important?</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance">The Variance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulating-random-variables">Manipulating Random Variables</a></li>
 </ul>
             </nav>
         </div>
@@ -549,6 +552,12 @@ y \sim \mathcal{B}\left(n,p\right)
 E\left(y\right) = np.
 \]</div>
 <p>How this result is reached is not especially important for us, but just note that it works by looking at the Binomial distribution we visualised earlier.</p>
+<div class="tip admonition">
+<p class="admonition-title">Equations for the Expected Value</p>
+<p>If you are ever curious, the <a class="reference external" href="https://en.wikipedia.org/wiki/Probability_distribution">Wikipedia pages</a> for all the most common probability distributions contain tables giving the formulas for their various properties, including the mean. For some distributions, the mean is the same as one of the parameters (e.g. the normal distribution, the Poisson distribution), whereas for others the mean is some function of the parameters (e.g. the binomial distribution, the uniform distribution).</p>
+</div>
+<section id="why-is-the-expected-value-important">
+<h4>Why is the Expected Value Important?<a class="headerlink" href="#why-is-the-expected-value-important" title="Link to this heading">#</a></h4>
 <p>The importance of the expected value is that it is not subject to random variation. It is the element of the distribution that does not change across measurements and thus represents some <em>universal truth</em> of the variable in question. In essence, the expected value is the <em>predictable</em> part of the variable. Because of this, we can conceptualise any value we measure as the expected value plus some random variation.</p>
 <div class="math notranslate nohighlight">
 \[
@@ -614,12 +623,18 @@ y_{i} &amp;= \mu + \epsilon_{i} \\
 \end{split}\]</div>
 <p>From this perspective, variation in <span class="math notranslate nohighlight">\(y\)</span> can be broken into two sources. The first is the expected value, which influences the <em>scaling</em> of <span class="math notranslate nohighlight">\(y\)</span> and is <em>constant</em> across all the values. The second is the <em>error</em>, which influences the degree to which the data deviates from the expected value. Because the expected value is constant, the randomness in the data comes from the <em>errors</em>. Thus, it is the <em>errors</em> that have a probability distribution. The expected values influence how <em>predictable</em> the data are and the errors influence how <em>unpredictable</em> the data are. In terms of statistical modelling, it is the <em>predictable</em> element we wish to capture as a universal truth of the variable in question.</p>
 </section>
+</section>
 <section id="the-variance">
 <h3>The Variance<a class="headerlink" href="#the-variance" title="Link to this heading">#</a></h3>
 <p>… All distributions have some metric of their variance, even if there is not a parameter that directly controls it (such as the normal distribution). For instance, the binomial distribution has a variance equal to <span class="math notranslate nohighlight">\(np(1-p)\)</span>. … Formally, this is known as the <em>second moment</em> of a distribution.</p>
+<div class="tip admonition">
+<p class="admonition-title">Moments of Distributions</p>
+<p>The <em>expected value</em> and the <em>variance</em> are both examples of the <em>moments</em> of a probability distribution…</p>
+</div>
+</section>
 </section>
 <section id="manipulating-random-variables">
-<h3>Manipulating Random Variables<a class="headerlink" href="#manipulating-random-variables" title="Link to this heading">#</a></h3>
+<h2>Manipulating Random Variables<a class="headerlink" href="#manipulating-random-variables" title="Link to this heading">#</a></h2>
 <p>… It is important to recognise that when a random variable is manipulated in some way, the fact that it is random does not change. However, the specific distribution <em>will</em> change. … A lot of effort within classical statistics has been dedicated to manipulating random variables and then trying to figure out what distribution the manipulated value has.</p>
 <aside class="topic">
 <p class="topic-title">Section Summary</p>
@@ -636,7 +651,6 @@ y_{i} &amp;= \mu + \epsilon_{i} \\
 <p>Note that the <code class="docutils literal notranslate"><span class="pre">rnorm</span></code> function parameterises the normal distribution using the <em>standard deviation</em>, rather than the <em>variance.</em></p>
 </aside>
 </aside>
-</section>
 </section>
 </section>
 
@@ -711,11 +725,14 @@ y_{i} &amp;= \mu + \epsilon_{i} \\
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#properties-of-probability-distributions">Properties of Probability Distributions</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-expected-value">The Expected Value</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance">The Variance</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulating-random-variables">Manipulating Random Variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-expected-value">The Expected Value</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-the-expected-value-important">Why is the Expected Value Important?</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance">The Variance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulating-random-variables">Manipulating Random Variables</a></li>
 </ul>
   </nav></div>
 
