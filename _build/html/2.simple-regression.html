@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>The Simple Linear Regression Model &#8212; Linear Models I: Simple and Multiple Regression</title>
+    <title>The Simple Regression Model &#8212; Linear Models I: Simple and Multiple Regression</title>
   
   
   
@@ -172,7 +172,7 @@
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Simple Linear Regression Model</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Simple Regression Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.maximum-likelihood.html">Maximum Likelihood Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6.regression-R.html">Building Regression Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
@@ -359,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The Simple Linear Regression Model</h1>
+    <h1>The Simple Regression Model</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -370,7 +370,10 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model-assumptions">The Model Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model-assumptions">The Model Assumptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-outcome-is-a-continuous-random-variable">1) The Outcome is a Continuous Random Variable</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -382,8 +385,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-simple-linear-regression-model">
-<h1>The Simple Linear Regression Model<a class="headerlink" href="#the-simple-linear-regression-model" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="the-simple-regression-model">
+<h1>The Simple Regression Model<a class="headerlink" href="#the-simple-regression-model" title="Link to this heading">#</a></h1>
 <section id="the-normal-probability-model">
 <h2>The Normal Probability Model<a class="headerlink" href="#the-normal-probability-model" title="Link to this heading">#</a></h2>
 <div class="math notranslate nohighlight">
@@ -393,7 +396,6 @@
     \mu_{i} &amp;= \beta_{0} + \beta_{1}x_{i}
 \end{align*}
 \end{split}\]</div>
-<p>… This is an example of a <em>linear</em> model</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><!doctype html>
@@ -431,10 +433,29 @@
 </html>
 </div></div>
 </div>
+<div class="tip admonition">
+<p class="admonition-title">Linear Models</p>
+<p>The simple regression model described above is an example of a <em>linear model</em>. These are a special class of statistical model that have a very specific mean function. Mathematically, the distinction between something being <em>linear</em> and something being <em>nonlinear</em> comes down to issues of simplification and ease of finding a solution. This is because linear equations are easier to work with and understand compared to nonlinear. For our purpose, we do not need to understand this distinction in any deep way. The main point is that for the mean function to be linear each parameter (e.g. <span class="math notranslate nohighlight">\(\beta_{1}\)</span>, <span class="math notranslate nohighlight">\(\beta_{2}\)</span> etc.):</p>
+<ul class="simple">
+<li><p>Appears in the equation only to the first power</p></li>
+<li><p>Is not multiplied or divided by another parameter or variable</p></li>
+<li><p>Is not inside a function like a sine, exponential, or logarithm</p></li>
+</ul>
+<p>The simple regression model meets these criteria, but the following mean functions would not</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\begin{array}{lr} \mu_{i} = \beta_{0} + \beta_{1}^{2}x_{i} &amp; \text{Parameter raised to a higher power} \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}{lr} \mu_{i} = \beta_{0} + \frac{\beta_{0}}{\beta_{1}x_{i}} &amp; \text{Parameter appears in a denominator} \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}{lr} \mu_{i} = \beta_{0} \cdot e^{\beta_{1}x_{i}} &amp; \text{Parameter appears inside exponential function} \end{array}\)</span></p></li>
+</ul>
+<p>Perhaps the more important thing to understand is that the word <em>linear</em> in <em>linear regression</em> does <em>not</em> refer to the fact that we are fitting a straight-line to the data. This is an easy mistake to make, however, we will see later that <em>polynomial</em> regression can be used to fit curves to data. These are still linear models because they still meet the definition above. So, linear regression is named after the fact that it is <em>linear in the parameters</em>, not because it fits a straight-line.</p>
+</div>
 </section>
 <section id="the-model-assumptions">
 <h2>The Model Assumptions<a class="headerlink" href="#the-model-assumptions" title="Link to this heading">#</a></h2>
 <p>We will see ways to assess all of these next week, so for now we will just examine all the assumptions that are implicit in the normal probability model.</p>
+<section id="the-outcome-is-a-continuous-random-variable">
+<h3>1) The Outcome is a Continuous Random Variable<a class="headerlink" href="#the-outcome-is-a-continuous-random-variable" title="Link to this heading">#</a></h3>
+</section>
 </section>
 </section>
 
@@ -504,7 +525,10 @@
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model-assumptions">The Model Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model-assumptions">The Model Assumptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-outcome-is-a-continuous-random-variable">1) The Outcome is a Continuous Random Variable</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
