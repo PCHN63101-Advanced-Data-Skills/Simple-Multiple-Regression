@@ -434,12 +434,12 @@ y = mx + b,
 \text{MPG} = m \times \text{Weight} + b.
 \]</div>
 <p>Understanding this equation can be made more simple by conceptualising it as instructions for how far to climb up the <span class="math notranslate nohighlight">\(y\)</span>-axis, after walking a certain distance along the <span class="math notranslate nohighlight">\(x\)</span>-axis. We always start our walk from an <span class="math notranslate nohighlight">\(x\)</span>-value of 0. The intercept, <span class="math notranslate nohighlight">\(b\)</span>, tells us how far we need to climb up <span class="math notranslate nohighlight">\(y\)</span> before we start walking. For the line shown above, we start from <span class="math notranslate nohighlight">\(x = 0\)</span> and <span class="math notranslate nohighlight">\(y = b = 37.2851\)</span>. So we need to climb all the way up to a value of <span class="math notranslate nohighlight">\(37.2851\)</span> before we start. The slope then tells us how far we would need to climb up <span class="math notranslate nohighlight">\(y\)</span> if we take <em>one step</em> along the <span class="math notranslate nohighlight">\(x\)</span>-axis. For the line shown above, we had <span class="math notranslate nohighlight">\(m = -5.3445\)</span>. So, if we move along the <span class="math notranslate nohighlight">\(x\)</span>-axis by one unit of <code class="docutils literal notranslate"><span class="pre">wt</span></code>, then we need to move <em>down</em> the <span class="math notranslate nohighlight">\(y\)</span>-axis by <span class="math notranslate nohighlight">\(5.3445\)</span>. For any other distance, we can simply multiply how far we are walking by the value of <span class="math notranslate nohighlight">\(m\)</span>. For instance, if we walked 2-units along <span class="math notranslate nohighlight">\(x\)</span> we would have <span class="math notranslate nohighlight">\(m \times 2 = -10.689\)</span>, whereas if we move only half a unit we would have <span class="math notranslate nohighlight">\(m \times 0.5 = -2.6723\)</span>.</p>
-<p>Given the information above, knowing the <span class="math notranslate nohighlight">\(y\)</span>-value of a line only depends upon <em>three</em> pieces of information: the <em>intercept</em> (our starting point), the <em>slope</em> (how <span class="math notranslate nohighlight">\(y\)</span> changes for a single unit change in <span class="math notranslate nohighlight">\(x\)</span>) and <span class="math notranslate nohighlight">\(x\)</span> (how far we are actually walking). In the context of our example, we already know the values of <span class="math notranslate nohighlight">\(x\)</span> as these are given by the <code class="docutils literal notranslate"><span class="pre">wt</span></code> variable. As such, there are only <em>two</em> values we need to choose (<span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(m\)</span>). Importantly, once we have values for both the intercept and slope, we have effectively reduced all the information in the data to <em>two numbers</em>. For the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> example, we have therefore gone from 32 values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> and 32 values of <code class="docutils literal notranslate"><span class="pre">wt</span></code> to only 2 numbers. These 2 numbers capture everything we need to know about the <em>general</em> relationship in the data. Hopefully this makes it clear how a straight-line allows for a dramatic simplification of our data.</p>
+<p>Given the information above, knowing the <span class="math notranslate nohighlight">\(y\)</span>-value of a line only depends upon <em>three</em> pieces of information: the <em>intercept</em> (our starting point), the <em>slope</em> (how <span class="math notranslate nohighlight">\(y\)</span> changes for a single unit change in <span class="math notranslate nohighlight">\(x\)</span>) and <span class="math notranslate nohighlight">\(x\)</span> (how far we are actually walking). In the context of our example, we already know the values of <span class="math notranslate nohighlight">\(x\)</span> as these are given by the <code class="docutils literal notranslate"><span class="pre">wt</span></code> variable. As such, there are only <em>two</em> values we need to choose (<span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(m\)</span>). Importantly, once we have values for both the intercept and slope, we have effectively reduced all the information in the data to <em>two numbers</em>. For the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> example, we have therefore gone from 32 values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> and 32 values of <code class="docutils literal notranslate"><span class="pre">wt</span></code> to only 2 numbers. These 2 numbers capture everything we need to know about the <em>general</em> relationship in the data, which hopefully makes it clear how a straight-line allows for a dramatic simplification of our data.</p>
 </section>
 <section id="finding-the-best-line">
 <h2>Finding the “Best” Line<a class="headerlink" href="#finding-the-best-line" title="Link to this heading">#</a></h2>
-<p>In the example above, the values of <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(m\)</span> were already given. However, we should consider <em>how</em> these values can be found? In order to do so, we need some rule for determining which line we think is “best” for capturing the relationship in our data.</p>
-<p>In general, we want this line to be as <em>close</em> to our data as possible. In other words, we want the average distance of the datapoints from the line to be as <em>small</em> as possible. These distances are shown in the plot below.</p>
+<p>In the example above, the values of <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(m\)</span> were already given. However, in any real-world analysis, these will be unknown. As such, we need to consider <em>how</em> to find reasonable values for these parameters? This requires some rule for determining which line we think is “best” for capturing the relationship in our data.</p>
+<p>In general, we want this line to be as <em>close</em> to our data as possible. In other words, we want the average distance of the datapoints from the line to be as <em>small</em> as possible. These distances are shown in the plot below for the line we used earlier.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
@@ -462,17 +462,20 @@ y = mx + b,
 </div>
 </div>
 <p>Does this picture look familiar? If you remember from last week, we used the same form of visualisation when we were exploring the concept of <em>variance</em>. The only difference now is that our reference point is no longer the mean of the data, rather it is the <em>regression line</em>. So, if we want a line that minimises these vertical distances, what we are really looking for is a line that <em>minimises the variance around the regression line</em>. If we define the expected values of <span class="math notranslate nohighlight">\(y\)</span> to be the regression equation, then <span class="math notranslate nohighlight">\(\text{Var}(y)\)</span> precisely captures these vertical distances.</p>
-<p>Formally, if we take</p>
+<p>To see this formally, we can take</p>
 <div class="math notranslate nohighlight">
 \[
-E(y) = mx + b
+E(y) = mx + b.
 \]</div>
-<p>then</p>
+<p>The variance of <span class="math notranslate nohighlight">\(y\)</span> is then given by</p>
 <div class="math notranslate nohighlight">
-\[
-\text{Var}(y) = E[(y - E(y))^{2}] = E[(y - [mx + b])^{2}].
-\]</div>
-<p>As we know from last week, subtracting an expectation from the raw data produces the <em>errors</em>. So the variance really captures the average squared errors (also known as the <em>mean squares errors</em> or MSE). In the context of a straight-line, removing the expectation produces the following</p>
+\[\begin{split}
+\begin{align*}
+    \text{Var}(y) &amp;= E\left[\left(y - E\left[y\right]\right)^{2}\right] \\ 
+                  &amp;= E\left[\left(y - \left[mx + b\right]\right)^{2}\right],
+\end{align*}
+\end{split}\]</div>
+<p>which should be familiar from last week. As also discussed last week, subtracting an expectation from the raw data produces a quantity known as the <em>errors</em>. The variance therefore captures the value of the <em>mean squares errors</em> (MSE). As we know, the errors are centred around 0 so that, in the context of a straight-line, removing the expectation produces the following</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w">   </span><span class="c1"># plot scaling</span>
@@ -496,10 +499,91 @@ E(y) = mx + b
 <a class="reference internal image-reference" href="_images/3cb972d5f9de1a382b4909ef41ff381ad60785398d4ebcc2ce832ae54aa8e583.png"><img alt="_images/3cb972d5f9de1a382b4909ef41ff381ad60785398d4ebcc2ce832ae54aa8e583.png" src="_images/3cb972d5f9de1a382b4909ef41ff381ad60785398d4ebcc2ce832ae54aa8e583.png" style="width: 720px; height: 420px;" /></a>
 </div>
 </div>
-<p>In essence, the line that is <em>closest</em> to the data is the one that <em>minimises</em> the mean-squared errors. This line will produce the <em>smallest</em> errors, which is equivalent to minimising the average vertical distance we can see above. This makes sense intuitively, because the line that is closest to the data will have the smallest discrepancy between the line itself and the actual data values. We just express this more formally by placing it within the context of <em>variance around the regression line</em>.</p>
+<p>The line that is <em>closest</em> to the data is the one that <em>minimises</em> the MSE. This line will produce the <em>smallest</em> errors, which is equivalent to minimising the average squared vertical distances, as shown in the plot below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w">   </span><span class="c1"># plot scaling</span>
+<span class="n">b</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">37.2851</span><span class="w">                            </span><span class="c1"># intercept</span>
+<span class="n">m</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-5.3445</span><span class="w">                            </span><span class="c1"># slope</span>
+<span class="n">err</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="c1"># errors</span>
+<span class="n">sq.err</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">err</span><span class="o">^</span><span class="m">2</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">sq.err</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Squared Errors&quot;</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="m">0</span><span class="p">)</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)){</span>
+<span class="w">    </span><span class="n">x.start</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="w">    </span><span class="n">x.end</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="w">    </span><span class="n">y.start</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="w">    </span><span class="n">y.end</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sq.err</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="w">    </span><span class="nf">lines</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">x.start</span><span class="p">,</span><span class="n">x.end</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">y.start</span><span class="p">,</span><span class="n">y.end</span><span class="p">),</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/24ce6a8622e526519450361c0bfb8c636b4e1b516c1c2ffc47d6e34ec70df3bd.png"><img alt="_images/24ce6a8622e526519450361c0bfb8c636b4e1b516c1c2ffc47d6e34ec70df3bd.png" src="_images/24ce6a8622e526519450361c0bfb8c636b4e1b516c1c2ffc47d6e34ec70df3bd.png" style="width: 720px; height: 420px;" /></a>
+</div>
+</div>
+<p>This makes sense intuitively, because the line that is closest to the data will have the smallest discrepancy between the line itself and the actual data values. We can just express this more formally by placing it within the context of <em>variance</em>. In effect, if the line makes the variance as small as possible, then we have done the best job we can of making the line fit the data.</p>
 <section id="ordinary-least-squares">
 <h3>Ordinary Least Squares<a class="headerlink" href="#ordinary-least-squares" title="Link to this heading">#</a></h3>
-<p>So, how do we find the line that minimises the errors? Later in this lesson we will look at the method of Maxmimum Likelihood, that can be used to find this line based on <em>probability</em>. However, there is a simpler approach for regression models that leads to the same answer, known as <em>ordinary least squares</em> (OLS)</p>
+<p>So, how do we find the line that minimises the errors? Later in this lesson we will look at the method of Maxmimum Likelihood, that can be used to find this line based on <em>probability</em>. However, there is a simpler approach for regression models that leads to the same answer, known as <em>ordinary least squares</em> (OLS). As the name implies, the aim of least squares is to make the squared errors as small as possible. This involves minimising the <em>sum of squared errors</em> (SSE), which we can express as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    \text{SSE} &amp;= \sum_{i=1}^{n}\left(y - E\left[y\right]\right)^{2} \\ 
+               &amp;= \sum_{i=1}^{n}\left(y - \left[mx + b\right]\right)^{2} \\
+               &amp;= \sum_{i=1}^{n}\epsilon_{i}^{2}
+\end{align*}
+\end{split}\]</div>
+<p>Notice that this is basically <em>identical</em> to the expression for the variance around the regression line, except that it is not an <em>average</em> it is a <em>sum</em>. However, because creating an average just involves dividing by a constant, it makes no difference to the outcome. As such, it is just simpler mathematically to remove the constant and work with the SSE rather than the MSE.</p>
+<p>So, how do we find the <em>minimum</em> SSE? This where the tools of calculus are need to find the minimum of a function. This is way beyond the scope of this lesson (and this course). However, we do not really need to understand the derivation. The only important point practically is that, for linear regression problems, a <em>closed-form solution</em> exists to find the line that minimises the SSE. What this means is that we do not need to use iterative algorithms to search for a solution amongst many possibilities. Instead, a <em>single set of equations</em> can be applied to any regression problem to find this line. These are given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    m &amp;= \frac{\sum{\left(x_{i} - \bar{x}\right)\left(y_{i} - \bar{y}\right)}}{\sum{\left(x_{i} - \bar{x}\right)^{2}}}\\
+    b &amp;= \bar{y} - m\bar{x} \\ 
+\end{align*}
+\end{split}\]</div>
+<p>where the <em>bar</em> symbol indicates the <em>mean</em>. Again, we do not really need to dig into why this works, especially as we will be seeing a more general method for arriving at this result later. However, it can be useful to demonstrate that it <em>does</em> work using the <code class="docutils literal notranslate"><span class="pre">R</span></code> code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
+<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span>
+
+<span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nf">c</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class=list-inline><li>37.285126167342</li><li>-5.34447157272268</li></ol>
+</div></div>
+</div>
+<p>This produces the same values we saw earlier for both the intercept and the slope. These are also the same values that the <code class="docutils literal notranslate"><span class="pre">R</span></code> functions for linear regression will produce. We will explore these later in the lesson, but just to demonstrate that everything discussed so far works, we can use:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">reg.model</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="nf">coef</span><span class="p">(</span><span class="n">reg.model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class=dl-inline><dt>(Intercept)</dt><dd>37.285126167342</dd><dt>wt</dt><dd>-5.34447157272268</dd></dl>
+</div></div>
+</div>
 </section>
 </section>
 </section>
