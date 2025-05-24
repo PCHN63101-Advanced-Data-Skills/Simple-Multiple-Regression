@@ -369,8 +369,15 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model-assumptions">The Model Assumptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-population-distribution">(1) The Population Distribution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mean-function">(2) The Mean Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance-function">(3) The Variance Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-model">The Complete Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-models">Linear Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-simple-regression-assumptions">The Simple Regression Assumptions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-outcome-is-a-continuous-random-variable">1) The Outcome is a Continuous Random Variable</a></li>
 </ul>
 </li>
@@ -387,8 +394,53 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="the-simple-regression-model">
 <h1>The Simple Regression Model<a class="headerlink" href="#the-simple-regression-model" title="Link to this heading">#</a></h1>
+<p>In the previous section, we explored using a stright-line to capture the relationship in the data. In doing so, we were getting very close to formalising these ideas in terms of a statistical model. In this section, we will complete this formalisation by placing simple regression within the framework we discussed last week.</p>
 <section id="the-normal-probability-model">
 <h2>The Normal Probability Model<a class="headerlink" href="#the-normal-probability-model" title="Link to this heading">#</a></h2>
+<p>To begin, we will work through all the elements of a statistical model we discussed last week, indicating how these are defined in a typical simple regression model.</p>
+<section id="the-population-distribution">
+<h3>(1) The Population Distribution<a class="headerlink" href="#the-population-distribution" title="Link to this heading">#</a></h3>
+<p>The starting point for a simple regression model is to assume that the population distribition is <em>normal</em>. This implies that whatever outcome variable we have, it can be conceptualised as a <em>continuous random variable</em> drawn from a normal distribution with some mean and some variance. In symbols, we therefore have</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} \sim \mathcal{N}\left(\mu_{i},\sigma^{2}_{i}\right).
+\]</div>
+<div class="tip admonition">
+<p class="admonition-title">Why the Normal Distribution?</p>
+<p>The reason for choosing the normal distribution is simply because it is <em>useful</em> from a mathematical perspective. There are certain derivations relied on later that depend upon the assumption of normality. Importantly, these are mathematically <em>tractable</em> which, in other words, simply means that you do not get stuck when trying to work them out. In the past, in a world without computers, decisions needed to be made that allowed calculations to be (a) completed and (b) simple. The normal distribution achieves both of these aims. As such, this choice is largely historical. We will see more advanced methods that do not assume this later in the course.</p>
+</div>
+</section>
+<section id="the-mean-function">
+<h3>(2) The Mean Function<a class="headerlink" href="#the-mean-function" title="Link to this heading">#</a></h3>
+<p>Next, we need to define what form the expected value of the normal distribution will take. Because simple regression problems have only <em>one</em> predictor variable, we therefore wish to define <span class="math notranslate nohighlight">\(E(y|x)\)</span>, as explained last week. As discussed in the previous section, for a simple regression model we define this as a <em>straight-line</em>. However, we tend to use a slightly different notation for this line. Instead of the usual <span class="math notranslate nohighlight">\(y = mx + b\)</span>, we use</p>
+<div class="math notranslate nohighlight">
+\[
+E\left(y_{i}|x_{i}\right) = \beta_{0} + \beta_{1}x_{i}.
+\]</div>
+<p>This is functionally identical to the traditional notation, we have just renamed <span class="math notranslate nohighlight">\(b \rightarrow \beta_{0}\)</span>, <span class="math notranslate nohighlight">\(m \rightarrow \beta_{1}\)</span> and have changed the order of the terms in the sum. The reason for this is …</p>
+</section>
+<section id="the-variance-function">
+<h3>(3) The Variance Function<a class="headerlink" href="#the-variance-function" title="Link to this heading">#</a></h3>
+</section>
+<section id="the-complete-model">
+<h3>The Complete Model<a class="headerlink" href="#the-complete-model" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    y_{i}   &amp;= \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} \\
+    \epsilon_{i} &amp;\sim \mathcal{N}\left(0,\sigma^{2}\right)
+\end{align*}
+\end{split}\]</div>
+<p>or (using our very general framework)</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    y_{i}          &amp;\sim \mathcal{N}\left(\mu_{i},\sigma^{2}_{i}\right) \\
+    \mu_{i}        &amp;= \beta_{0} + \beta_{1}x_{i} \\
+    \sigma^{2}_{i} &amp;= \sigma^{2}
+\end{align*}
+\end{split}\]</div>
+<p>or (simplifying the above)</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align*}
@@ -396,6 +448,12 @@
     \mu_{i} &amp;= \beta_{0} + \beta_{1}x_{i}
 \end{align*}
 \end{split}\]</div>
+<p>or (further simplying the above)</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
+\]</div>
+<p>Try and make sure you understand all the ways this can be written. You may find different approach used in different texts and it is helpful to understand why these are all <em>exactly the same model</em>.</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><!doctype html>
@@ -433,8 +491,10 @@
 </html>
 </div></div>
 </div>
-<div class="tip admonition">
-<p class="admonition-title">Linear Models</p>
+</section>
+</section>
+<section id="linear-models">
+<h2>Linear Models<a class="headerlink" href="#linear-models" title="Link to this heading">#</a></h2>
 <p>The simple regression model described above is an example of a <em>linear model</em>. These are a special class of statistical model that have a very specific mean function. Mathematically, the distinction between something being <em>linear</em> and something being <em>nonlinear</em> comes down to issues of simplification and ease of finding a solution. This is because linear equations are easier to work with and understand compared to nonlinear. For our purpose, we do not need to understand this distinction in any deep way. The main point is that for the mean function to be linear each parameter (e.g. <span class="math notranslate nohighlight">\(\beta_{1}\)</span>, <span class="math notranslate nohighlight">\(\beta_{2}\)</span> etc.):</p>
 <ul class="simple">
 <li><p>Appears in the equation only to the first power</p></li>
@@ -448,10 +508,9 @@
 <li><p><span class="math notranslate nohighlight">\(\begin{array}{lr} \mu_{i} = \beta_{0} \cdot e^{\beta_{1}x_{i}} &amp; \text{Parameter appears inside exponential function} \end{array}\)</span></p></li>
 </ul>
 <p>Perhaps the more important thing to understand is that the word <em>linear</em> in <em>linear regression</em> does <em>not</em> refer to the fact that we are fitting a straight-line to the data. This is an easy mistake to make, however, we will see later that <em>polynomial</em> regression can be used to fit curves to data. These are still linear models because they still meet the definition above. So, linear regression is named after the fact that it is <em>linear in the parameters</em>, not because it fits a straight-line.</p>
-</div>
 </section>
-<section id="the-model-assumptions">
-<h2>The Model Assumptions<a class="headerlink" href="#the-model-assumptions" title="Link to this heading">#</a></h2>
+<section id="the-simple-regression-assumptions">
+<h2>The Simple Regression Assumptions<a class="headerlink" href="#the-simple-regression-assumptions" title="Link to this heading">#</a></h2>
 <p>We will see ways to assess all of these next week, so for now we will just examine all the assumptions that are implicit in the normal probability model.</p>
 <section id="the-outcome-is-a-continuous-random-variable">
 <h3>1) The Outcome is a Continuous Random Variable<a class="headerlink" href="#the-outcome-is-a-continuous-random-variable" title="Link to this heading">#</a></h3>
@@ -524,8 +583,15 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model-assumptions">The Model Assumptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-population-distribution">(1) The Population Distribution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mean-function">(2) The Mean Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance-function">(3) The Variance Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-model">The Complete Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-models">Linear Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-simple-regression-assumptions">The Simple Regression Assumptions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-outcome-is-a-continuous-random-variable">1) The Outcome is a Continuous Random Variable</a></li>
 </ul>
 </li>
