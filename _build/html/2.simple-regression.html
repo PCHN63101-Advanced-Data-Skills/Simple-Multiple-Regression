@@ -422,7 +422,17 @@ E\left(y_{i}|x_{i}\right) = \beta_{0} + \beta_{1}x_{i}.
 </section>
 <section id="the-variance-function">
 <h3>(3) The Variance Function<a class="headerlink" href="#the-variance-function" title="Link to this heading">#</a></h3>
-<p>Finally, to complete the model, we need to define the variance function. As indicated last week, this gives the form that we assume <span class="math notranslate nohighlight">\(\text{Var}\left(y_{i}|x_{i}\right)\)</span> takes. In other words, we define an equation for the <em>width</em> of the population disribution and how this can change with different values of <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p>Finally, to complete the model, we need to define the variance function. As indicated last week, this gives the form that we assume <span class="math notranslate nohighlight">\(\text{Var}\left(y|x\right)\)</span> takes. In other words, we define an equation for the <em>width</em> of the population disribution and how this can change with different values of <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p>For a simple regression model, the variance function takes on a very simplistic form:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Var}\left(y_{i}|x_{i}\right) = \sigma^{2}.
+\]</div>
+<p>As such, irrespective of the value of <span class="math notranslate nohighlight">\(x\)</span>, the variance is assumed to be <em>the same</em>. This means that the width of the population distribution is <em>fixed</em> and does not shift. This is largely a simplifying assumption to make the model more tractable. As mentioned previously, many of the decisions around the forms that statistical models take are both historical and practical. In an age before computers, solutions needed to be calculated manually, meaning that these models needed to be as simple as possible to work with and solvable. Assuming a constant variance allows for both of these conditions to be met and a solution to be found.</p>
+<div class="tip admonition">
+<p class="admonition-title">Occam’s Razor</p>
+<p>Also known as “The Law of Parsimony”, Occam’s Razor is a <em>heuristic</em> that we use to guide the development of statistical models. Named after <a class="reference external" href="https://en.wikipedia.org/wiki/William_of_Ockham">William of Ockham</a>, the “razor” is a metaphorical device used to “shave off” excessive and unnecessary complexity to try and build the simplest model we can. In effect, we want our models to only be as complex as they need to be, but no more. In adhering to this principle, we therefore start with the simplest model we can and then only add complexity if it is needed. Simple regression is a good example of this. We start with the most basic explanation we can: a straight line with constant variance. Only if there is evidence that this does not work would we need to examine how this should be changed. In general, this is the method for building models that you need to learn. Start simple. Assess the fit. Add complexity as needed.</p>
+</div>
 </section>
 <section id="the-complete-model">
 <h3>The Complete Model<a class="headerlink" href="#the-complete-model" title="Link to this heading">#</a></h3>
