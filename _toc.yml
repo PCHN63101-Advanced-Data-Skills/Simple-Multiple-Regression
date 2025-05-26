@@ -7,7 +7,7 @@ chapters:
 - file: 1.straight-line
 - file: 2.simple-regression
 - file: 3.maximum-likelihood
-- file: 6.inference
+- file: 4.inference
 - file: 5.multiple-regression
 - file: 6.regression-R
 - file: summary
