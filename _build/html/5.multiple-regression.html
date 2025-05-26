@@ -408,6 +408,33 @@
 \end{align*}
 \end{split}\]</div>
 <p>See the box below if you are unfamiliar with “big sigma” notation.</p>
+<div class="tip admonition">
+<p class="admonition-title">Big Sigma Notation</p>
+<p>So the notation</p>
+<div class="math notranslate nohighlight">
+\[
+S = \sum_{j=1}^{k} \beta_{j}x_{j}
+\]</div>
+<p>is equivalent to</p>
+<div class="math notranslate nohighlight">
+\[
+S = \beta_{1}x_{1} + \beta_{2}x_{2} + \beta_{3}x_{3},
+\]</div>
+<p>if we take <span class="math notranslate nohighlight">\(k=3\)</span>. In code, is the same as shortening</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">3</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">k</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
+<span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">){</span>
+<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>So, you can think of the Big Sigma notation as a <em>summation loop</em> over a certain set of indices.</p>
+</div>
 </section>
 <section id="parameter-interpretation">
 <h2>Parameter Interpretation<a class="headerlink" href="#parameter-interpretation" title="Link to this heading">#</a></h2>
