@@ -347,7 +347,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -363,6 +365,19 @@
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notation-for-estimates">Notation for Estimates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-vs-residuals">Errors vs Residuals</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-estimates-with-maximum-likelihood">Calculating Estimates with Maximum Likelihood</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-vs-least-squares">Maximum Likelihood vs Least-Squares</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -374,6 +389,30 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood-estimation">
 <h1>Maximum Likelihood Estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Link to this heading">#</a></h1>
+<section id="notation-for-estimates">
+<h2>Notation for Estimates<a class="headerlink" href="#notation-for-estimates" title="Link to this heading">#</a></h2>
+<p>So far, our notation for our model has implicitly assumed that we have the whole popluation at our disposal and know the values for the parameters. However, in reality, we will usually only have a sample from that population and will need to <em>estimate</em> the parameter values. Because the distinction between the <em>true value</em> and an <em>estimate</em> is quite important, we need some new notation to make this clear.</p>
+<p>Traditionally, we denote an estimate by placing a “hat” on top of the corresponding Greek letter. For instance, if <span class="math notranslate nohighlight">\(\beta_{1}\)</span> corresponds to the true value of the regression slope in the population, we would denote an estimate of <span class="math notranslate nohighlight">\(\beta_{1}\)</span> from a sample as <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span>. The importance of this distinction then goes further than just indicating that <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> is simply a “guess” based on some data. Because <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> will change for every new sample we take, its value will shift around. As such, <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> is a <em>random variable</em>. This is important, because <span class="math notranslate nohighlight">\(\beta_{1}\)</span> is <em>constant</em> and <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> is <em>random</em>. As such, <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> has a distribution with an expectation and a variance. We will get into the specifics of this later, but for the moment it is worth noting that an expression such as <span class="math notranslate nohighlight">\(E\left(\hat{\beta}_{1}\right)\)</span> and <span class="math notranslate nohighlight">\(\text{Var}\left(\hat{\beta}_{1}\right)\)</span> make complete sense because our estimates are <em>random</em>, whereas <span class="math notranslate nohighlight">\(E\left(\beta_{1}\right)\)</span> and <span class="math notranslate nohighlight">\(\text{Var}\left(\beta_{1}\right)\)</span> do not make sense because the true population values are <em>constant</em>. So keep an eye on those little hats, they make quite a big difference to the meaning.</p>
+<div class="tip admonition">
+<p class="admonition-title">Alternative Notation for Estimates</p>
+<p>Some authors like to use the Latin alternatives to the Greek letters to denote estimates. We will not be doing this, but it is worth knowing about to make sense of notation you may see in textbooks or the literature. In this scheme, the estimate of <span class="math notranslate nohighlight">\(\beta_{1}\)</span> would be <span class="math notranslate nohighlight">\(b_{1}\)</span>. So, the true population model would be</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i},
+\]</div>
+<p>whereas as an estimated model based on data would be</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} = b_{0} + b_{1}x_{i} + e_{i}.
+\]</div>
+<p>You can decide which of these you prefer, but we will be using “hats” in all our notation going forward.</p>
+</div>
+<section id="errors-vs-residuals">
+<h3>Errors vs Residuals<a class="headerlink" href="#errors-vs-residuals" title="Link to this heading">#</a></h3>
+</section>
+</section>
+<section id="calculating-estimates-with-maximum-likelihood">
+<h2>Calculating Estimates with Maximum Likelihood<a class="headerlink" href="#calculating-estimates-with-maximum-likelihood" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
@@ -397,6 +436,10 @@
 <div class="output text_html">49.9299299299299</div><a class="reference internal image-reference" href="_images/f22a192644361b90c6604e54c8d29ab642ecf83354b5344c9d8ad3c7c7856772.png"><img alt="_images/f22a192644361b90c6604e54c8d29ab642ecf83354b5344c9d8ad3c7c7856772.png" src="_images/f22a192644361b90c6604e54c8d29ab642ecf83354b5344c9d8ad3c7c7856772.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
+</section>
+<section id="maximum-likelihood-vs-least-squares">
+<h2>Maximum Likelihood vs Least-Squares<a class="headerlink" href="#maximum-likelihood-vs-least-squares" title="Link to this heading">#</a></h2>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -453,6 +496,27 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notation-for-estimates">Notation for Estimates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-vs-residuals">Errors vs Residuals</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-estimates-with-maximum-likelihood">Calculating Estimates with Maximum Likelihood</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-vs-least-squares">Maximum Likelihood vs Least-Squares</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
