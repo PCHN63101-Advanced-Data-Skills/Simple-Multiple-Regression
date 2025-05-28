@@ -373,14 +373,10 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-1-the-population-distribution">Element 1 - The Population Distribution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-2-the-mean-function">Element 2 - The Mean Function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-3-the-variance-function">Element 3 - The Variance Function</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-simple-regression-model">The Complete Simple Regression Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-regression-as-a-linear-model">Simple Regression as a Linear Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-simple-regression-assumptions">The Simple Regression Assumptions</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-outcome-is-a-continuous-random-variable">(1) The Outcome is a Continuous Random Variable</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-distribution-of-the-errors-is-normal">(2) The Distribution of the Errors is Normal</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-errors-are-uncorrelated">(3) The Data/Errors are Uncorrelated</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-relationship-is-a-straight-line">(4) The Relationship is a Straight Line</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance-is-constant">(5) The variance is constant</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-model">The Complete Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-models-framework">The Linear Models Framework</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-models-in-r">Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-model-assumptions">Linear Model Assumptions</a></li>
 </ul>
 </li>
 </ul>
@@ -414,7 +410,7 @@ y_{i} \sim \mathcal{N}\left(\mu_{i},\sigma^{2}_{i}\right).
 \[
 E\left(y_{i}|x_{i}\right) = \beta_{0} + \beta_{1}x_{i}.
 \]</div>
-<p>This is functionally identical to the traditional notation, we have just renamed <span class="math notranslate nohighlight">\(b \rightarrow \beta_{0}\)</span>, <span class="math notranslate nohighlight">\(m \rightarrow \beta_{1}\)</span> and have changed the order of the terms in the sum. The reason for this is that it is useful to group the parameters together under the same name, rather than separating them out into <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>. This renaming also adheres to the general approach of using Greek letters<a class="footnote-reference brackets" href="#greekfoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> for parameters and Roman letters for variables. In addition, when we come to <em>multiple</em> regression, this naming scheme is practical because we can expand the number of <span class="math notranslate nohighlight">\(\beta\)</span> terms as far as we want, without having to come up with new letters for every additional variable we have in the model. Placing the <em>intercept</em> at the start of the sum is simply convention, but makes sense if we want to think of this as our <em>starting point</em>.</p>
+<p>This is functionally identical to the traditional notation, we have just renamed <span class="math notranslate nohighlight">\(b \rightarrow \beta_{0}\)</span>, <span class="math notranslate nohighlight">\(m \rightarrow \beta_{1}\)</span> and have changed the order of the terms in the sum. The reason for this is that it is useful to group the parameters together under the same name, rather than separating them out into <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>. This renaming also adheres to the general approach of using Greek letters[^greekfoot] for parameters and Roman letters for variables. In addition, when we come to <em>multiple</em> regression, this naming scheme is practical because we can expand the number of <span class="math notranslate nohighlight">\(\beta\)</span> terms as far as we want, without having to come up with new letters for every additional variable we have in the model. Placing the <em>intercept</em> at the start of the sum is simply convention, but makes sense if we want to think of this as our <em>starting point</em>.</p>
 </section>
 <section id="element-3-the-variance-function">
 <h2>Element 3 - The Variance Function<a class="headerlink" href="#element-3-the-variance-function" title="Link to this heading">#</a></h2>
@@ -424,14 +420,14 @@ E\left(y_{i}|x_{i}\right) = \beta_{0} + \beta_{1}x_{i}.
 \[
 \text{Var}\left(y_{i}|x_{i}\right) = \text{Var}\left(y_{i}\right) = \sigma^{2}.
 \]</div>
-<p>As such, irrespective of the value of <span class="math notranslate nohighlight">\(x\)</span>, the variance is assumed to be <em>the same</em>. This means that the width of the population distribution is <em>fixed</em> and does not shift. This is largely a simplifying assumption to make the model more tractable. As mentioned previously, many of the decisions around the forms that statistical models take are both historical and practical. In an age before computers, solutions needed to be calculated manually, meaning that these models needed to be as simple as possible to work with and, most importantly, <em>solvable</em>. Assuming a constant variance is one of the conditions that allows this to be possible.</p>
+<p>As such, irrespective of the value of <span class="math notranslate nohighlight">\(x\)</span>, the variance is assumed to be <em>the same</em>. This means that the width of the population distribution is <em>fixed</em> and does not shift. This is largely a simplifying assumption to make the model more tractable. As mentioned previously, many of the decisions around the forms that statistical models take are both historical and practical. In an age before computers, solutions needed to be calculated manually, meaning that these models needed to be as simple as possible to work with and, most importantly, <em>solvable</em>. Assuming a constant variance is another one of the conditions that allows this to be possible. It also adheres to our general principle of maintaining <em>simplicity</em> in our models, as discussed more in the box below.</p>
 <div class="tip admonition">
 <p class="admonition-title">Occam’s Razor</p>
-<p>Another way of looking at simplicity within statistical models is through the heuristic of <em>Occam’s Razor</em>. Also known as “The Law of Parsimony”, this can be used to guide the development of statistical models. Named after <a class="reference external" href="https://en.wikipedia.org/wiki/William_of_Ockham">William of Ockham</a>, the “razor” is a metaphorical device used to “shave off” excessive and unnecessary complexity. In adhering to this principle, we can therefore start with the simplest model we can and then only add complexity if it is needed. Simple regression is a good example of this. We start with the most basic explanation we can: a straight line with constant variance. Only if there is evidence that this does not work would we need to examine how this can be changed. Sometimes, we can work in the opposite direction and start with the most complex model we can, and then assess if all the complexity is needed. Either way, our aim is to arrive at the model that is <em>as complex as needed, but no more</em>. As we will come to see, we will often need to choose between multiple models during an analysis. If there is a marginal difference between two competing models, we can use the principle of Occam’s Razor to choose the simpler of the two.</p>
+<p>We can look at simplicity within statistical models using the heuristic of <em>Occam’s Razor</em>. Also known as “The Law of Parsimony”, this can be used to guide the development of statistical models. Named after <a class="reference external" href="https://en.wikipedia.org/wiki/William_of_Ockham">William of Ockham</a>, the “razor” is a metaphorical device used to “shave off” excessive and unnecessary complexity. In adhering to this principle, we can therefore start with the simplest model we can and then only add complexity if it is needed. Simple regression is a good example of this. We start with the most basic explanation we can: a straight line with constant variance. Only if there is evidence that this does not work would we need to examine how this can be changed. Sometimes, we can work in the opposite direction and start with the most complex model we can, and then assess if all the complexity is needed. Either way, our aim is to arrive at the model that is <em>as complex as needed, but no more</em>. As we will come to see, we will often need to choose between multiple models during an analysis. If there is a marginal difference between two competing models, we can use the principle of Occam’s Razor to choose the simpler of the two.</p>
 </div>
 </section>
-<section id="the-complete-simple-regression-model">
-<h2>The Complete Simple Regression Model<a class="headerlink" href="#the-complete-simple-regression-model" title="Link to this heading">#</a></h2>
+<section id="the-complete-model">
+<h2>The Complete Model<a class="headerlink" href="#the-complete-model" title="Link to this heading">#</a></h2>
 <p>Now that we have defined the population distribution, mean function and variance function, we can now express the full simple regression model:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -449,7 +445,7 @@ E\left(y_{i}|x_{i}\right) = \beta_{0} + \beta_{1}x_{i}.
     \mu_{i} &amp;= \beta_{0} + \beta_{1}x_{i},
 \end{align*}
 \end{split}\]</div>
-<p>which makes it clearer that the only element that changes across different of <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(x\)</span> values is the <em>mean</em>. We can also further simplify this expression by collapsing the mean function into the notation for the normal distribution, giving:</p>
+<p>which makes it clearer that the only element that changes is the <em>mean</em>. We can also further simplify this expression by collapsing the mean function into the notation for the normal distribution, giving:</p>
 <div class="math notranslate nohighlight">
 \[
 y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
@@ -462,7 +458,7 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
     \epsilon_{i} &amp;\sim \mathcal{N}\left(0,\sigma^{2}\right),
 \end{align*}
 \end{split}\]</div>
-<p>which is a form you will often seen in textbooks and the literature.</p>
+<p>which is probably the most common form that you will seen in statistical textbooks and the literature.</p>
 <p>Irrespective of how it is written, all the forms above imply <em>the same model</em>. We can visualise this below as we did last week, using the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> data. Make sure you spend some time moving this visualisation around and thinking about how it connects with all the different ways of writing the model given above. Remember as well that the distributions visualised here are just <em>examples</em> for a selection of Weight values. The model itself implies a normal distribution for <em>every possible value of Weight</em>.</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
@@ -502,12 +498,13 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
 </div></div>
 </div>
 </section>
-<section id="simple-regression-as-a-linear-model">
-<h2>Simple Regression as a Linear Model<a class="headerlink" href="#simple-regression-as-a-linear-model" title="Link to this heading">#</a></h2>
-<p>The simple regression model described above is an example of a <em>linear model</em>. These are a special class of statistical model that have a very specific mean function. Mathematically, the distinction between something being <em>linear</em> and something being <em>nonlinear</em> comes down to issues of simplification and ease of finding a solution. This is because linear equations are easier to work with and understand compared to nonlinear. For our purpose, we do not need to understand this distinction in any deep way. The main point is that for the mean function to be linear each parameter (<span class="math notranslate nohighlight">\(\beta_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}\)</span>):</p>
+<section id="the-linear-models-framework">
+<h2>The Linear Models Framework<a class="headerlink" href="#the-linear-models-framework" title="Link to this heading">#</a></h2>
+<p>The simple regression model described above is an example of a <em>linear model</em>. These are a special class of statistical model that have a very specific mean function. Mathematically, the practical distinction between something being <em>linear</em> and something being <em>nonlinear</em> comes down to simplicity and ease of finding a solution. This is because linear equations are easier to understand, manipulate and solve compared to nonlinear. For our purpose, we do not need to understand this distinction in any deep way. The main point is that for the mean function to be linear each parameter:</p>
 <ul class="simple">
-<li><p>Appears in the equation only to the first power</p></li>
-<li><p>Is not multiplied by another parameter, or divided by another parameter or variable</p></li>
+<li><p>Appears only to the first power</p></li>
+<li><p>Is not multiplied by another parameter</p></li>
+<li><p>Is not divided by another parameter or variable</p></li>
 <li><p>Is not inside a function like a sine, exponential, or logarithm</p></li>
 </ul>
 <p>The simple regression model meets these criteria, but the following mean functions would not</p>
@@ -520,61 +517,18 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
     \mu_{i} &amp;= \beta_{0} \cdot e^{\beta_{1}x_{i}}           &amp;\text{Parameter inside exponential function}   \\
 \end{array}
 \end{split}\]</div>
+<p>From a practical perspective, the formal distinction between <em>linear</em> and <em>nonlinear</em> is not too important. We will be almost exclusively working with <em>linear</em> models on this course. Indeed, the vast majority of statistics is concerned with linear models. This means that we will almost always be forming our mean function as a <em>linear combination</em> of parameters and variables. So, we will see the same form of mean function in many different places, where we calculate a sum of variables, with each one <em>weighted</em> (i.e. multiplied) by some parameter. Although quite simple, this turns out to be a very powerful approach in practice.</p>
 <div class="tip admonition">
-<p class="admonition-title"><em>Linear</em> Regression Does <em>NOT</em> Mean a Straight Line!</p>
-<p>From a practical perspective, the formal distinction between <em>linear</em> and <em>nonlinear</em> is not too important as we will be almost exclusively working with <em>linear</em> models on this course. Indeed, the vast majority of statistics is concerned with linear models almost exclusively. The more important thing to understand is that the word <em>linear</em> does <em>not</em> refer to the fact that we are fitting a straight-line to the data. This is an easy mistake to make, however, we will see later that <em>polynomial</em> regression can be used to fit curves to data. These are still linear models because they still meet the definition above. So, linear regression is named after the fact that it is <em>linear in the parameters</em>, not because it fits a straight-line. We can specify a <em>non-linear fit</em> within a <em>linear model</em>.</p>
+<p class="admonition-title">Linear Regression Does NOT Mean a Straight Line</p>
+<p>One of the more important thing to understand about the concept of a linear model is that the word <em>linear</em> does <em>not</em> refer to the fact that we are fitting a straight-line to the data. This is an easy mistake to make, however, we will see later that <em>polynomial</em> regression can be used to fit curves to data. These are still linear models because they still meet the definition above. So, linear regression is named after the fact that it is <em>linear in the parameters</em>, not because it fits a straight-line. We can still describe the model fit as linear (straight line) or nonlinear (curved line), but the model itself remains a linear model if it adheres to the definition given above. This can be quite confusing, but just remember that a linear model is not restricted to only straight lines, as the use of <em>linear</em> in the name is more nuance.</p>
 </div>
+<section id="linear-models-in-r">
+<h3>Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#linear-models-in-r" title="Link to this heading">#</a></h3>
+<p>The importance of linear models to statistics cannot be overstated. As we will see a little later, one of the core functions within <code class="docutils literal notranslate"><span class="pre">R</span></code> is the <code class="docutils literal notranslate"><span class="pre">lm()</span></code> function, used to fit a <em>linear model</em>. Base <code class="docutils literal notranslate"><span class="pre">R</span></code> does not contain functions called <code class="docutils literal notranslate"><span class="pre">simple.regression()</span></code>, <code class="docutils literal notranslate"><span class="pre">multiple.regression()</span></code>, <code class="docutils literal notranslate"><span class="pre">oneway.anova()</span></code> or similar because all these forms of analysis are subsumed under the linear models framework. As such, we only need one function for fitting all of these. The challenge is simply understanding this generic frameowork so that its power can be fully leveraged. There are many packages available that do provide functions for individual types of analyses, often as a means of making them easier to work with, or to control the output so that only the most important information is displayed. Unfortunately, this does go against the concept of making the modelling framework generic. So, while it may be tempting to find alternative functions that make using certain types of model “easier”, it is much better to try and understand and use the general framework, rather than hiding it.</p>
 </section>
-<section id="the-simple-regression-assumptions">
-<h2>The Simple Regression Assumptions<a class="headerlink" href="#the-simple-regression-assumptions" title="Link to this heading">#</a></h2>
-<p>Before moving on, it will be useful to take a step back and examine all the <em>assumptions</em> that are inherent in the model we have specified. This is quite an important exericse, because the assumptions of regression often seem somewhat esoteric when taught outside the framework of statistical models. However, we should be able to derive all of them by simply examining the model equations given above. This is the same approach we will take when we also examine models such as ANOVA and ANCOVA, which will allow us to see that the assumptions <em>are always the same</em> when working with these forms of linear models. This means you only need to learn one set of assumptions and they can be applied equivalently across lots of different models. We look at this in more detail next week, so for now we will just have a brief discussion of each.</p>
-<p>To make this discussion easier, we will restate the most common form of the simple regression model:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{align*}
-    y_{i}   &amp;= \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} \\
-    \epsilon_{i} &amp;\sim \mathcal{N}\left(0,\sigma^{2}\right),
-\end{align*}
-\end{split}\]</div>
-<section id="the-outcome-is-a-continuous-random-variable">
-<h3>(1) The Outcome is a Continuous Random Variable<a class="headerlink" href="#the-outcome-is-a-continuous-random-variable" title="Link to this heading">#</a></h3>
-<p>The first core assumption that we made is that the outcome variable is a continuous random variable. As such, the <em>data-generating process</em> can be captured by a continuous probability distribution. This means our outcome variables must, in theory, have an infinite number of possibilities within a given range. Refer back to the lesson last week for more details on this, as well as some of the subtlties around psychologists using discrete measures and treating them as continuous.</p>
-</section>
-<section id="the-distribution-of-the-errors-is-normal">
-<h3>(2) The Distribution of the Errors is Normal<a class="headerlink" href="#the-distribution-of-the-errors-is-normal" title="Link to this heading">#</a></h3>
-<p>Following from the first assumption, we have chosen the normal distribution as the population distribution. This can be stated in two ways. The first is as a <em>marginal</em> distribution of <span class="math notranslate nohighlight">\(y\)</span>, given a specific value of <span class="math notranslate nohighlight">\(x\)</span>. This is expressed as:</p>
-<div class="math notranslate nohighlight">
-\[
-y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right)
-\]</div>
-<p>This assumption is important to understand, not least because many people <em>get it wrong</em>. As should be clear from the equation above, the simple regression model does <em>not</em> assume that the entire outcome variable <span class="math notranslate nohighlight">\(y\)</span> is normally distributed. Instead, the assumption is that the distribution of <span class="math notranslate nohighlight">\(y\)</span> <em>at each value of <span class="math notranslate nohighlight">\(x\)</span></em> is normally distributed. Considering only the distribution of a <em>subset</em> of <span class="math notranslate nohighlight">\(y\)</span> values is known as the <em>marginal</em> distribution of <span class="math notranslate nohighlight">\(y\)</span> given certain values of <span class="math notranslate nohighlight">\(x\)</span>. However, as we will see next week, this is difficult to work with practically. As such, it is much easier to work with the second form that this assumption takes, which is that the <em>errors</em> are <em>identically distributed</em> with mean 0, expressed as</p>
-<div class="math notranslate nohighlight">
-\[
-\epsilon_{i} \sim \mathcal{N}\left(0,\sigma^{2}\right).
-\]</div>
-<p>Every error is therefore drawn from <em>the same distribution</em>. In other words, the errors represents a <em>sample</em> from a single distribution. Because of this, we can collapse all the errors together and just examine a <em>single distribution</em>. Again, refer back to the content from last week if you need a reminder on why this assumption can be stated in two different ways.</p>
-</section>
-<section id="the-data-errors-are-uncorrelated">
-<h3>(3) The Data/Errors are Uncorrelated<a class="headerlink" href="#the-data-errors-are-uncorrelated" title="Link to this heading">#</a></h3>
-<p>… Typically, this is not actually an assumption we test, rather we infer it based on the context of the data collection. For instance, in the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> example, there is no reason to think that the measurement of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> from one car would impact the measurement from any other car. We therefore assume that all cars are independent and there will be no correlation. However, if we made the same measurement multiple times <em>on the same car</em>, then we would probably assume some degree of correlation (this would be an example of <em>repeated measurements</em>). Similarly, if we made these measurements over certain time-intervals, then the data would represent a <em>time-series</em>, which then would have a very specific correlation structure where values closer in time are more similar than those measured further away. The same is true of working with human subjects. When each measurement represents a different subject, we will typically assume independence. However, multiple measures of the same subject imply some degree of correlation</p>
-<div class="tip admonition">
-<p class="admonition-title">The Complexity of Repeated Measurements</p>
-<p>As indicated above, the typical linear regression model is <em>not</em> suitable for repeated measurements. However, these forms of experimental design are so common in Experimental Psychology that they are usually introduced very early on, without much appreciation for the complexity they add to the model. Because of this, everything we cover in this unit will only be applicable to <em>independent measures</em> deisgns (also known as <em>between-subjects</em> experiments). We will cover how to deal with repeated measurements in the context of <em>mixed-effects models</em> later on the course. However, we have a lot of ground to cover before we get there.</p>
-</div>
-</section>
-<section id="the-relationship-is-a-straight-line">
-<h3>(4) The Relationship is a Straight Line<a class="headerlink" href="#the-relationship-is-a-straight-line" title="Link to this heading">#</a></h3>
-<p>Implicit in the mean function we have specified is the assumption that the relationship in the population that generated our data is a <em>straight line</em>. This is not something we can every truly know without access to the whole population. However, we need to examine whether a straight line appears <em>reasonable</em>, given the data we have available. This involves examining the fit of the line visually. As we will see next week, this can either be done using just the raw data or, more usefully, can be assessed using some special plots using the residuals.</p>
-</section>
-<section id="the-variance-is-constant">
-<h3>(5) The variance is constant<a class="headerlink" href="#the-variance-is-constant" title="Link to this heading">#</a></h3>
-<hr class="footnotes docutils" />
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="greekfoot" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>Ifyou are not very comfortable with this, we would recommend spending some time learning the Greek alphabet. Not only will this help you get more used to the symbols being used, but will also help in terms of communication. You will not be able to verbalise anything about a model if you do not know how to pronounce the Greek alphabet.</p>
-</aside>
-</aside>
+<section id="linear-model-assumptions">
+<h3>Linear Model Assumptions<a class="headerlink" href="#linear-model-assumptions" title="Link to this heading">#</a></h3>
+<p>In building the model above, we have made a number of assumptions about the population distribution, mean function and variance function. In order to make sure this model is a good fit for a particular dataset, we will need to check these assumptions. This will be our focus <em>next week</em>. So, for the moment, we will leave this to one side and just treat all the assumptions as if they hold. Once we understand the consequences of these assumptions, we will be in a better position to evaluate them. This is particularly true in terms of understand what might happen if the assumptions are not met.</p>
 </section>
 </section>
 </section>
@@ -647,14 +601,10 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right)
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-1-the-population-distribution">Element 1 - The Population Distribution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-2-the-mean-function">Element 2 - The Mean Function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-3-the-variance-function">Element 3 - The Variance Function</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-simple-regression-model">The Complete Simple Regression Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-regression-as-a-linear-model">Simple Regression as a Linear Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-simple-regression-assumptions">The Simple Regression Assumptions</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-outcome-is-a-continuous-random-variable">(1) The Outcome is a Continuous Random Variable</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-distribution-of-the-errors-is-normal">(2) The Distribution of the Errors is Normal</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-errors-are-uncorrelated">(3) The Data/Errors are Uncorrelated</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-relationship-is-a-straight-line">(4) The Relationship is a Straight Line</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance-is-constant">(5) The variance is constant</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-model">The Complete Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-models-framework">The Linear Models Framework</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-models-in-r">Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-model-assumptions">Linear Model Assumptions</a></li>
 </ul>
 </li>
 </ul>
