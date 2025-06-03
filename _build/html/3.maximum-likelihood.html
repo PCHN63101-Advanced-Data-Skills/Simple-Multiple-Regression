@@ -382,6 +382,7 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-vs-least-squares">Maximum Likelihood vs Least-Squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a></li>
 </ul>
             </nav>
         </div>
@@ -437,15 +438,6 @@ y_{i} = b_{0} + b_{1}x_{i} + e_{i}.
 y_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i} + e_{i}.
 \]</div>
 <p>This is helpful, because it makes it clearer that the residuals are not really a parameter, rather thay are a <em>derived</em> quantity. So we keep Greek letters wearing hats for our estimated parameters, and lower-case Latin letters for everything else.</p>
-<div class="tip admonition">
-<p class="admonition-title">Residuals are Not Independent with Constant Variance</p>
-<p>One of the main reasons for distinguishing between <em>errors</em> and <em>residuals</em> is that the estimation process <em>changes</em> the distributional properties of the errors. This means that <em>errors</em> and <em>residuals</em> are not expected to behave idnetically. So while it is correct to assume</p>
-<div class="math notranslate nohighlight">
-\[
-\epsilon_{i} \overset{\text{i.i.d.}}{\sim} \mathcal{N}\left(0,\sigma^{2}\right),
-\]</div>
-<p>it is <em>not</em> technically correct to assume the same for the <em>errors</em>. This is because the estimation procedure can <em>induce</em> correlation between the errors and the errors can have non-constant variance, depending upon a property known as <em>leverage</em>. We will discuss some of these concepts next week. For now, just note that the residuals can be used as an <em>approximation</em> for the errors, but we need to perform some additional checks to make sure that this approximation is reasonable.</p>
-</div>
 </section>
 </section>
 <section id="calculating-estimates-with-maximum-likelihood">
@@ -622,6 +614,9 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 <section id="maximum-likelihood-vs-least-squares">
 <h2>Maximum Likelihood vs Least-Squares<a class="headerlink" href="#maximum-likelihood-vs-least-squares" title="Link to this heading">#</a></h2>
 <p>It is important to understand that the implementation of basic linear models in software almost always use OLS instead of ML or REML. So for us, it is important to remember that <code class="docutils literal notranslate"><span class="pre">R</span></code> does <em>not</em> use ML or REML estimation for the <code class="docutils literal notranslate"><span class="pre">lm()</span></code> function, even though it <em>could</em>. In this context, OLS is easier and simpler to estimate, and is more computationally efficient because it does not require iteration. However, because the results are <em>the same</em>, there is no harm viewing linear models through the lens of ML, because this allows for a very general perspective that will be useful as models get more complex in future<a class="footnote-reference brackets" href="#searlefoot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p>
+</section>
+<section id="the-final-estimated-model">
+<h2>The Final Estimated Model<a class="headerlink" href="#the-final-estimated-model" title="Link to this heading">#</a></h2>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="bayesfoot" role="note">
@@ -718,6 +713,7 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-vs-least-squares">Maximum Likelihood vs Least-Squares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a></li>
 </ul>
   </nav></div>
 
