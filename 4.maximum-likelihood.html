@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Maximum Likelihood Estimation &#8212; Linear Models I: Simple and Multiple Regression</title>
+    <title>Maximum Likelihood &#8212; LM I: Simple and Multiple Regression</title>
   
   
   
@@ -62,11 +62,11 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '3.maximum-likelihood';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '4.maximum-likelihood';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Multiple Linear Regression" href="4.multiple-regression.html" />
-    <link rel="prev" title="The Simple Regression Model" href="2.simple-regression.html" />
+    <link rel="next" title="Multiple Linear Regression" href="5.multiple-regression.html" />
+    <link rel="prev" title="Estimating the Simple Regression Model" href="3.estimation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -148,8 +148,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Linear Models I: Simple and Multiple Regression - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Linear Models I: Simple and Multiple Regression - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt="LM I: Simple and Multiple Regression - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="LM I: Simple and Multiple Regression - Home"/>
   
   
 </a></div>
@@ -173,9 +173,10 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.simple-regression.html">The Simple Regression Model</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Maximum Likelihood Estimation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.multiple-regression.html">Multiple Linear Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.regression-R.html">Building Regression Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.estimation.html">Estimating the Simple Regression Model</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Maximum Likelihood</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.regression-R.html">Building Regression Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -253,7 +254,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2F3.maximum-likelihood.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2F4.maximum-likelihood.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -283,7 +284,7 @@
       
       
       
-      <li><a href="_sources/3.maximum-likelihood.ipynb" target="_blank"
+      <li><a href="_sources/4.maximum-likelihood.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -359,7 +360,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Maximum Likelihood Estimation</h1>
+    <h1>Maximum Likelihood</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -369,20 +370,14 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notation-for-estimates">Notation for Estimates</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-vs-residuals">Errors vs Residuals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-maximum-likelihood-work">How Does Maximum Likelihood Work?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#closed-form-solutions">Closed-form Solutions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-maximum-likelihood">Restricted Maximum Likelihood</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-estimates-with-maximum-likelihood">Calculating Estimates with Maximum Likelihood</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-maximum-likelihood">Why Maximum Likelihood?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-maximum-likelihood-work">How Does Maximum Likelihood Work?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#closed-form-solutions">Closed-form Solutions</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-maximum-likelihood">Restricted Maximum Likelihood</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-vs-least-squares">Maximum Likelihood vs Least-Squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a></li>
 </ul>
             </nav>
         </div>
@@ -394,61 +389,11 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood-estimation">
-<h1>Maximum Likelihood Estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Link to this heading">#</a></h1>
-<p>As a brief review, we are now in the position where we have specified the form of model we wish to use on our data. For some continuous outcome variable and some continuous predictor, we start with simplest relationship we can imagine: a straight-line. We then formalise this by placing it within the context of a statistical model, giving:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{align*}
-    y_{i}   &amp;= \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} \\
-    \epsilon_{i} &amp;\sim \mathcal{N}\left(0,\sigma^{2}\right).
-\end{align*}
-\end{split}\]</div>
-<p>This is all fine, except that we have not actually done anything yet! All we have done is written down the model equation that we would like to use. However, we cannot do anything with this because it contains <em>unknown values</em>. At the point of analysing the data, we have measurements of both <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(x\)</span>, but we do <em>not</em> have values for:</p>
-<ul class="simple">
-<li><p>The intercept <span class="math notranslate nohighlight">\(\beta_{0}\)</span></p></li>
-<li><p>The slope <span class="math notranslate nohighlight">\(\beta_{1}\)</span></p></li>
-<li><p>The errors <span class="math notranslate nohighlight">\(\epsilon_{i}\)</span> – because they depend upon <span class="math notranslate nohighlight">\(\beta_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}\)</span></p></li>
-<li><p>The variance <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> – because it depends upon the errors</p></li>
-</ul>
-<p>So, we are currently a bit stuck. Earlier in this lesson, we saw a way of <em>estimating</em> the slope and intercept using the method of <em>least-squares</em>. In this section, we will examine a more generic way of arriving at these values using the <em>Method of Maximum Likelihood</em>. In effect, this will provide us with values for all the unknowns above, allowing us to actually perform calculations and reach conclusions using our model.</p>
-<section id="notation-for-estimates">
-<h2>Notation for Estimates<a class="headerlink" href="#notation-for-estimates" title="Link to this heading">#</a></h2>
-<p>Before getting to the details of estimation, it is important that we establish some new notation for the estimates themseleves. So far, our notation has implicitly assumed that we are referring to the whole popluation under study. As such, the parameters indicated above represent <em>population-level constants</em>. In other words, <span class="math notranslate nohighlight">\(\beta_{0}\)</span> is the <em>true</em> intercept and <span class="math notranslate nohighlight">\(\beta_{1}\)</span> is the <em>true</em> slope. In reality, however, we will usually only have a <em>sample</em> from a population. As such, the parameters we calculate will only be <em>estimates</em> of the true values.</p>
-<p>Traditionally, we denote a parameter estimate by placing a “hat” on top of the corresponding Greek letter. For instance, we would denote an estimate of <span class="math notranslate nohighlight">\(\beta_{1}\)</span> from a given sample as <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> (pronounced “beta 1 hat”). This is important because whenever we see <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span>, this tells us that the value is effectively a <em>guess</em> based on a certain sample of data. In comaprison, whenever we see <span class="math notranslate nohighlight">\(\beta_{1}\)</span>, this indicates the <em>true</em> population value, even though this is largely theoretical and unknowable quantity. We will see more later about why this distinction is important. For the moment, you just need to keep an eye on those little hats because they make quite a big difference to the meaning.</p>
-<div class="tip admonition">
-<p class="admonition-title">Alternative Notation for Estimates</p>
-<p>Some authors like to use the Latin alternatives to the Greek letters to denote estimates. We will not be doing this, but it is worth knowing about to make sense of notation you may see in textbooks or the literature. In this scheme, the estimate of <span class="math notranslate nohighlight">\(\beta_{1}\)</span> would be <span class="math notranslate nohighlight">\(b_{1}\)</span>. So, the true population model would be</p>
-<div class="math notranslate nohighlight">
-\[
-y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i},
-\]</div>
-<p>whereas as an estimated model based on data would be</p>
-<div class="math notranslate nohighlight">
-\[
-y_{i} = b_{0} + b_{1}x_{i} + e_{i}.
-\]</div>
-<p>You can decide which of these you prefer, but we will be wearing “hats” in all our notation going forward.</p>
-</div>
-<section id="errors-vs-residuals">
-<h3>Errors vs Residuals<a class="headerlink" href="#errors-vs-residuals" title="Link to this heading">#</a></h3>
-<p>Another subtle but important difference is that, much like the parameters <span class="math notranslate nohighlight">\(\beta_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}\)</span>, the <em>errors</em> in the model above are defined at the level of the population. This is important, because their value depends upon <span class="math notranslate nohighlight">\(\beta_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}\)</span>. In other words, to get the <em>true</em> errors, we would need to know the <em>true</em> population values of the parameters. Because this is almost never possible, the errors we actually use are based on the <em>estimates</em> <span class="math notranslate nohighlight">\(\hat{\beta}_{0}\)</span> and <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span>. As such, the errors we calculate from our estimated model are going to be different from the true errors. We therefore make a distinction between <em>errors</em> and <em>residuals</em>. The <em>errors</em> are the differences from the <em>true</em> regression line, whereas the <em>residuals</em> are the differences from the <em>estimated</em> regression line. To denote this, residuals are often written with a Latin <span class="math notranslate nohighlight">\(e_{i}\)</span>, meaning we can write our <em>estimated</em> model as:</p>
-<div class="math notranslate nohighlight">
-\[
-y_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i} + e_{i}.
-\]</div>
-<p>This is helpful, because it makes it clearer that the residuals are not really a parameter, rather thay are a <em>derived</em> quantity. So we keep Greek letters wearing hats for our estimated parameters, and lower-case Latin letters for everything else.</p>
-</section>
-</section>
-<section id="calculating-estimates-with-maximum-likelihood">
-<h2>Calculating Estimates with Maximum Likelihood<a class="headerlink" href="#calculating-estimates-with-maximum-likelihood" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood">
+<h1>Maximum Likelihood<a class="headerlink" href="#maximum-likelihood" title="Link to this heading">#</a></h1>
 <p>Now that we have established some new notation and terminology, we can turn to the main topic of this section.</p>
-<section id="why-maximum-likelihood">
-<h3>Why Maximum Likelihood?<a class="headerlink" href="#why-maximum-likelihood" title="Link to this heading">#</a></h3>
-<p>The main point of ML estimation is that it is <em>generic</em>. OLS can only be applied in cases of linear regression, whereas ML is used for Linear Models, Generalised Linear Model, Mixed-effects Models and Generalised Mixed-effects Models. The principles of the <em>likelihood</em> are also very important for understanding Bayesian Statistics. So, it is more helpful in the long-run to understand ML, even if OLS is easier to understand. We will see ML cropping-up throughout this course, so we may as well start by trying to understand it, rather than having to back-track later.</p>
-</section>
 <section id="how-does-maximum-likelihood-work">
-<h3>How Does Maximum Likelihood Work?<a class="headerlink" href="#how-does-maximum-likelihood-work" title="Link to this heading">#</a></h3>
+<h2>How Does Maximum Likelihood Work?<a class="headerlink" href="#how-does-maximum-likelihood-work" title="Link to this heading">#</a></h2>
 <p>…</p>
 <div class="math notranslate nohighlight">
 \[
@@ -536,7 +481,7 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 <p>So, the log likelihood is now <em>more positive</em>, meaning we are moving in the right direction. So hopefully it is clear how calculating the log-likelihood gives us a metric of which combination of parameters make our data the <em>most probable</em>. Now, importantly, this depends upon the assumed distribution of the data, so we can start to see how the assumptions we made when defining our model are starting to be used. We can also see that this depends upon the data we have collected. So, the assumption here is that our sample is <em>representative</em> in order to make sure the estimates are close to the population values.</p>
 </section>
 <section id="optimisation-algorithms">
-<h3>Optimisation Algorithms<a class="headerlink" href="#optimisation-algorithms" title="Link to this heading">#</a></h3>
+<h2>Optimisation Algorithms<a class="headerlink" href="#optimisation-algorithms" title="Link to this heading">#</a></h2>
 <p>Of course, searching through many combinations of guesses for the parameters is not particularly efficient or principled. In order to do this sensibly, we rely on computer algorithms to search through many possible combinations of values to find which one <em>maximises</em> the log-likelihood. These are known as <em>optimisation</em> algorithms and are a complex topic in numerical computing. For us, we do not really need to understand how these work. …</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -598,11 +543,11 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 </div>
 </section>
 <section id="closed-form-solutions">
-<h3>Closed-form Solutions<a class="headerlink" href="#closed-form-solutions" title="Link to this heading">#</a></h3>
+<h2>Closed-form Solutions<a class="headerlink" href="#closed-form-solutions" title="Link to this heading">#</a></h2>
 <p>For certain applications of ML, the need to use an iterative algorithm is unnecessary. This is because evaluating the values maximise the likelihood function can be worked-out and an equation giving the solution specified.</p>
 </section>
 <section id="restricted-maximum-likelihood">
-<h3>Restricted Maximum Likelihood<a class="headerlink" href="#restricted-maximum-likelihood" title="Link to this heading">#</a></h3>
+<h2>Restricted Maximum Likelihood<a class="headerlink" href="#restricted-maximum-likelihood" title="Link to this heading">#</a></h2>
 <p>In the example above, your may have notice that we neglected to show the estimates for <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>. This was not an accident…</p>
 <p>Sometimes denoted REML or ReML, …</p>
 <div class="tip admonition">
@@ -610,13 +555,10 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 <p>…</p>
 </div>
 </section>
-</section>
-<section id="maximum-likelihood-vs-least-squares">
-<h2>Maximum Likelihood vs Least-Squares<a class="headerlink" href="#maximum-likelihood-vs-least-squares" title="Link to this heading">#</a></h2>
-<p>It is important to understand that the implementation of basic linear models in software almost always use OLS instead of ML or REML. So for us, it is important to remember that <code class="docutils literal notranslate"><span class="pre">R</span></code> does <em>not</em> use ML or REML estimation for the <code class="docutils literal notranslate"><span class="pre">lm()</span></code> function, even though it <em>could</em>. In this context, OLS is easier and simpler to estimate, and is more computationally efficient because it does not require iteration. However, because the results are <em>the same</em>, there is no harm viewing linear models through the lens of ML, because this allows for a very general perspective that will be useful as models get more complex in future<a class="footnote-reference brackets" href="#searlefoot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p>
-</section>
 <section id="the-final-estimated-model">
 <h2>The Final Estimated Model<a class="headerlink" href="#the-final-estimated-model" title="Link to this heading">#</a></h2>
+<section id="interpreting-the-estimates">
+<h3>Interpreting the Estimates<a class="headerlink" href="#interpreting-the-estimates" title="Link to this heading">#</a></h3>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="bayesfoot" role="note">
@@ -627,11 +569,8 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
 <p>This is often a problem of just getting values of 0 due to issues with computational precision when working with many small probabilities. Taking logs not only changes the scale so that this does not happen, but it also turns <em>multiplication</em> into <em>summation</em>. Historically, this made calculating the likelihood much easier by hand. If you ever want to get back to the likelihood value, you can just undo the logs by using <code class="docutils literal notranslate"><span class="pre">exp(loglik)</span></code>.</p>
 </aside>
-<aside class="footnote brackets" id="searlefoot" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
-<p>This is the perspective taken by <a class="reference external" href="https://www.librarysearch.manchester.ac.uk/permalink/44MAN_INST/1r887gn/alma9930787964401631">McCulloch, Searle &amp; Neuhaus (2008)</a>, who are leading experts on the use of linear models and their derivatives within statistics. This book gives everything you need to understand about the mathematical theory behind this framework, though it is not for the faint of heart!</p>
 </aside>
-</aside>
+</section>
 </section>
 </section>
 
@@ -666,16 +605,16 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="2.simple-regression.html"
+       href="3.estimation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">The Simple Regression Model</p>
+        <p class="prev-next-title">Estimating the Simple Regression Model</p>
       </div>
     </a>
     <a class="right-next"
-       href="4.multiple-regression.html"
+       href="5.multiple-regression.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
@@ -700,20 +639,14 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notation-for-estimates">Notation for Estimates</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-vs-residuals">Errors vs Residuals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-maximum-likelihood-work">How Does Maximum Likelihood Work?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#closed-form-solutions">Closed-form Solutions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-maximum-likelihood">Restricted Maximum Likelihood</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-estimates-with-maximum-likelihood">Calculating Estimates with Maximum Likelihood</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-maximum-likelihood">Why Maximum Likelihood?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-maximum-likelihood-work">How Does Maximum Likelihood Work?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#closed-form-solutions">Closed-form Solutions</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-maximum-likelihood">Restricted Maximum Likelihood</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-vs-least-squares">Maximum Likelihood vs Least-Squares</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a></li>
 </ul>
   </nav></div>
 
