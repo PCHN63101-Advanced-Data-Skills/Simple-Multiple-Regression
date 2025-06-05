@@ -9,5 +9,4 @@ chapters:
 - file: 3.estimation
 - file: 4.maximum-likelihood
 - file: 5.multiple-regression
-- file: 6.regression-R
 - file: summary
