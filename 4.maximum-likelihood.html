@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Maximum Likelihood &#8212; LM I: Simple and Multiple Regression</title>
+    <title>Maximum Likelihood Estimation &#8212; LM I: Simple and Multiple Regression</title>
   
   
   
@@ -174,7 +174,7 @@
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.simple-regression.html">The Simple Regression Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.estimation.html">Estimating the Simple Regression Model</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Maximum Likelihood</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Maximum Likelihood Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6.regression-R.html">Building Regression Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -360,7 +360,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Maximum Likelihood</h1>
+    <h1>Maximum Likelihood Estimation</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -370,9 +370,9 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-maximum-likelihood-work">How Does Maximum Likelihood Work?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#closed-form-solutions">Closed-form Solutions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exact-solutions">Exact Solutions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-maximum-likelihood">Restricted Maximum Likelihood</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a></li>
@@ -389,23 +389,23 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood">
-<h1>Maximum Likelihood<a class="headerlink" href="#maximum-likelihood" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood-estimation">
+<h1>Maximum Likelihood Estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Link to this heading">#</a></h1>
 <p>Now that we have established some new notation and terminology, we can turn to the main topic of this section.</p>
-<section id="how-does-maximum-likelihood-work">
-<h2>How Does Maximum Likelihood Work?<a class="headerlink" href="#how-does-maximum-likelihood-work" title="Link to this heading">#</a></h2>
+<section id="how-does-mle-work">
+<h2>How Does MLE Work?<a class="headerlink" href="#how-does-mle-work" title="Link to this heading">#</a></h2>
 <p>…</p>
 <div class="math notranslate nohighlight">
 \[
-P\left(\mathcal{D}|\boldsymbol{\theta}\right),
+L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> represents the data we have collected and <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span> is a generic representation of any set of parameters. For instance, in simple regression, <span class="math notranslate nohighlight">\(\boldsymbol{\theta} = \{\beta_{0},\beta_{1},\sigma^{2}\}\)</span>. So the quantity of interest is the probability of the data given some values of the parameters<a class="footnote-reference brackets" href="#bayesfoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>The key point to understand about ML is that it is based on evaluating <em>the probability of the data</em>, given some values of the parameters. So we can think about it as taking a guess for the parameter values, then calculating how probable those values make the data we have collected. It is like asking the question: “how likely would it have been to collect the data that we have collected, if these were the parameter values?”. By searching through lots of different possible combinations of parameter values, the aim is to find the specific combination that leads to the <em>highest probability</em> of the data. Formally, we can write</p>
 <div class="math notranslate nohighlight">
 \[
-\left(\hat{\beta}_{0}, \hat{\beta}_{1}, \hat{\sigma}^{2}\right) = \text{arg max}\hspace{0.5em}  \mathcal{l}\left(\beta_{0}, \beta_{1}, \sigma^{2}\right),
+\left(\hat{\beta}_{0}, \hat{\beta}_{1}, \hat{\sigma}^{2}\right) = \text{arg max}\hspace{0.5em}  L\left(\beta_{0}, \beta_{1}, \sigma^{2}|\mathbf{y}\right),
 \]</div>
-<p>which is just saying that our parameter estimates are those values that make the output of the likelihood function <span class="math notranslate nohighlight">\(\mathcal{l}\left(\beta_{0}, \beta_{1}, \sigma^{2}\right)\)</span> as <em>big</em> as possible.</p>
+<p>which is just saying that our parameter estimates are those values that make the output of the likelihood function <span class="math notranslate nohighlight">\(L\left(\beta_{0}, \beta_{1}, \sigma^{2}|\mathbf{y}\right)\)</span> as <em>big</em> as possible.</p>
 <p>As an example, let us use the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> data again. Furthermore, let us say that we have guessed that <span class="math notranslate nohighlight">\(\beta_{0} = 30\)</span>, <span class="math notranslate nohighlight">\(\beta_{1} = -5\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2} = 1\)</span>. Do not worry too much about where these guesses have come from, they are just an example. If we are assuming that the data have come from a normal distribution, we can therefore calculate the probability of the first value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -425,7 +425,7 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 </div>
 </div>
 </div>
-<p>where the function <code class="docutils literal notranslate"><span class="pre">dnorm</span></code> returns the <em>density</em> of the normal distribution for the given data. This is the area under the normal curve, equivalent to the <em>probability</em> of a specific value. The probability of the second value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> would then be</p>
+<p>where the function <code class="docutils literal notranslate"><span class="pre">dnorm</span></code> returns the <em>density</em> of the normal distribution for the given data<a class="footnote-reference brackets" href="#densityfoot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. The probability of the second value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> would then be</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
@@ -441,7 +441,7 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 </div>
 </div>
 </div>
-<p>and so on. The find out the overall likelihood for the <em>whole</em> dataset, we just need to <em>multiply</em> these probabilities. However, this can cause computational problems<a class="footnote-reference brackets" href="#likprobsfoot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, so it is more usual to sum the <em>log</em> of these probabilities to give the <em>log likelihood</em>.</p>
+<p>and so on. The find out the overall likelihood for the <em>whole</em> dataset, we just need to <em>multiply</em> these probabilities. However, this can cause computational problems<a class="footnote-reference brackets" href="#likprobsfoot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>, so it is more usual to sum the <em>log</em> of these probabilities to give the <em>log likelihood</em>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
@@ -544,9 +544,9 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 </div>
 </div>
 </section>
-<section id="closed-form-solutions">
-<h2>Closed-form Solutions<a class="headerlink" href="#closed-form-solutions" title="Link to this heading">#</a></h2>
-<p>For certain applications of ML, the need to use an iterative algorithm is unnecessary. This is because evaluating the values maximise the likelihood function can be worked-out and an equation giving the solution specified.</p>
+<section id="exact-solutions">
+<h2>Exact Solutions<a class="headerlink" href="#exact-solutions" title="Link to this heading">#</a></h2>
+<p>The application of ML given above is sometimes known as <em>iterative</em> ML, highlighting the fact that in certain applications of ML, an iterative algorithm is unnecessary. This is because a single solution that maximise the likelihood function can be derived, meaning we can determine the equation that will give us the solution without the need to search around in the parameter space to find it. One example of this is linear models. If we assume a normal distribution for the outcome variable, we can work out an <em>exact</em> equation for those estimates that maximises the likelihood. Although the derivation of this is beyond the scope of this lesson, it turns out that the exact solution is <em>identical</em> to the OLS equations for the slope and intercept. As such, ML agrees with OLS and we can think of the estimating equations as either an application of OLS <em>or</em> as an application of ML.</p>
 </section>
 <section id="restricted-maximum-likelihood">
 <h2>Restricted Maximum Likelihood<a class="headerlink" href="#restricted-maximum-likelihood" title="Link to this heading">#</a></h2>
@@ -620,8 +620,12 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>This may seem like the wrong quantity. Surely, we are interested in <span class="math notranslate nohighlight">\(P(\boldsymbol{\theta}|\mathcal{D})\)</span>? In other words, finding the parameters that are most probable, given the data. Unfortunately, evaluating the probability <span class="math notranslate nohighlight">\(P(\boldsymbol{\theta}|\mathcal{D})\)</span> requires Bayesian methods. Because Fisher hated Bayesian statistics, he was determined to find methods of estimation that did not require Bayes Theorem. Hence, the likelihood was adopted as a method that could be used from a purely Frequentist perspective. We will see more about this later on the course.</p>
 </aside>
-<aside class="footnote brackets" id="likprobsfoot" role="note">
+<aside class="footnote brackets" id="densityfoot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>This is the area under the normal curve, equivalent to the <em>probability</em> of a specific value.</p>
+</aside>
+<aside class="footnote brackets" id="likprobsfoot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
 <p>This is often a problem of just getting values of 0 due to issues with computational precision when working with many small probabilities. Taking logs not only changes the scale so that this does not happen, but it also turns <em>multiplication</em> into <em>summation</em>. Historically, this made calculating the likelihood much easier by hand. If you ever want to get back to the likelihood value, you can just undo the logs by using <code class="docutils literal notranslate"><span class="pre">exp(loglik)</span></code>.</p>
 </aside>
 </aside>
@@ -694,9 +698,9 @@ P\left(\mathcal{D}|\boldsymbol{\theta}\right),
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-maximum-likelihood-work">How Does Maximum Likelihood Work?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#closed-form-solutions">Closed-form Solutions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exact-solutions">Exact Solutions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-maximum-likelihood">Restricted Maximum Likelihood</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a></li>
