@@ -371,7 +371,7 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-likelihood-function">The Likelihood Function</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#an-example-in-r">An Example in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-concrete-example-in-r">A Concrete Example in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
 </ul>
 </li>
@@ -414,7 +414,7 @@ L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\
 \[
 \left(\hat{\beta}_{0}, \hat{\beta}_{1}, \hat{\sigma}^{2}\right) = \text{arg max}\hspace{0.5em}  L\left(\beta_{0}, \beta_{1}, \sigma^{2}|\mathbf{y}\right),
 \]</div>
-<p>which is just saying that our parameter estimates are those values that make the output of the likelihood function <span class="math notranslate nohighlight">\(L\left(\beta_{0}, \beta_{1}, \sigma^{2}|\mathbf{y}\right)\)</span> as <em>big</em> as possible.</p>
+<p>which is just saying that our parameter estimates are those values that make the output of the likelihood function as <em>big</em> as possible.</p>
 <section id="the-likelihood-function">
 <h3>The Likelihood Function<a class="headerlink" href="#the-likelihood-function" title="Link to this heading">#</a></h3>
 <p>So how do we evaluate the likelihood function? In brief, if we want the likelihood of our entire dataset, we need to <em>multiply</em> the probability of each data value, using some guesses for the parameter values. We can then repeat this for some other guesses. If the likelihood gets <em>larger</em> then our new guesses make the data more probable than our old guesses. We will see shortly how to do this in a more principled way than just guessing, but this should give you enough of an idea at this point.</p>
@@ -445,7 +445,7 @@ L(\beta_{0},\beta_{1},\sigma^{2}|\mathbf{y}) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\
 \]</div>
 <div class="tip admonition">
 <p class="admonition-title">Big Pi Notation</p>
-<p>So the notation</p>
+<p>Big pi notation, denoted by the captitol Greek letter <span class="math notranslate nohighlight">\(\Pi\)</span>, is used as a shorthand for <em>multiplication</em>. Below the big Pi, we indicate the notation for our index across these multiplications, as well as our starting index value. Above the big Pi, we indicate the value where we stop. So the notation</p>
 <div class="math notranslate nohighlight">
 \[
 P = \prod_{i=1}^{n} y_{i}
@@ -455,7 +455,8 @@ P = \prod_{i=1}^{n} y_{i}
 \[
 P = y_{1} \times y_{2} \times y_{3} ,
 \]</div>
-<p>if we take <span class="math notranslate nohighlight">\(n=3\)</span>. In code, is the same as shortening</p>
+<p>if we take <span class="math notranslate nohighlight">\(n=3\)</span>. So, the notation says that our index is called <span class="math notranslate nohighlight">\(i\)</span> and that we start it at <span class="math notranslate nohighlight">\(1\)</span>. We then keep going until <span class="math notranslate nohighlight">\(i = n\)</span>, at which point we stop.</p>
+<p>This has a direct connection to a for-loop. So, in code, this is the same as shortening</p>
 <div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">P</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -471,15 +472,17 @@ P = y_{1} \times y_{2} \times y_{3} ,
 <p>So, you can think of the Big Pi notation as a <em>multiplication loop</em> over a certain set of indices.</p>
 </div>
 </section>
-<section id="an-example-in-r">
-<h3>An Example in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#an-example-in-r" title="Link to this heading">#</a></h3>
-<p>As an example, let us use the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> data again. Furthermore, let us say that we have guessed that <span class="math notranslate nohighlight">\(\beta_{0} = 30\)</span>, <span class="math notranslate nohighlight">\(\beta_{1} = -5\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2} = 1\)</span>. Do not worry too much about where these guesses have come from, they are just an example. If we are assuming that the data have come from a normal distribution, we can therefore calculate the probability of the first value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> using</p>
+<section id="a-concrete-example-in-r">
+<h3>A Concrete Example in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#a-concrete-example-in-r" title="Link to this heading">#</a></h3>
+<p>To get a more concrete sense of calculating the likelihood, let us use the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> data again. Furthermore, let us say that we have guessed that <span class="math notranslate nohighlight">\(\beta_{0} = 30\)</span>, <span class="math notranslate nohighlight">\(\beta_{1} = -5\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2} = 1\)</span>. If we are assuming that the data have come from a normal distribution, we can calculate the probability of the first value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">30</span>
 <span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-5</span>
-<span class="n">mu</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
 <span class="n">sigma2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
+
+<span class="n">mu</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+
 <span class="n">lik</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">dnorm</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2</span><span class="p">))</span>
 
 <span class="nf">print</span><span class="p">(</span><span class="n">lik</span><span class="p">)</span>
@@ -523,12 +526,12 @@ P = y_{1} \times y_{2} \times y_{3} ,
 </div>
 </div>
 </div>
-<p>and so on. The find out the overall likelihood for the <em>whole</em> dataset, we just need to <em>multiply</em> these probabilities. However, this can cause computational problems<a class="footnote-reference brackets" href="#likprobsfoot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, so it is more usual to sum the <em>log</em> of these probabilities to give the <em>log likelihood</em>.</p>
+<p>and so on. The find out the overall likelihood for the <em>whole</em> dataset, we just need to <em>multiply</em> these probabilities. However, this can cause computational problems<a class="footnote-reference brackets" href="#likprobsfoot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, so it is more usual to sum the <em>log</em> of these probabilities. This gives the <em>log-likelihood</em>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
-<span class="n">loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
 <span class="n">loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">dnorm</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2</span><span class="p">),</span><span class="w"> </span><span class="n">log</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span>
+
 <span class="nf">print</span><span class="p">(</span><span class="n">loglik</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -539,17 +542,18 @@ P = y_{1} \times y_{2} \times y_{3} ,
 </div>
 </div>
 </div>
-<p>This value is not particularly interpretable, but this does not matter. All we want to do is make it as <em>big</em> as possible. Because this has returned a <em>negative</em> value, what we need to do is make is as <em>positive</em> as possible. So maybe we should try something else?</p>
+<p>This value is not particularly interpretable, but this does not matter. All we want to do is make it as <em>big</em> as possible. In the context of a negative value, this means our aim is to make the likelihood as <em>positive</em> as possible.</p>
 <p>Let us inch closer to the results we got from least-squares earlier by setting <span class="math notranslate nohighlight">\(\beta_{0} = 35\)</span>, <span class="math notranslate nohighlight">\(\beta_{1} = -5\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2} = 1\)</span>. This gives</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">35</span>
 <span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-5</span>
-<span class="n">mu</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
 <span class="n">sigma2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
-<span class="n">loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+
+<span class="n">mu</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
 
 <span class="n">loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">dnorm</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">sigma2</span><span class="p">),</span><span class="w"> </span><span class="n">log</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span>
+
 <span class="nf">print</span><span class="p">(</span><span class="n">loglik</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -560,12 +564,12 @@ P = y_{1} \times y_{2} \times y_{3} ,
 </div>
 </div>
 </div>
-<p>So, the log likelihood is now <em>more positive</em>, meaning we are moving in the right direction. So hopefully it is clear how calculating the log-likelihood gives us a metric of which combination of parameters make our data the <em>most probable</em>. In principle, we could just continue with some guesses for the parameters until we cannot make the log-likelihood any bigger.</p>
+<p>So, the log likelihood is now <em>more positive</em>, meaning we are moving in the right direction. These parameter values make our data <em>more probable</em> than the values we had previously. As such, these estimates are, in some sense, <em>closer</em> to the true values. This is not necessarily the largest we can make the likelihood, but hopefully it is clear how this provides a metric indicating which combination of parameters make our data the <em>most probable</em>. In principle, we could just continue with some guesses for the parameters until we cannot make the log-likelihood any bigger.</p>
 </section>
 <section id="optimisation-algorithms">
 <h3>Optimisation Algorithms<a class="headerlink" href="#optimisation-algorithms" title="Link to this heading">#</a></h3>
-<p>An obvious issue with the scheme above is that searching through many combinations of guesses for the parameters is not particularly efficient or principled. In fact, there is an infinite number of values we could choose, as well as an infinite number of combinations. So how can we possibly find the values we need?</p>
-<p>In order to do so, we rely on computer algorithms to search through many possible combinations of values to find which one <em>maximises</em> the log-likelihood. These are known as <em>optimisation</em> algorithms and are a complex topic in numerical computing. For us, we do not really need to understand how these work. …</p>
+<p>An obvious issue with the scheme above is that searching through many combinations of guesses for the parameters is not particularly efficient or principled. In fact, there is an infinite number of values we could choose, as well as an infinite number of combinations. So how can we possibly find the values we need? In order to do so, we rely on computer algorithms to search through many possible combinations of values to find which one <em>maximises</em> the log-likelihood. These are known as <em>optimisation</em> algorithms and are a complex topic in numerical computing. For our purpose, we do not really need to understand how these algorithms work. All we really need to know is that they use rules and heuristics to explore the space of all possible parameter values in order to find values that the algorithm thinks make the log-likelihood the largest.</p>
+<p>Within <code class="docutils literal notranslate"><span class="pre">R</span></code> the generic function <code class="docutils literal notranslate"><span class="pre">optim()</span></code> can be used to do this, though note that there are several MLE-specific optimisation methods that we will encounter in the future. The <code class="docutils literal notranslate"><span class="pre">optim()</span></code> function needs some starting guesses for the parameters, so in the example below we set <span class="math notranslate nohighlight">\(\hat{\beta}_{0} = \bar{y}\)</span>, <span class="math notranslate nohighlight">\(\hat{\beta}_{1} = 0\)</span> and <span class="math notranslate nohighlight">\(\sigma = \sqrt{\text{Var}(y)}\)</span>. In addition, the <code class="docutils literal notranslate"><span class="pre">optim()</span></code> function is designed to <em>minimise</em> rather than <em>maximise</em> a value, so we instead define the <em>negative</em> log-likelihood, as minimising the negative log-likelihood is equivalent to maximising the positive log-likelihood. After running the iterative ML estimation, we get</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span>
@@ -573,7 +577,7 @@ P = y_{1} \times y_{2} \times y_{3} ,
 <span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span>
 
 <span class="c1"># Define negative log-likelihood</span>
-<span class="n">neg_loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="n">loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">params</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
 <span class="w">  </span><span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">params</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
 <span class="w">  </span><span class="n">sigma</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">params</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
@@ -583,35 +587,38 @@ P = y_{1} \times y_{2} \times y_{3} ,
 <span class="w">    </span>
 <span class="w">  </span><span class="n">loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">dnorm</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span><span class="w"> </span><span class="n">log</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span><span class="w"> </span><span class="c1"># log-likelihood</span>
 
-<span class="w">  </span><span class="kr">return</span><span class="p">(</span><span class="o">-</span><span class="n">loglik</span><span class="p">)</span><span class="w"> </span><span class="c1"># retun negative log-likelihood</span>
+<span class="w">  </span><span class="kr">return</span><span class="p">(</span><span class="n">loglik</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="c1"># Starting values (a guess based on plotting the data)</span>
-<span class="n">init_params</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">37</span><span class="p">,</span><span class="m">-5</span><span class="p">,</span><span class="m">3</span><span class="p">)</span>
+<span class="c1"># Starting values</span>
+<span class="n">init_params</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="w"> </span><span class="c1"># guess for the intercept</span>
+<span class="w">                 </span><span class="m">0</span><span class="p">,</span><span class="w">       </span><span class="c1"># guess for the slope</span>
+<span class="w">                 </span><span class="nf">sd</span><span class="p">(</span><span class="n">y</span><span class="p">))</span><span class="w">   </span><span class="c1"># guess for the standard deviation</span>
 
 <span class="c1"># Run optimisation</span>
 <span class="n">mle</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">optim</span><span class="p">(</span>
 <span class="w">  </span><span class="n">par</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">init_params</span><span class="p">,</span>
-<span class="w">  </span><span class="n">fn</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">neg_loglik</span><span class="p">,</span>
+<span class="w">  </span><span class="n">fn</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">loglik</span><span class="p">,</span>
 <span class="w">  </span><span class="n">method</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;BFGS&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">reltol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1e-12</span><span class="p">)</span>
+<span class="w">  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">reltol</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="m">1e-12</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                 </span><span class="n">fnscale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">)</span><span class="w">    </span><span class="c1"># do maximisation</span>
 <span class="p">)</span>
 
 <span class="c1"># Print results</span>
-<span class="n">mle_est</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mle</span><span class="o">$</span><span class="n">par</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span>
-<span class="nf">names</span><span class="p">(</span><span class="n">mle_est</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beta.1&quot;</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">mle_est</span><span class="p">)</span>
+<span class="n">mle_pars</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mle</span><span class="o">$</span><span class="n">par</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">mle_pars</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beta.1&quot;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">mle_pars</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   beta.0    beta.1 
-37.285126 -5.344472 
+37.285125 -5.344471 
 </pre></div>
 </div>
 </div>
 </div>
-<p>Which we can compare to the results <code class="docutils literal notranslate"><span class="pre">R</span></code> gives us when using the <code class="docutils literal notranslate"><span class="pre">lm()</span></code> function</p>
+<p>Which we can compare to the OLS results <code class="docutils literal notranslate"><span class="pre">R</span></code> gives us when using the <code class="docutils literal notranslate"><span class="pre">lm()</span></code> function</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">coef</span><span class="p">(</span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)))</span>
@@ -625,6 +632,7 @@ P = y_{1} \times y_{2} \times y_{3} ,
 </div>
 </div>
 </div>
+<p>As we can see, these are basically exactly the same, showing how both MLE and OLS will result in the same estimates for the intercept and slope, save for some minor differences in numerical precision.</p>
 </section>
 </section>
 <section id="exact-solutions">
@@ -802,7 +810,7 @@ e_{i} = \text{MPG}_{i} - [... + (... \times \text{Weight}_{i})].
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-likelihood-function">The Likelihood Function</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#an-example-in-r">An Example in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-concrete-example-in-r">A Concrete Example in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
 </ul>
 </li>
