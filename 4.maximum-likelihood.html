@@ -176,7 +176,6 @@
 <li class="toctree-l1"><a class="reference internal" href="3.estimation.html">Estimating the Simple Regression Model</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Maximum Likelihood Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6.regression-R.html">Building Regression Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -370,11 +369,16 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-likelihood-function">The Likelihood Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#an-example-in-r">An Example in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exact-solutions">Exact Solutions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-maximum-likelihood">Restricted Maximum Likelihood</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-estimated-model">The Estimated Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimates">The Final Estimates</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a></li>
 </ul>
 </li>
@@ -391,21 +395,84 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood-estimation">
 <h1>Maximum Likelihood Estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Link to this heading">#</a></h1>
-<p>Now that we have established some new notation and terminology, we can turn to the main topic of this section.</p>
+<p>In the previous section, we discussed estimation of the simple regression model very generally, establishing that we could use <em>either</em> MLE or OLS to arrive at the same results. As argued in that section, although OLS is conceptually simple, it is limited in its application to the more complex models that we will be encountering later on the course. As such, it is useful to focus primarily on Maximum Likelihood Estimation (MLE) as a general method that can be used to estimate values across a variety of models. In this section, we will dig into MLE in a bit more detail to give you a sense of how it works and, also, to show how the results are identical to OLS.</p>
 <section id="how-does-mle-work">
 <h2>How Does MLE Work?<a class="headerlink" href="#how-does-mle-work" title="Link to this heading">#</a></h2>
-<p>…</p>
+<p>Before getting started on understanding MLE, it is worth highlighting that you will <em>never</em> need to actually implement this yourself. Software will always take care of all of this for you. As such, this section is just trying to help you gain intution about how MLE works. Even if you do not understand every nuance, you can still happily use MLE in software as the estimation technique. So just try to gain some intution here and do not worry about understanding every detail.</p>
+<p>Fundamentally, MLE is based on finding parameter values that make a certain value, known as the <em>likelihood</em>, as <em>big</em> as possible. The value of likelihood is calculated using the <em>likelihood function</em>, denoted</p>
 <div class="math notranslate nohighlight">
 \[
-L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\theta}\right),
+L\left(\boldsymbol{\theta}|\mathcal{D}\right),
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> represents the data we have collected and <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span> is a generic representation of any set of parameters. For instance, in simple regression, <span class="math notranslate nohighlight">\(\boldsymbol{\theta} = \{\beta_{0},\beta_{1},\sigma^{2}\}\)</span>. So the quantity of interest is the probability of the data given some values of the parameters<a class="footnote-reference brackets" href="#bayesfoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
-<p>The key point to understand about ML is that it is based on evaluating <em>the probability of the data</em>, given some values of the parameters. So we can think about it as taking a guess for the parameter values, then calculating how probable those values make the data we have collected. It is like asking the question: “how likely would it have been to collect the data that we have collected, if these were the parameter values?”. By searching through lots of different possible combinations of parameter values, the aim is to find the specific combination that leads to the <em>highest probability</em> of the data. Formally, we can write</p>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> represents the data we have collected and <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span> is a generic representation of any set of parameters. For instance, in simple regression, <span class="math notranslate nohighlight">\(\boldsymbol{\theta} = \{\beta_{0},\beta_{1},\sigma^{2}\}\)</span>. In order to understand this, we can make an equivalence between the likelihood and probability. When placed in probabilitstic terms, we have</p>
+<div class="math notranslate nohighlight">
+\[
+L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\theta}\right).
+\]</div>
+<p>In words, this is saying that the likelihood of a set of paramater values, given some data, is the <em>same</em> as evaluating the probability of the data, assuming those parameter values are true. The key point here is that MLE is based on evaluating the <em>probability of the data</em>, given some values of the parameters<a class="footnote-reference brackets" href="#bayesfoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. We can think about it as taking a guess for the parameter values, then calculating how probable those values make the data we have collected. It is like asking the question: “how likely would it have been to collect the data that we have collected, if these were the parameter values?”. By searching through lots of different possible combinations of parameter values, the aim is to find the specific combination that leads to the <em>highest probability</em> of the data. In other words, the values that <em>maxmimise the likelihood</em>. Within the context of simple regression, we could then write</p>
 <div class="math notranslate nohighlight">
 \[
 \left(\hat{\beta}_{0}, \hat{\beta}_{1}, \hat{\sigma}^{2}\right) = \text{arg max}\hspace{0.5em}  L\left(\beta_{0}, \beta_{1}, \sigma^{2}|\mathbf{y}\right),
 \]</div>
 <p>which is just saying that our parameter estimates are those values that make the output of the likelihood function <span class="math notranslate nohighlight">\(L\left(\beta_{0}, \beta_{1}, \sigma^{2}|\mathbf{y}\right)\)</span> as <em>big</em> as possible.</p>
+<section id="the-likelihood-function">
+<h3>The Likelihood Function<a class="headerlink" href="#the-likelihood-function" title="Link to this heading">#</a></h3>
+<p>So how do we evaluate the likelihood function? In brief, if we want the likelihood of our entire dataset, we need to <em>multiply</em> the probability of each data value, using some guesses for the parameter values. We can then repeat this for some other guesses. If the likelihood gets <em>larger</em> then our new guesses make the data more probable than our old guesses. We will see shortly how to do this in a more principled way than just guessing, but this should give you enough of an idea at this point.</p>
+<p>So how do we calculate the probabilities of each data point? Remember that our core assumption for simple regression is that</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i}, \sigma^{2}\right).
+\]</div>
+<p>The probability of any value from a normal distribution is given by its <em>probability density function</em>, which is</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(x - \mu)^{2}}{2\sigma^{2}}}.
+\]</div>
+<p>Combining these two tells us that the probability of any particular datapoint can be calculated using</p>
+<div class="math notranslate nohighlight">
+\[
+P(y_{i}) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(y_{i} - (\beta_{0} + \beta_{1}x_{i}))^{2}}{2\sigma^{2}}}.
+\]</div>
+<p>So, if we insert some guesses for <span class="math notranslate nohighlight">\(\beta_{0}\)</span>, <span class="math notranslate nohighlight">\(\beta_{1}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>, we can calculate the probability of any of our data values. This effectively tells us the probability of that datapoint, assuming our guesses are correct. The likelihood function then involves multiplying all these values together to give</p>
+<div class="math notranslate nohighlight">
+\[
+L(\beta_{0},\beta_{1},\sigma^{2}|\mathbf{y}) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(y_{1} - (\beta_{0} + \beta_{1}x_{1}))^{2}}{2\sigma^{2}}} \times \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(y_{2} - (\beta_{0} + \beta_{1}x_{2}))^{2}}{2\sigma^{2}}} \times \dots \times \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(y_{n} - (\beta_{0} + \beta_{1}x_{n}))^{2}}{2\sigma^{2}}},
+\]</div>
+<p>which we can more compactly express using Big Pi notation (see the box below)</p>
+<div class="math notranslate nohighlight">
+\[
+L(\beta_{0},\beta_{1},\sigma^{2}|\mathbf{y}) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(y_{i} - (\beta_{0} + \beta_{1}x_{i}))^{2}}{2\sigma^{2}}}.
+\]</div>
+<div class="tip admonition">
+<p class="admonition-title">Big Pi Notation</p>
+<p>So the notation</p>
+<div class="math notranslate nohighlight">
+\[
+P = \prod_{i=1}^{n} y_{i}
+\]</div>
+<p>is equivalent to</p>
+<div class="math notranslate nohighlight">
+\[
+P = y_{1} \times y_{2} \times y_{3} ,
+\]</div>
+<p>if we take <span class="math notranslate nohighlight">\(n=3\)</span>. In code, is the same as shortening</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">P</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
+<span class="n">P</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
+
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">){</span>
+<span class="w">    </span><span class="n">P</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">P</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>So, you can think of the Big Pi notation as a <em>multiplication loop</em> over a certain set of indices.</p>
+</div>
+</section>
+<section id="an-example-in-r">
+<h3>An Example in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#an-example-in-r" title="Link to this heading">#</a></h3>
 <p>As an example, let us use the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> data again. Furthermore, let us say that we have guessed that <span class="math notranslate nohighlight">\(\beta_{0} = 30\)</span>, <span class="math notranslate nohighlight">\(\beta_{1} = -5\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2} = 1\)</span>. Do not worry too much about where these guesses have come from, they are just an example. If we are assuming that the data have come from a normal distribution, we can therefore calculate the probability of the first value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -425,7 +492,22 @@ L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\
 </div>
 </div>
 </div>
-<p>where the function <code class="docutils literal notranslate"><span class="pre">dnorm</span></code> returns the <em>density</em> of the normal distribution for the given data<a class="footnote-reference brackets" href="#densityfoot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. The probability of the second value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> would then be</p>
+<p>where the function <code class="docutils literal notranslate"><span class="pre">dnorm</span></code> returns the <em>density</em> of the normal distribution for the given data. We can see how this agrees with manually calculating the density using the formula given above</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">/</span><span class="nf">sqrt</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="kc">pi</span><span class="o">*</span><span class="n">sigma2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mu</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="o">/</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="n">sigma2</span><span class="p">)))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">lik</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 8.926166e-05
+</pre></div>
+</div>
+</div>
+</div>
+<p>The probability of the second value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> would then be</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
@@ -441,7 +523,7 @@ L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\
 </div>
 </div>
 </div>
-<p>and so on. The find out the overall likelihood for the <em>whole</em> dataset, we just need to <em>multiply</em> these probabilities. However, this can cause computational problems<a class="footnote-reference brackets" href="#likprobsfoot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>, so it is more usual to sum the <em>log</em> of these probabilities to give the <em>log likelihood</em>.</p>
+<p>and so on. The find out the overall likelihood for the <em>whole</em> dataset, we just need to <em>multiply</em> these probabilities. However, this can cause computational problems<a class="footnote-reference brackets" href="#likprobsfoot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, so it is more usual to sum the <em>log</em> of these probabilities to give the <em>log likelihood</em>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
@@ -478,11 +560,12 @@ L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\
 </div>
 </div>
 </div>
-<p>So, the log likelihood is now <em>more positive</em>, meaning we are moving in the right direction. So hopefully it is clear how calculating the log-likelihood gives us a metric of which combination of parameters make our data the <em>most probable</em>. Now, importantly, this depends upon the assumed distribution of the data, so we can start to see how the assumptions we made when defining our model are starting to be used. We can also see that this depends upon the data we have collected. So, the assumption here is that our sample is <em>representative</em> in order to make sure the estimates are close to the population values.</p>
+<p>So, the log likelihood is now <em>more positive</em>, meaning we are moving in the right direction. So hopefully it is clear how calculating the log-likelihood gives us a metric of which combination of parameters make our data the <em>most probable</em>. In principle, we could just continue with some guesses for the parameters until we cannot make the log-likelihood any bigger.</p>
 </section>
 <section id="optimisation-algorithms">
-<h2>Optimisation Algorithms<a class="headerlink" href="#optimisation-algorithms" title="Link to this heading">#</a></h2>
-<p>Of course, searching through many combinations of guesses for the parameters is not particularly efficient or principled. In order to do this sensibly, we rely on computer algorithms to search through many possible combinations of values to find which one <em>maximises</em> the log-likelihood. These are known as <em>optimisation</em> algorithms and are a complex topic in numerical computing. For us, we do not really need to understand how these work. …</p>
+<h3>Optimisation Algorithms<a class="headerlink" href="#optimisation-algorithms" title="Link to this heading">#</a></h3>
+<p>An obvious issue with the scheme above is that searching through many combinations of guesses for the parameters is not particularly efficient or principled. In fact, there is an infinite number of values we could choose, as well as an infinite number of combinations. So how can we possibly find the values we need?</p>
+<p>In order to do so, we rely on computer algorithms to search through many possible combinations of values to find which one <em>maximises</em> the log-likelihood. These are known as <em>optimisation</em> algorithms and are a complex topic in numerical computing. For us, we do not really need to understand how these work. …</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span>
@@ -511,8 +594,7 @@ L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\
 <span class="w">  </span><span class="n">par</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">init_params</span><span class="p">,</span>
 <span class="w">  </span><span class="n">fn</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">neg_loglik</span><span class="p">,</span>
 <span class="w">  </span><span class="n">method</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;BFGS&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">reltol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1e-12</span><span class="p">),</span>
-<span class="w">  </span><span class="n">hessian</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span>
+<span class="w">  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">reltol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1e-12</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="c1"># Print results</span>
@@ -543,6 +625,7 @@ L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\
 </div>
 </div>
 </div>
+</section>
 </section>
 <section id="exact-solutions">
 <h2>Exact Solutions<a class="headerlink" href="#exact-solutions" title="Link to this heading">#</a></h2>
@@ -610,24 +693,41 @@ L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\
 <p>…</p>
 </div>
 </section>
-<section id="the-final-estimated-model">
-<h2>The Final Estimated Model<a class="headerlink" href="#the-final-estimated-model" title="Link to this heading">#</a></h2>
+<section id="the-estimated-model">
+<h2>The Estimated Model<a class="headerlink" href="#the-estimated-model" title="Link to this heading">#</a></h2>
 <p>So, at this point, we can think of our parameter estimates either as those that minimise the sum-of-squared errors or, more generically, as those values that make the data most probable. As argued previously, the likelihood perspective is more generally applicable and so it is useful to think of the estimates in proabilistic terms. As such, if our data are truly drawn from a normal distribution then these parameter values make the data more likely than any other possible combination of values.</p>
+<section id="the-final-estimates">
+<h3>The Final Estimates<a class="headerlink" href="#the-final-estimates" title="Link to this heading">#</a></h3>
+<p>So, using the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> example again, after running either OLS or MLE (with REML for the variance) we have:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{\beta}_{0} =\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{\beta}_{1} =\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{\sigma}^{2} =\)</span></p></li>
+</ul>
+<p>Meaning that our final regression model can be expressed as</p>
+<div class="math notranslate nohighlight">
+\[
+\text{MPG}_{i} = ... + (... \times \text{Weight}_{i}) + e_{i}.
+\]</div>
+<p>The errors can be calculated once values for <span class="math notranslate nohighlight">\(\hat{\beta}_{0}\)</span> and <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> are available through a simple subtraction</p>
+<div class="math notranslate nohighlight">
+\[
+e_{i} = \text{MPG}_{i} - [... + (... \times \text{Weight}_{i})].
+\]</div>
+<p>This then completes every unknown element of the model.</p>
+</section>
 <section id="interpreting-the-estimates">
 <h3>Interpreting the Estimates<a class="headerlink" href="#interpreting-the-estimates" title="Link to this heading">#</a></h3>
 <p>Although we have focussed mainly on <em>how</em> to get estimates using our data, in practical terms our main interest is what do the parameters actually mean?</p>
+<p>However, there are still a lot of things we do not know … Most of these questions will be answered via the process of <em>statistical inference</em>, which we will be covering next week.</p>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="bayesfoot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>This may seem like the wrong quantity. Surely, we are interested in <span class="math notranslate nohighlight">\(P(\boldsymbol{\theta}|\mathcal{D})\)</span>? In other words, finding the parameters that are most probable, given the data. Unfortunately, evaluating the probability <span class="math notranslate nohighlight">\(P(\boldsymbol{\theta}|\mathcal{D})\)</span> requires Bayesian methods and so cannot be evaluated from a purely Frequentist perspective. This is why the likelihood has such an awkward definition.</p>
 </aside>
-<aside class="footnote brackets" id="densityfoot" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<p>This is the area under the normal curve, equivalent to the <em>probability</em> of a specific value.</p>
-</aside>
 <aside class="footnote brackets" id="likprobsfoot" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
 <p>This is often a problem of just getting values of 0 due to issues with computational precision when working with many small probabilities. Taking logs not only changes the scale so that this does not happen, but it also turns <em>multiplication</em> into <em>summation</em>. Historically, this made calculating the likelihood much easier by hand. If you ever want to get back to the likelihood value, you can just undo the logs by using <code class="docutils literal notranslate"><span class="pre">exp(loglik)</span></code>.</p>
 </aside>
 </aside>
@@ -700,11 +800,16 @@ L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-likelihood-function">The Likelihood Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#an-example-in-r">An Example in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimisation-algorithms">Optimisation Algorithms</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exact-solutions">Exact Solutions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restricted-maximum-likelihood">Restricted Maximum Likelihood</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimated-model">The Final Estimated Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-estimated-model">The Estimated Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimates">The Final Estimates</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a></li>
 </ul>
 </li>
