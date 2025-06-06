@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Multiple Linear Regression &#8212; LM I: Simple and Multiple Regression</title>
+    <title>The Estimated Model &#8212; LM I: Simple and Multiple Regression</title>
   
   
   
@@ -62,11 +62,11 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '5.multiple-regression';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '5.estimated-model';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Summary" href="summary.html" />
-    <link rel="prev" title="The Estimated Model" href="5.estimated-model.html" />
+    <link rel="next" title="Multiple Linear Regression" href="5.multiple-regression.html" />
+    <link rel="prev" title="Maximum Likelihood" href="4.maximum-likelihood.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -174,8 +174,8 @@
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.simple-regression.html">The Simple Regression Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.maximum-likelihood.html">Maximum Likelihood</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.estimated-model.html">The Estimated Model</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Multiple Linear Regression</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Estimated Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -253,7 +253,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2F5.multiple-regression.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2F5.estimated-model.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -283,7 +283,7 @@
       
       
       
-      <li><a href="_sources/5.multiple-regression.ipynb" target="_blank"
+      <li><a href="_sources/5.estimated-model.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -359,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Multiple Linear Regression</h1>
+    <h1>The Estimated Model</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -369,10 +369,14 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-a-plane-to-data">Fitting a <em>Plane</em> to Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-estimation">Parameter Estimation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-interpretation">Parameter Interpretation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimates">The Final Estimates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-r-output-for-simple-regression">The <code class="docutils literal notranslate"><span class="pre">R</span></code> Output for Simple Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-estimates">Visualising the Estimates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-plotting-of-the-estimates">Simple Plotting of the Estimates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-complex-visualisations-with-effects">More Complex Visualisations with <code class="docutils literal notranslate"><span class="pre">effects</span></code></a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -384,66 +388,111 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="multiple-linear-regression">
-<h1>Multiple Linear Regression<a class="headerlink" href="#multiple-linear-regression" title="Link to this heading">#</a></h1>
-<p>… The nice thing about muliple regression is that most of the ideas from simple regression still apply. This makes it relatively easy to move from simple regression to muliple regression.</p>
-<section id="fitting-a-plane-to-data">
-<h2>Fitting a <em>Plane</em> to Data<a class="headerlink" href="#fitting-a-plane-to-data" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="the-estimated-model">
+<h1>The Estimated Model<a class="headerlink" href="#the-estimated-model" title="Link to this heading">#</a></h1>
+<p>So, at this point, we can think of our parameter estimates either as those that minimise the sum-of-squared errors or, more generically, as those values that maximise the likelihood (i.e. make the data most probable). As argued previously, the likelihood perspective is more generally applicable and so it is useful to think of the estimates in proabilistic terms. As such, if our data are truly drawn from a normal distribution then these parameter values make the data more likely than any other possible combination of values.</p>
+<section id="the-final-estimates">
+<h2>The Final Estimates<a class="headerlink" href="#the-final-estimates" title="Link to this heading">#</a></h2>
+<p>So, using the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> example again, after using either OLS or MLE (with REML for the variance) we have:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{\beta}_{0} = 37.2851\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{\beta}_{1} = -5.3445\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{\sigma}^{2} = 9.2774\)</span></p></li>
+</ul>
+<p>Meaning that our final regression model can be expressed as</p>
+<div class="math notranslate nohighlight">
+\[
+\text{MPG}_{i} = 37.2851 + -5.3445 \times \text{Weight}_{i} + e_{i}.
+\]</div>
+<p>The residuals can be calculated once values for <span class="math notranslate nohighlight">\(\hat{\beta}_{0}\)</span> and <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> are available through a simple subtraction. If we take the <em>fitted</em> or <em>predicted</em> values of MPG to be</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat{\text{MPG}}_{i} = 37.2851 + -5.3445 \times \text{Weight}_{i}
+\]</div>
+<p>then the residuals are simply</p>
+<div class="math notranslate nohighlight">
+\[
+e_{i} = \text{MPG}_{i} - \widehat{\text{MPG}}_{i}.
+\]</div>
+<p>We can also express this in terms of our probabilistic model like so</p>
+<div class="math notranslate nohighlight">
+\[
+\text{MPG}_{i} \sim \mathcal{N}\left(37.2851 + -5.3445 \times \text{Weight}_{i}, 9.2774\right),
+\]</div>
+<p>though this starts to get a little difficult to parse. Neverthless, the point is that these estimates now complete every unknown element of the model.</p>
 </section>
-<section id="the-normal-probability-model">
-<h2>The Normal Probability Model<a class="headerlink" href="#the-normal-probability-model" title="Link to this heading">#</a></h2>
-<p>which we can more succintly write as</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{align*}
-    y_{i} &amp;\sim \mathcal{N}\left(\mu_{i},\sigma^{2}\right) \\
-    \mu_{i} &amp;= \beta_{0} + \sum_{j=1}^{k} \beta_{j}x_{ij},
-\end{align*}
-\end{split}\]</div>
-<p>or</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{align*}
-    y_{i} &amp;= \beta_{0} + \sum_{j=1}^{k} \beta_{j}x_{ij} + \epsilon_{i} \\
-    \epsilon_{i} &amp;\sim \mathcal{N}\left(0,\sigma^{2}\right).
-\end{align*}
-\end{split}\]</div>
-<p>See the box below if you are unfamiliar with “big sigma” notation.</p>
-<div class="tip admonition">
-<p class="admonition-title">Big Sigma Notation</p>
-<p>So the notation</p>
-<div class="math notranslate nohighlight">
-\[
-S = \sum_{j=1}^{k} \beta_{j}x_{j}
-\]</div>
-<p>is equivalent to</p>
-<div class="math notranslate nohighlight">
-\[
-S = \beta_{1}x_{1} + \beta_{2}x_{2} + \beta_{3}x_{3},
-\]</div>
-<p>if we take <span class="math notranslate nohighlight">\(k=3\)</span>. In code, is the same as shortening</p>
-<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">3</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
+<section id="the-r-output-for-simple-regression">
+<h2>The <code class="docutils literal notranslate"><span class="pre">R</span></code> Output for Simple Regression<a class="headerlink" href="#the-r-output-for-simple-regression" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="s">&#39;mpg ~ wt&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>to</p>
-<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">k</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
-<span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = &quot;mpg ~ wt&quot;, data = mtcars)
 
-<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">){</span>
-<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-<span class="p">}</span>
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </pre></div>
 </div>
-<p>So, you can think of the Big Sigma notation as a <em>summation loop</em> over a certain set of indices.</p>
+</div>
 </div>
 </section>
-<section id="parameter-estimation">
-<h2>Parameter Estimation<a class="headerlink" href="#parameter-estimation" title="Link to this heading">#</a></h2>
-<p>Estimation of the parameters proceeds in the same fashion as simple regression, using either a least-squares or likelihood perspective. Like all linear models, exact solutions exist for the parameter estimates meaning the results are the same either way.</p>
+<section id="interpreting-the-estimates">
+<h2>Interpreting the Estimates<a class="headerlink" href="#interpreting-the-estimates" title="Link to this heading">#</a></h2>
+<p>Although we have focussed mainly on <em>how</em> to get estimates using our data, in practical terms our main interest is what do the parameters actually mean?</p>
+<p>However, there are still a lot of things we do not know … Most of these questions will be answered via the process of <em>statistical inference</em>, which we will be covering next week.</p>
 </section>
-<section id="parameter-interpretation">
-<h2>Parameter Interpretation<a class="headerlink" href="#parameter-interpretation" title="Link to this heading">#</a></h2>
-<p>… This dependence between parameters can be thought of like trying to balance the regression plane. You cannot balance the plane by only looking within a single dimension. Instead, you need to consider all variables together to provide a good balance. Importantly, this means that you cannot expect the estimates from simple regression to be the same as multiple regression and any attempt to equate the two is flawed. This is most applicable when it comes to <em>plotting</em> the multiple regression effects. You cannot just plot multiple simple regressions and expect the result to be accurate.</p>
+<section id="visualising-the-estimates">
+<h2>Visualising the Estimates<a class="headerlink" href="#visualising-the-estimates" title="Link to this heading">#</a></h2>
+<section id="simple-plotting-of-the-estimates">
+<h3>Simple Plotting of the Estimates<a class="headerlink" href="#simple-plotting-of-the-estimates" title="Link to this heading">#</a></h3>
+</section>
+<section id="more-complex-visualisations-with-effects">
+<h3>More Complex Visualisations with <code class="docutils literal notranslate"><span class="pre">effects</span></code><a class="headerlink" href="#more-complex-visualisations-with-effects" title="Link to this heading">#</a></h3>
+<p>… The <code class="docutils literal notranslate"><span class="pre">R</span></code> package <code class="docutils literal notranslate"><span class="pre">effects</span></code> is most useful for this purpose.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;wt&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/6875f5a20b1af1ee2471d83bdbd839d05db0e9110a35cca09b5bba260c7c6c0c.png"><img alt="_images/6875f5a20b1af1ee2471d83bdbd839d05db0e9110a35cca09b5bba260c7c6c0c.png" src="_images/6875f5a20b1af1ee2471d83bdbd839d05db0e9110a35cca09b5bba260c7c6c0c.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<p>This is a more complex display, but it is showing us several things at once … Finally, the wiggly yellow line represents a more complex approximation to the pattern in the data. If this looks very far from the regression line, then it may suggest that a more complex shape is needed to capture these data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
+<span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">qsec</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&quot;wt&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span>
+<span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&quot;qsec&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/ee946c6913556eca706fe5e498a9eff0ef09e3f3ffc4b6a05faa76bfc4104d90.png"><img alt="_images/ee946c6913556eca706fe5e498a9eff0ef09e3f3ffc4b6a05faa76bfc4104d90.png" src="_images/ee946c6913556eca706fe5e498a9eff0ef09e3f3ffc4b6a05faa76bfc4104d90.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/8fb47466d2356b01ef87a6e002f48f4169635412554864f824b31dca2fde89ac.png"><img alt="_images/8fb47466d2356b01ef87a6e002f48f4169635412554864f824b31dca2fde89ac.png" src="_images/8fb47466d2356b01ef87a6e002f48f4169635412554864f824b31dca2fde89ac.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+</section>
 </section>
 </section>
 
@@ -478,20 +527,20 @@ S = \beta_{1}x_{1} + \beta_{2}x_{2} + \beta_{3}x_{3},
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="5.estimated-model.html"
+       href="4.maximum-likelihood.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">The Estimated Model</p>
+        <p class="prev-next-title">Maximum Likelihood</p>
       </div>
     </a>
     <a class="right-next"
-       href="summary.html"
+       href="5.multiple-regression.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Summary</p>
+        <p class="prev-next-title">Multiple Linear Regression</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -512,10 +561,14 @@ S = \beta_{1}x_{1} + \beta_{2}x_{2} + \beta_{3}x_{3},
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-a-plane-to-data">Fitting a <em>Plane</em> to Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-estimation">Parameter Estimation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-interpretation">Parameter Interpretation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimates">The Final Estimates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-r-output-for-simple-regression">The <code class="docutils literal notranslate"><span class="pre">R</span></code> Output for Simple Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-estimates">Visualising the Estimates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-plotting-of-the-estimates">Simple Plotting of the Estimates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#more-complex-visualisations-with-effects">More Complex Visualisations with <code class="docutils literal notranslate"><span class="pre">effects</span></code></a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

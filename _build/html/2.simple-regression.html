@@ -65,7 +65,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '2.simple-regression';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Maximum Likelihood Estimation" href="4.maximum-likelihood.html" />
+    <link rel="next" title="Maximum Likelihood" href="4.maximum-likelihood.html" />
     <link rel="prev" title="Fitting a Straight Line to Data" href="1.straight-line.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -173,7 +173,8 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The Simple Regression Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.maximum-likelihood.html">Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.maximum-likelihood.html">Maximum Likelihood</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.estimated-model.html">The Estimated Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
@@ -368,11 +369,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-1-the-population-distribution">Element 1 - The Population Distribution</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-2-the-mean-function">Element 2 - The Mean Function</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-3-the-variance-function">Element 3 - The Variance Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-regression-model-elements">Simple Regression Model Elements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-population-distribution">1) The Population Distribution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mean-function">2) The Mean Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance-function">3) The Variance Function</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-model">The Complete Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-models-framework">The Linear Models Framework</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-the-simple-regression-model">Estimating the Simple Regression Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notation-for-estimates">Notation for Estimates</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-vs-residuals">Errors vs Residuals</a></li>
@@ -391,9 +394,12 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="the-simple-regression-model">
 <h1>The Simple Regression Model<a class="headerlink" href="#the-simple-regression-model" title="Link to this heading">#</a></h1>
-<p>In the previous section, we explored using a stright-line to capture the relationship in the data. In doing so, we were getting very close to formalising these ideas in terms of a statistical model. In this section, we will complete this formalisation by placing simple regression within the framework we discussed last week. To begin, we will work through all the elements of a statistical model we discussed last week, indicating how these are defined in a typical simple regression model.</p>
-<section id="element-1-the-population-distribution">
-<h2>Element 1 - The Population Distribution<a class="headerlink" href="#element-1-the-population-distribution" title="Link to this heading">#</a></h2>
+<p>In the previous section, we explored using a stright-line to capture the relationship in the data. In doing so, we were getting very close to formalising these ideas in terms of a statistical model. In this section, we will complete this formalisation by placing simple regression within the framework we discussed last week.</p>
+<section id="simple-regression-model-elements">
+<h2>Simple Regression Model Elements<a class="headerlink" href="#simple-regression-model-elements" title="Link to this heading">#</a></h2>
+<p>To begin, we will work through all the elements of a statistical model we discussed last week, indicating how these are defined in a typical simple regression model.</p>
+<section id="the-population-distribution">
+<h3>1) The Population Distribution<a class="headerlink" href="#the-population-distribution" title="Link to this heading">#</a></h3>
 <p>The starting point for a simple regression model is to assume that the population distribition is <em>normal</em>. This implies that whatever outcome variable we have, it can be conceptualised as a <em>continuous random variable</em> drawn from a normal distribution with some mean and some variance. In symbols, we therefore have</p>
 <div class="math notranslate nohighlight">
 \[
@@ -401,18 +407,18 @@ y_{i} \sim \mathcal{N}\left(\mu_{i},\sigma^{2}_{i}\right).
 \]</div>
 <p>The reason for using the normal distribution is simply because it is <em>useful</em> from a mathematical perspective. There are certain derivations relied on later that depend upon the assumption of normality. Importantly, these are mathematically <em>tractable</em> which, in other words, simply means that you do not get stuck when trying to work them out. In the past, in a world without computers, decisions needed to be made that allowed calculations to be (a) completed and (b) simple. The normal distribution achieves both of these aims. As such, this choice is largely historical. We will see more advanced methods that do not assume this later in the course.</p>
 </section>
-<section id="element-2-the-mean-function">
-<h2>Element 2 - The Mean Function<a class="headerlink" href="#element-2-the-mean-function" title="Link to this heading">#</a></h2>
+<section id="the-mean-function">
+<h3>2) The Mean Function<a class="headerlink" href="#the-mean-function" title="Link to this heading">#</a></h3>
 <p>Next, we need to define what form the expected value of the normal distribution will take. Because simple regression problems have only <em>one</em> predictor variable, we therefore wish to define <span class="math notranslate nohighlight">\(E(y|x)\)</span>. In other words, we define an equation for the <em>mean</em> of the population disribution and how this can change with different values of <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <p>As discussed in the previous section, for a simple regression model, the mean is defined as a point on a <em>straight-line</em>. Previously this was given as <span class="math notranslate nohighlight">\(E(y) = mx + b\)</span>. However, we use a slightly different notation for regression models:</p>
 <div class="math notranslate nohighlight">
 \[
 E\left(y_{i}|x_{i}\right) = \beta_{0} + \beta_{1}x_{i}.
 \]</div>
-<p>This is functionally identical to the traditional notation, we have just renamed <span class="math notranslate nohighlight">\(b \rightarrow \beta_{0}\)</span>, <span class="math notranslate nohighlight">\(m \rightarrow \beta_{1}\)</span> and have changed the order of the terms in the sum. The reason for this is that it is useful to group the parameters together under the same name, rather than separating them out into <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>. This renaming also adheres to the general approach of using Greek letters[^greekfoot] for parameters and Roman letters for variables. In addition, when we come to <em>multiple</em> regression, this naming scheme is practical because we can expand the number of <span class="math notranslate nohighlight">\(\beta\)</span> terms as far as we want, without having to come up with new letters for every additional variable we have in the model. Placing the <em>intercept</em> at the start of the sum is simply convention, but makes sense if we want to think of this as our <em>starting point</em>.</p>
+<p>This is functionally identical to the traditional notation, we have just renamed <span class="math notranslate nohighlight">\(b \rightarrow \beta_{0}\)</span>, <span class="math notranslate nohighlight">\(m \rightarrow \beta_{1}\)</span> and have changed the order of the terms in the sum. The reason for this is that it is useful to group the parameters together under the same name, rather than separating them out into <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>. This renaming also adheres to the general approach of using Greek letters<a class="footnote-reference brackets" href="#greekfoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> for parameters and Roman letters for variables. In addition, when we come to <em>multiple</em> regression, this naming scheme is practical because we can expand the number of <span class="math notranslate nohighlight">\(\beta\)</span> terms as far as we want, without having to come up with new letters. Placing the <em>intercept</em> at the start of the sum is simply convention, but makes sense if we want to think of this as our <em>starting point</em>.</p>
 </section>
-<section id="element-3-the-variance-function">
-<h2>Element 3 - The Variance Function<a class="headerlink" href="#element-3-the-variance-function" title="Link to this heading">#</a></h2>
+<section id="the-variance-function">
+<h3>3) The Variance Function<a class="headerlink" href="#the-variance-function" title="Link to this heading">#</a></h3>
 <p>Finally, to complete the model, we need to define the variance function. As indicated last week, this gives the form that we assume <span class="math notranslate nohighlight">\(\text{Var}\left(y|x\right)\)</span> takes. In other words, we define an equation for the <em>width</em> of the population disribution and how this can change with different values of <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <p>For a simple regression model, the variance function takes on a very basic form:</p>
 <div class="math notranslate nohighlight">
@@ -424,6 +430,7 @@ E\left(y_{i}|x_{i}\right) = \beta_{0} + \beta_{1}x_{i}.
 <p class="admonition-title">Occam’s Razor</p>
 <p>We can look at simplicity within statistical models using the heuristic of <em>Occam’s Razor</em>. Also known as “The Law of Parsimony”, this can be used to guide the development of statistical models. Named after <a class="reference external" href="https://en.wikipedia.org/wiki/William_of_Ockham">William of Ockham</a>, the “razor” is a metaphorical device used to “shave off” excessive and unnecessary complexity. In adhering to this principle, we can therefore start with the simplest model we can and then only add complexity if it is needed. Simple regression is a good example of this. We start with the most basic explanation we can: a straight line with constant variance. Only if there is evidence that this does not work would we need to examine how this can be changed. Sometimes, we can work in the opposite direction and start with the most complex model we can, and then assess if all the complexity is needed. Either way, our aim is to arrive at the model that is <em>as complex as needed, but no more</em>. As we will come to see, we will often need to choose between multiple models during an analysis. If there is a marginal difference between two competing models, we can use the principle of Occam’s Razor to choose the simpler of the two.</p>
 </div>
+</section>
 </section>
 <section id="the-complete-model">
 <h2>The Complete Model<a class="headerlink" href="#the-complete-model" title="Link to this heading">#</a></h2>
@@ -496,9 +503,8 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
 </html>
 </div></div>
 </div>
-</section>
-<section id="the-linear-models-framework">
-<h2>The Linear Models Framework<a class="headerlink" href="#the-linear-models-framework" title="Link to this heading">#</a></h2>
+<div class="tip admonition">
+<p class="admonition-title">Simple Regression as a Linear Model</p>
 <p>The simple regression model described above is an example of a <em>linear model</em>. These are a special class of statistical model that have a very specific mean function. Mathematically, the practical distinction between something being <em>linear</em> and something being <em>nonlinear</em> comes down to simplicity and ease of finding a solution. This is because linear equations are easier to understand, manipulate and solve compared to nonlinear. For our purpose, we do not need to understand this distinction in any deep way. The main point is that for the mean function to be linear each parameter:</p>
 <ul class="simple">
 <li><p>Appears only to the first power</p></li>
@@ -506,15 +512,12 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
 <li><p>Is not divided by another parameter or variable</p></li>
 <li><p>Is not inside a function like a sine, exponential, or logarithm</p></li>
 </ul>
-<p>From a practical perspective, the formal distinction between <em>linear</em> and <em>nonlinear</em> is not too important. We will be almost exclusively working with <em>linear</em> models on this course. Indeed, the vast majority of statistics is concerned with linear models. This means that we will almost always be forming our mean function as a <em>linear combination</em> of parameters and variables. So, we will see the same form of mean function in many different places, where we calculate a sum of variables, with each one <em>weighted</em> (i.e. multiplied) by some parameter. Although quite simple, this turns out to be a very powerful approach in practice.</p>
-<div class="tip admonition">
-<p class="admonition-title">Linear Regression Does NOT Mean a Straight Line</p>
-<p>One of the more important thing to understand about the concept of a linear model is that the word <em>linear</em> does <em>not</em> refer to the fact that we are fitting a straight-line to the data. This is an easy mistake to make, however, we will see later that <em>polynomial</em> regression can be used to fit curves to data. These are still linear models because they still meet the definition above. So, linear regression is named after the fact that it is <em>linear in the parameters</em>, not because it fits a straight-line. We can still describe the model fit as linear (straight line) or nonlinear (curved line), but the model itself remains a linear model if it adheres to the definition given above. This can be quite confusing, but just remember that a linear model is not restricted to only straight lines, as the use of <em>linear</em> in the name is more nuance.</p>
+<p>From a practical perspective, the formal distinction between <em>linear</em> and <em>nonlinear</em> is not too important as we will be working exclusively with <em>linear</em> models on this course. Indeed, the vast majority of statistics is concerned with linear models. The <code class="docutils literal notranslate"><span class="pre">R</span></code> function for fitting regression models is even called <code class="docutils literal notranslate"><span class="pre">lm()</span></code> (for <em>linear model</em>). This means that we will always be forming our mean function as a <em>linear combination</em> of parameters and variables. This means that every mean function we encounter will consist of a sum of variables, with each one <em>weighted</em> (i.e. multiplied) by a parameter. Although quite simple, this turns out to be a very powerful approach in practice.</p>
 </div>
 </section>
 <section id="estimating-the-simple-regression-model">
 <h2>Estimating the Simple Regression Model<a class="headerlink" href="#estimating-the-simple-regression-model" title="Link to this heading">#</a></h2>
-<p>As a brief review, we are now in the position where we have specified the form of model we wish to use on our data. For some continuous outcome variable and some continuous predictor, we start with simplest relationship we can imagine: a straight-line. We then formalise this by placing it within the context of a statistical model, giving:</p>
+<p>We are now in the position where we have specified the form of model we wish to use on our data. For some continuous outcome variable and some continuous predictor, we start with the simplest relationship we can imagine: a straight-line. We then formalise this by placing it within the context of a statistical model, giving:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align*}
@@ -529,7 +532,7 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
 <li><p>The errors <span class="math notranslate nohighlight">\(\epsilon_{i}\)</span> – because they depend upon <span class="math notranslate nohighlight">\(\beta_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}\)</span></p></li>
 <li><p>The variance <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> – because it depends upon the errors</p></li>
 </ul>
-<p>So, we are currently a bit stuck. Earlier in this lesson, we saw a way of <em>estimating</em> the slope and intercept using the method of <em>least-squares</em>. In the next section, we will examine a more generic way of arriving at these values using the <em>method of Maximum Likelihood</em>. In effect, this will provide us with values for all the unknowns above, allowing us to actually perform calculations and reach conclusions using our model.</p>
+<p>So, we are currently a bit stuck. Earlier in this lesson, we saw a way of <em>estimating</em> the slope and intercept using the method of <em>least-squares</em>. In the next section, we will examine a more generic way of arriving at these values using the <em>method of maximum likelihood</em>. This will provide us with values for all the unknowns above, allowing us to actually perform calculations and reach conclusions using our model.</p>
 <section id="notation-for-estimates">
 <h3>Notation for Estimates<a class="headerlink" href="#notation-for-estimates" title="Link to this heading">#</a></h3>
 <p>Before getting to the details of estimation, it is important that we establish some new notation for the estimates themseleves. So far, our notation has implicitly assumed that we are referring to the whole popluation under study. As such, the parameters indicated above represent <em>population-level constants</em>. In other words, <span class="math notranslate nohighlight">\(\beta_{0}\)</span> is the <em>true</em> intercept and <span class="math notranslate nohighlight">\(\beta_{1}\)</span> is the <em>true</em> slope. In reality, however, we will usually only have a <em>sample</em> from a population. As such, the parameters we calculate will only be <em>estimates</em> of the true values.</p>
@@ -557,6 +560,13 @@ y_{i} = b_{0} + b_{1}x_{i} + e_{i}.
 y_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i} + e_{i}.
 \]</div>
 <p>This is helpful, because it makes it clearer that the residuals are not really a parameter, rather thay are a <em>derived</em> quantity. So we keep Greek letters wearing hats for our estimated parameters, and lower-case Latin letters for everything else.</p>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="greekfoot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>If you are not very comfortable with the Greek alphabet, you may want to spend some time learning the names of the letters and how to pronounce them.</p>
+</aside>
+</aside>
 </section>
 </section>
 </section>
@@ -605,7 +615,7 @@ y_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i} + e_{i}.
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Maximum Likelihood Estimation</p>
+        <p class="prev-next-title">Maximum Likelihood</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -626,11 +636,13 @@ y_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i} + e_{i}.
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-1-the-population-distribution">Element 1 - The Population Distribution</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-2-the-mean-function">Element 2 - The Mean Function</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-3-the-variance-function">Element 3 - The Variance Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-regression-model-elements">Simple Regression Model Elements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-population-distribution">1) The Population Distribution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mean-function">2) The Mean Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance-function">3) The Variance Function</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-model">The Complete Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-models-framework">The Linear Models Framework</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-the-simple-regression-model">Estimating the Simple Regression Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notation-for-estimates">Notation for Estimates</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-vs-residuals">Errors vs Residuals</a></li>
