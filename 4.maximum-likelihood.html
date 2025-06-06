@@ -66,7 +66,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Multiple Linear Regression" href="5.multiple-regression.html" />
-    <link rel="prev" title="Estimating the Simple Regression Model" href="3.estimation.html" />
+    <link rel="prev" title="The Simple Regression Model" href="2.simple-regression.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -173,7 +173,6 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.simple-regression.html">The Simple Regression Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.estimation.html">Estimating the Simple Regression Model</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Maximum Likelihood Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -369,6 +368,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mle-vs-ols">MLE vs OLS</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-likelihood-function">The Likelihood Function</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-concrete-example-in-r">A Concrete Example in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
@@ -396,6 +396,9 @@
   <section class="tex2jax_ignore mathjax_ignore" id="maximum-likelihood-estimation">
 <h1>Maximum Likelihood Estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Link to this heading">#</a></h1>
 <p>In the previous section, we discussed estimation of the simple regression model very generally, establishing that we could use <em>either</em> MLE or OLS to arrive at the same results. As argued in that section, although OLS is conceptually simple, it is limited in its application to the more complex models that we will be encountering later on the course. As such, it is useful to focus primarily on Maximum Likelihood Estimation (MLE) as a general method that can be used to estimate values across a variety of models. In this section, we will dig into MLE in a bit more detail to give you a sense of how it works and, also, to show how the results are identical to OLS.</p>
+<section id="mle-vs-ols">
+<h2>MLE vs OLS<a class="headerlink" href="#mle-vs-ols" title="Link to this heading">#</a></h2>
+</section>
 <section id="how-does-mle-work">
 <h2>How Does MLE Work?<a class="headerlink" href="#how-does-mle-work" title="Link to this heading">#</a></h2>
 <p>Before getting started on understanding MLE, it is worth highlighting that you will <em>never</em> need to actually implement this yourself. Software will always take care of all of this for you. As such, this section is just trying to help you gain intution about how MLE works. Even if you do not understand every nuance, you can still happily use MLE in software as the estimation technique. So just try to gain some intution here and do not worry about understanding every detail.</p>
@@ -493,21 +496,7 @@ P = y_{1} \times y_{2} \times y_{3} ,
 </div>
 </div>
 </div>
-<p>where the function <code class="docutils literal notranslate"><span class="pre">dnorm</span></code> returns the <em>density</em> of the normal distribution for the given data. We can see how this agrees with manually calculating the density using the formula given above</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">P.y1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">/</span><span class="nf">sqrt</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="kc">pi</span><span class="o">*</span><span class="n">sigma2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mu</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="o">/</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="n">sigma2</span><span class="p">)))</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">P.y1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 8.926166e-05
-</pre></div>
-</div>
-</div>
-</div>
-<p>The probability of the second value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> would then be</p>
+<p>where the function <code class="docutils literal notranslate"><span class="pre">dnorm</span></code> returns the <em>density</em> of the normal distribution for the given data. The probability of the second value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> would then be</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
@@ -656,12 +645,12 @@ P = y_{1} \times y_{2} \times y_{3} ,
 \[
 \text{MPG}_{i} = 37.2851 + -5.3445 \times \text{Weight}_{i} + e_{i}.
 \]</div>
-<p>The errors can be calculated once values for <span class="math notranslate nohighlight">\(\hat{\beta}_{0}\)</span> and <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> are available through a simple subtraction. If we take the <em>fitted</em> or <em>predicted</em> values of MPG to be</p>
+<p>The residuals can be calculated once values for <span class="math notranslate nohighlight">\(\hat{\beta}_{0}\)</span> and <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> are available through a simple subtraction. If we take the <em>fitted</em> or <em>predicted</em> values of MPG to be</p>
 <div class="math notranslate nohighlight">
 \[
 \widehat{\text{MPG}}_{i} = 37.2851 + -5.3445 \times \text{Weight}_{i}
 \]</div>
-<p>then the errors are simply</p>
+<p>then the residuals are simply</p>
 <div class="math notranslate nohighlight">
 \[
 e_{i} = \text{MPG}_{i} - \widehat{\text{MPG}}_{i}.
@@ -727,12 +716,12 @@ e_{i} = \text{MPG}_{i} - \widehat{\text{MPG}}_{i}.
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="3.estimation.html"
+       href="2.simple-regression.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Estimating the Simple Regression Model</p>
+        <p class="prev-next-title">The Simple Regression Model</p>
       </div>
     </a>
     <a class="right-next"
@@ -761,6 +750,7 @@ e_{i} = \text{MPG}_{i} - \widehat{\text{MPG}}_{i}.
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mle-vs-ols">MLE vs OLS</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-mle-work">How Does MLE Work?</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-likelihood-function">The Likelihood Function</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-concrete-example-in-r">A Concrete Example in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>

@@ -65,7 +65,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '2.simple-regression';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Estimating the Simple Regression Model" href="3.estimation.html" />
+    <link rel="next" title="Maximum Likelihood Estimation" href="4.maximum-likelihood.html" />
     <link rel="prev" title="Fitting a Straight Line to Data" href="1.straight-line.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -173,7 +173,6 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The Simple Regression Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.estimation.html">Estimating the Simple Regression Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.maximum-likelihood.html">Maximum Likelihood Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -373,9 +372,10 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-2-the-mean-function">Element 2 - The Mean Function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-3-the-variance-function">Element 3 - The Variance Function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-model">The Complete Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-models-framework">The Linear Models Framework</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-models-in-r">Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-model-assumptions">Linear Model Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-models-framework">The Linear Models Framework</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-the-simple-regression-model">Estimating the Simple Regression Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notation-for-estimates">Notation for Estimates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-vs-residuals">Errors vs Residuals</a></li>
 </ul>
 </li>
 </ul>
@@ -506,28 +506,57 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
 <li><p>Is not divided by another parameter or variable</p></li>
 <li><p>Is not inside a function like a sine, exponential, or logarithm</p></li>
 </ul>
-<p>The simple regression model meets these criteria, but the following mean functions would not</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{array}{rlr} 
-    \mu_{i} &amp;= \beta_{0} + \beta_{1}^{2}x_{i}               &amp;\text{Parameter raised to a higher power}                \\
-    \mu_{i} &amp;= \beta_{0} + \beta_{0}\beta_{1}x_{i}          &amp;\text{Parameters multiplied together}          \\
-    \mu_{i} &amp;= \beta_{0} + \frac{\beta_{0}}{\beta_{1}x_{i}} &amp;\text{Parameter and variable in denominator}   \\
-    \mu_{i} &amp;= \beta_{0} \cdot e^{\beta_{1}x_{i}}           &amp;\text{Parameter inside exponential function}   \\
-\end{array}
-\end{split}\]</div>
 <p>From a practical perspective, the formal distinction between <em>linear</em> and <em>nonlinear</em> is not too important. We will be almost exclusively working with <em>linear</em> models on this course. Indeed, the vast majority of statistics is concerned with linear models. This means that we will almost always be forming our mean function as a <em>linear combination</em> of parameters and variables. So, we will see the same form of mean function in many different places, where we calculate a sum of variables, with each one <em>weighted</em> (i.e. multiplied) by some parameter. Although quite simple, this turns out to be a very powerful approach in practice.</p>
 <div class="tip admonition">
 <p class="admonition-title">Linear Regression Does NOT Mean a Straight Line</p>
 <p>One of the more important thing to understand about the concept of a linear model is that the word <em>linear</em> does <em>not</em> refer to the fact that we are fitting a straight-line to the data. This is an easy mistake to make, however, we will see later that <em>polynomial</em> regression can be used to fit curves to data. These are still linear models because they still meet the definition above. So, linear regression is named after the fact that it is <em>linear in the parameters</em>, not because it fits a straight-line. We can still describe the model fit as linear (straight line) or nonlinear (curved line), but the model itself remains a linear model if it adheres to the definition given above. This can be quite confusing, but just remember that a linear model is not restricted to only straight lines, as the use of <em>linear</em> in the name is more nuance.</p>
 </div>
-<section id="linear-models-in-r">
-<h3>Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#linear-models-in-r" title="Link to this heading">#</a></h3>
-<p>The importance of linear models to statistics cannot be overstated. As we will see a little later, one of the core functions within <code class="docutils literal notranslate"><span class="pre">R</span></code> is the <code class="docutils literal notranslate"><span class="pre">lm()</span></code> function, used to fit a <em>linear model</em>. Base <code class="docutils literal notranslate"><span class="pre">R</span></code> does not contain functions called <code class="docutils literal notranslate"><span class="pre">simple.regression()</span></code>, <code class="docutils literal notranslate"><span class="pre">multiple.regression()</span></code>, <code class="docutils literal notranslate"><span class="pre">oneway.anova()</span></code> or similar because all these forms of analysis are subsumed under the linear models framework. As such, we only need one function for fitting all of these. The challenge is simply understanding this generic frameowork so that its power can be fully leveraged. There are many packages available that do provide functions for individual types of analyses, often as a means of making them easier to work with, or to control the output so that only the most important information is displayed. Unfortunately, this does go against the concept of making the modelling framework generic. So, while it may be tempting to find alternative functions that make using certain types of model “easier”, it is much better to try and understand and use the general framework, rather than hiding it.</p>
 </section>
-<section id="linear-model-assumptions">
-<h3>Linear Model Assumptions<a class="headerlink" href="#linear-model-assumptions" title="Link to this heading">#</a></h3>
-<p>In building the model above, we have made a number of assumptions about the population distribution, mean function and variance function. In order to make sure this model is a good fit for a particular dataset, we will need to check these assumptions. This will be our focus <em>next week</em>. So, for the moment, we will leave this to one side and just treat all the assumptions as if they hold. Once we understand the consequences of these assumptions, we will be in a better position to evaluate them. This is particularly true in terms of understand what might happen if the assumptions are not met.</p>
+<section id="estimating-the-simple-regression-model">
+<h2>Estimating the Simple Regression Model<a class="headerlink" href="#estimating-the-simple-regression-model" title="Link to this heading">#</a></h2>
+<p>As a brief review, we are now in the position where we have specified the form of model we wish to use on our data. For some continuous outcome variable and some continuous predictor, we start with simplest relationship we can imagine: a straight-line. We then formalise this by placing it within the context of a statistical model, giving:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    y_{i}   &amp;= \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} \\
+    \epsilon_{i} &amp;\sim \mathcal{N}\left(0,\sigma^{2}\right).
+\end{align*}
+\end{split}\]</div>
+<p>This is all fine, except that we have not actually done anything yet! All we have done is written down the model equation that we would like to use. However, we cannot do anything with this because it contains <em>unknown values</em>. At the point of analysing the data, we have measurements of both <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(x\)</span>, but we do <em>not</em> have values for:</p>
+<ul class="simple">
+<li><p>The intercept <span class="math notranslate nohighlight">\(\beta_{0}\)</span></p></li>
+<li><p>The slope <span class="math notranslate nohighlight">\(\beta_{1}\)</span></p></li>
+<li><p>The errors <span class="math notranslate nohighlight">\(\epsilon_{i}\)</span> – because they depend upon <span class="math notranslate nohighlight">\(\beta_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}\)</span></p></li>
+<li><p>The variance <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> – because it depends upon the errors</p></li>
+</ul>
+<p>So, we are currently a bit stuck. Earlier in this lesson, we saw a way of <em>estimating</em> the slope and intercept using the method of <em>least-squares</em>. In the next section, we will examine a more generic way of arriving at these values using the <em>method of Maximum Likelihood</em>. In effect, this will provide us with values for all the unknowns above, allowing us to actually perform calculations and reach conclusions using our model.</p>
+<section id="notation-for-estimates">
+<h3>Notation for Estimates<a class="headerlink" href="#notation-for-estimates" title="Link to this heading">#</a></h3>
+<p>Before getting to the details of estimation, it is important that we establish some new notation for the estimates themseleves. So far, our notation has implicitly assumed that we are referring to the whole popluation under study. As such, the parameters indicated above represent <em>population-level constants</em>. In other words, <span class="math notranslate nohighlight">\(\beta_{0}\)</span> is the <em>true</em> intercept and <span class="math notranslate nohighlight">\(\beta_{1}\)</span> is the <em>true</em> slope. In reality, however, we will usually only have a <em>sample</em> from a population. As such, the parameters we calculate will only be <em>estimates</em> of the true values.</p>
+<p>Traditionally, we denote a parameter estimate by placing a “hat” on top of the corresponding Greek letter. For instance, we would denote an estimate of <span class="math notranslate nohighlight">\(\beta_{1}\)</span> from a given sample as <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> (pronounced “beta 1 hat”). This is important because whenever we see <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span>, this tells us that the value is effectively a <em>guess</em> based on a certain sample of data. In comaprison, whenever we see <span class="math notranslate nohighlight">\(\beta_{1}\)</span>, this indicates the <em>true</em> population value, even though this is largely theoretical and unknowable quantity. We will see more later about why this distinction is important. For the moment, you just need to keep an eye on those little hats because they make quite a big difference to the meaning.</p>
+<div class="tip admonition">
+<p class="admonition-title">Alternative Notation for Estimates</p>
+<p>Some authors like to use the Latin alternatives to the Greek letters to denote estimates. We will not be doing this, but it is worth knowing about to make sense of notation you may see in textbooks or the literature. In this scheme, the estimate of <span class="math notranslate nohighlight">\(\beta_{1}\)</span> would be <span class="math notranslate nohighlight">\(b_{1}\)</span>. So, the true population model would be</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i},
+\]</div>
+<p>whereas as an estimated model based on data would be</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} = b_{0} + b_{1}x_{i} + e_{i}.
+\]</div>
+<p>You can decide which of these you prefer, but we will be wearing “hats” in all our notation going forward.</p>
+</div>
+</section>
+<section id="errors-vs-residuals">
+<h3>Errors vs Residuals<a class="headerlink" href="#errors-vs-residuals" title="Link to this heading">#</a></h3>
+<p>Another subtle but important difference is that, much like the parameters <span class="math notranslate nohighlight">\(\beta_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}\)</span>, the <em>errors</em> in the model above are defined at the level of the population. This is important, because their value depends upon <span class="math notranslate nohighlight">\(\beta_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}\)</span>. In other words, to get the <em>true</em> errors, we would need to know the <em>true</em> population values of the parameters. Because this is almost never possible, the errors we actually use are based on the <em>estimates</em> <span class="math notranslate nohighlight">\(\hat{\beta}_{0}\)</span> and <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span>. As such, the errors we calculate from our estimated model are going to be different from the true errors. We therefore make a distinction between <em>errors</em> and <em>residuals</em>. The <em>errors</em> are the differences from the <em>true</em> regression line, whereas the <em>residuals</em> are the differences from the <em>estimated</em> regression line. To denote this, residuals are often written with a Latin <span class="math notranslate nohighlight">\(e_{i}\)</span>, meaning we can write our <em>estimated</em> model as:</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i} + e_{i}.
+\]</div>
+<p>This is helpful, because it makes it clearer that the residuals are not really a parameter, rather thay are a <em>derived</em> quantity. So we keep Greek letters wearing hats for our estimated parameters, and lower-case Latin letters for everything else.</p>
 </section>
 </section>
 </section>
@@ -572,11 +601,11 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
       </div>
     </a>
     <a class="right-next"
-       href="3.estimation.html"
+       href="4.maximum-likelihood.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Estimating the Simple Regression Model</p>
+        <p class="prev-next-title">Maximum Likelihood Estimation</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -601,9 +630,10 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i},\sigma^{2}\right).
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-2-the-mean-function">Element 2 - The Mean Function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-3-the-variance-function">Element 3 - The Variance Function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-complete-model">The Complete Model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-models-framework">The Linear Models Framework</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-models-in-r">Linear Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-model-assumptions">Linear Model Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-models-framework">The Linear Models Framework</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-the-simple-regression-model">Estimating the Simple Regression Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notation-for-estimates">Notation for Estimates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-vs-residuals">Errors vs Residuals</a></li>
 </ul>
 </li>
 </ul>
