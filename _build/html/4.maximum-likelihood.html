@@ -394,24 +394,24 @@
 <p>At the end of the previous section, we discussed the concept of estimating the parameters of the simple regression model. In this section, we will explore a method of estimation known as <em>maximum likelihood estimation</em> (MLE) that is applicable to both simple linear models, as well as many of the more complex models we will see later on the course.</p>
 <section id="mle-vs-ols">
 <h2>MLE vs OLS<a class="headerlink" href="#mle-vs-ols" title="Link to this heading">#</a></h2>
-<p>At the beginning of this lesson, we demonstrated how the simple regression line could be fit by minimising the sum of squared errors. Effectively, we were finding the line that <em>minimised</em> the variance of the data around the regression line. This is known as the method of <em>ordinary least squares</em> (OLS). OLS is useful because it is very simple to conceptualise and results in a simple set of equations for finding estimates. Because of this, OLS is generally considered <em>the</em> method used for estimating normal linear models. However, the main problem with OLS is that it is largely only applicable to these types of models. For instance, models that do not assume a normal distribution or those that assume more complex correlational and variance structures cannot be estimated with OLS. As such, OLS is actually a very niche approach that gets abandoned very quickly as soon as models get more complex. Because of this, it is much more helpful in terms of thinking <em>generally</em> to consider a <em>likelihood</em> approach to estimation<a class="footnote-reference brackets" href="#searlefoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This is widely applicable across may different types of model, as well as being fundamental to Bayesian approaches to statistics.</p>
+<p>At the beginning of this lesson, we demonstrated how the simple regression line could be fit by minimising the sum of squared errors. This is known as the method of <em>ordinary least squares</em> (OLS). OLS is useful because it is easy to conceptualise and results in a simple set of equations for finding estimates. Because of this, OLS is generally considered <em>the</em> method used for estimating linear models. However, models that do not assume a normal distribution or those that assume more complex correlational and variance structures cannot be estimated with OLS. As such, OLS is actually something of a niche approach that gets abandoned quickly as models get more complex. Because of this, it is much more helpful to consider a <em>likelihood</em> approach to estimation<a class="footnote-reference brackets" href="#searlefoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. The principle of the likelihood is widely applicable across may different types of model, as well as being fundamental to Bayesian methods. As such, we can consider MLE as our singular generic method of estimation that will be applicable across this entire course.</p>
 </section>
 <section id="how-does-mle-work">
 <h2>How Does MLE Work?<a class="headerlink" href="#how-does-mle-work" title="Link to this heading">#</a></h2>
-<p>Fundamentally, MLE is based on finding parameter values that make a certain value, known as the <em>likelihood</em>, as <em>big</em> as possible. The value of likelihood is calculated using the <em>likelihood function</em>, denoted</p>
+<p>Fundamentally, MLE is based on finding parameter estimates that make a value, known as the <em>likelihood</em>, as <em>big</em> as possible. The value of the likelihood is calculated using the <em>likelihood function</em>, denoted</p>
 <div class="math notranslate nohighlight">
 \[
-L\left(\boldsymbol{\theta}|\mathcal{D}\right),
+L\left(\theta|y\right),
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> represents the data we have collected and <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span> is a generic representation of any set of parameters. For instance, in simple regression, <span class="math notranslate nohighlight">\(\boldsymbol{\theta} = \{\beta_{0},\beta_{1},\sigma^{2}\}\)</span>. In order to understand this, we can make an equivalence between the likelihood and probability. When placed in probabilitstic terms, we have</p>
+<p>where <span class="math notranslate nohighlight">\(\theta\)</span> is a generic representation of any set of parameters. For instance, in simple regression, <span class="math notranslate nohighlight">\(\theta = \{\beta_{0},\beta_{1},\sigma^{2}\}\)</span>. In order to understand this, we can make an equivalence between the likelihood and probability. When placed in probabilitstic terms, we have</p>
 <div class="math notranslate nohighlight">
 \[
-L\left(\boldsymbol{\theta}|\mathcal{D}\right) = P\left(\mathcal{D}|\boldsymbol{\theta}\right).
+L\left(\theta|y\right) = P\left(y|\theta\right).
 \]</div>
-<p>In words, this is saying that the likelihood of a set of paramater values, given some data, is the <em>same</em> as evaluating the probability of the data, assuming those parameter values are true. The key point here is that MLE is based on evaluating the <em>probability of the data</em>, given some values of the parameters<a class="footnote-reference brackets" href="#bayesfoot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. We can think about it as taking a guess for the parameter values, then calculating how probable those values make the data we have collected. It is like asking the question: “how likely would it have been to collect the data that we have collected, if these were the parameter values?”. By searching through lots of different possible combinations of parameter values, the aim is to find the specific combination that leads to the <em>highest probability</em> of the data. In other words, the values that <em>maxmimise the likelihood</em>.</p>
+<p>In words, this is saying that the likelihood of a set of paramater values, given some data, is the <em>same</em> as evaluating the probability of the data, assuming those parameter values are true. The key point here is that MLE is about the <em>probability of the data</em><a class="footnote-reference brackets" href="#bayesfoot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. We can think about it as taking a guess for the parameter values, then calculating how probable those guesses make the data we have collected. It is like asking the question: “how likely would it have been to collect my data, if these were the parameter values?”. By searching through lots of different possible combinations of parameter values, the aim is to find the specific combination that leads to the <em>highest probability</em> of the data. In other words, the values that <em>maxmimise the likelihood</em>.</p>
 <section id="the-likelihood-function">
 <h3>The Likelihood Function<a class="headerlink" href="#the-likelihood-function" title="Link to this heading">#</a></h3>
-<p>So how do we evaluate the likelihood function? In brief, if we want the likelihood of our entire dataset, we need to <em>multiply</em> the probability of each data value, using some guesses for the parameter values. We can then repeat this for some other guesses. If the likelihood gets <em>larger</em> then our new guesses make the data more probable than our old guesses. We will see shortly how to do this in a more principled way than just guessing, but this should give you enough of an idea at this point.</p>
+<p>So how do we evaluate the likelihood function? In brief, if we want the likelihood of our entire dataset, we need to <em>multiply</em> the probability of each datapoint, using some guesses for the parameter values. We can then repeat this for some other guesses. If the likelihood gets <em>larger</em> then our new guesses make the data more probable than our old guesses.</p>
 <p>So how do we calculate the probabilities of each data point? Remember that our core assumption for simple regression is that</p>
 <div class="math notranslate nohighlight">
 \[
@@ -420,17 +420,17 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i}, \sigma^{2}\right).
 <p>The probability of any value from a normal distribution can be calculated using its <em>probability density function</em>, which is given by</p>
 <div class="math notranslate nohighlight">
 \[
-f(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(x - \mu)^{2}}{2\sigma^{2}}}.
+f(y) = \frac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left(-\frac{(y - \mu)^{2}}{2\sigma^{2}}\right).
 \]</div>
-<p>This can look a little complicated, but notice that the only values we need to plug-in here are <span class="math notranslate nohighlight">\(\mu\)</span>, <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> and some value for <span class="math notranslate nohighlight">\(x\)</span>. For instance, if we wanted to know the probability of a value of 10 from a normal distribution with a mean of 9 and a variance of 1, then we have</p>
+<p>This can look a little complicated, but notice that the only values we need to plug-in here are <span class="math notranslate nohighlight">\(\mu\)</span>, <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> and some value for <span class="math notranslate nohighlight">\(y\)</span>. For instance, if we wanted to know the probability of sampling a value of 10 from <span class="math notranslate nohighlight">\(\mathcal{N}(9,1)\)</span>, we can use</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">y</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10</span>
 <span class="n">mu</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">9</span>
 <span class="n">sigma2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
 
-<span class="n">P.x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">/</span><span class="nf">sqrt</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="kc">pi</span><span class="o">*</span><span class="n">sigma2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="n">sigma2</span><span class="p">))</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">P.x</span><span class="p">)</span>
+<span class="n">P.y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">/</span><span class="nf">sqrt</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="kc">pi</span><span class="o">*</span><span class="n">sigma2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">y</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="n">sigma2</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">P.y</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -440,12 +440,13 @@ f(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(x - \mu)^{2}}{2\sigma^{2}}}.
 </div>
 </div>
 </div>
-<p>We can then reframe the expression for the probability density using our model to give</p>
+<p>By replacing <span class="math notranslate nohighlight">\(\mu\)</span> with the mean function, we can reframe the probability density using our model to give</p>
 <div class="math notranslate nohighlight">
 \[
-P(y_{i}) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(y_{i} - (\beta_{0} + \beta_{1}x_{i}))^{2}}{2\sigma^{2}}}.
+P(y_{i}) = \frac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left(-\frac{\left(y_{i} - \left[\beta_{0} + \beta_{1}x_{i}\right]\right)^{2}}{2\sigma^{2}}\right).
 \]</div>
-<p>So, if we insert some guesses for <span class="math notranslate nohighlight">\(\beta_{0}\)</span>, <span class="math notranslate nohighlight">\(\beta_{1}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>, we can calculate the probability of any of our data values. This effectively tells us the probability of that datapoint, assuming our guesses are correct. The likelihood function then involves multiplying all these values together to give</p>
+<p>So, if we insert some guesses for <span class="math notranslate nohighlight">\(\beta_{0}\)</span>, <span class="math notranslate nohighlight">\(\beta_{1}\)</span> and <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>, we can calculate the probability of any of our data values. This effectively tells us the probability of that datapoint, assuming our guesses are correct.</p>
+<p>Calculating the likelihood then involves multiplying all these values together to give</p>
 <div class="math notranslate nohighlight">
 \[
 L(\beta_{0},\beta_{1},\sigma^{2}|\mathbf{y}) = P\left(y_{1}\right) \times P(y_{2}) \times \dots \times P(y_{n})
@@ -454,13 +455,13 @@ L(\beta_{0},\beta_{1},\sigma^{2}|\mathbf{y}) = P\left(y_{1}\right) \times P(y_{2
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align*}
-    L(\beta_{0},\beta_{1},\sigma^{2}|\mathbf{y}) &amp;= \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(y_{i} - (\beta_{0} + \beta_{1}x_{i}))^{2}}{2\sigma^{2}}} \\
+    L(\beta_{0},\beta_{1},\sigma^{2}|\mathbf{y}) &amp;= \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left(-\frac{(y_{i} - [\beta_{0} + \beta_{1}x_{i}])^{2}}{2\sigma^{2}}\right) \\
     &amp;= \prod_{i=1}^{n} P(y_{i})
 \end{align*}
 \end{split}\]</div>
-<div class="tip admonition">
+<div class="tip dropdown admonition">
 <p class="admonition-title">Big Pi Notation</p>
-<p>Big pi notation, denoted by the captitol Greek letter <span class="math notranslate nohighlight">\(\Pi\)</span>, is used as a shorthand for <em>multiplication</em>. Below the big Pi, we indicate the notation for our index across these multiplications, as well as our starting index value. Above the big Pi, we indicate the value where we stop. So the notation</p>
+<p>Big pi notation, denoted by the captitol Greek letter <span class="math notranslate nohighlight">\(\Pi\)</span>, is used as a shorthand for <em>multiplication</em>. Below the big Pi, we define our indexing variable, as well as its starting value. Above the big Pi, we indicate the value where we stop. So the notation</p>
 <div class="math notranslate nohighlight">
 \[
 P = \prod_{i=1}^{3} y_{i}
