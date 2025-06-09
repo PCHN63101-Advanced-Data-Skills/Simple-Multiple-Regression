@@ -375,7 +375,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-slope">The Slope</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-intercept">The Intercept</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance">The Variance</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reaching-conclusions">Reaching Conclusions</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-estimates">Visualising the Estimates</a></li>
@@ -617,10 +616,6 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 \]</div>
 <p>our aim is to find the model that partitions the largest chunk of the total variance into the variance explained by the regression line, thus making the variance attributable to error as small as possible. This will have a direct influence on <em>inference</em>, as we will see next week, but also makes intuitive sense. From this perspective, we will use variance as a relative measure to see whether one model is able to reduce the error variance more than another. We already saw that above when assessing whether regression through the origin or regression through the origin with inverse weight were better models. We will see examples that formalise this more when we get to the concept of ANOVAs within the linear models framework.</p>
 </section>
-<section id="reaching-conclusions">
-<h3>Reaching Conclusions<a class="headerlink" href="#reaching-conclusions" title="Link to this heading">#</a></h3>
-<p>However, there are still a lot of things we do not know … Most of these questions will be answered via the process of <em>statistical inference</em>, which we will be covering next week.</p>
-</section>
 </section>
 <section id="visualising-the-estimates">
 <h2>Visualising the Estimates<a class="headerlink" href="#visualising-the-estimates" title="Link to this heading">#</a></h2>
@@ -646,7 +641,7 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 <span class="n">beta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
 
 <span class="nf">ggplot</span><span class="p">(</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">mpg</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
-<span class="w">    </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="s">&quot;cornflowerblue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span><span class="w"> </span><span class="n">stroke</span><span class="o">=</span><span class="m">1.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">    </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="s">&quot;cornflowerblue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span><span class="w"> </span><span class="n">stroke</span><span class="o">=</span><span class="m">1.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">    </span><span class="nf">geom_abline</span><span class="p">(</span><span class="n">intercept</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">slope</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">    </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;MPG as a function of weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="s">&quot;Weight (1000 lbs)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
 <span class="w">    </span><span class="nf">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">22</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
@@ -655,7 +650,7 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/b0e38561de54d6d46c077aaf0f9fec636f31655cf83ab2e84a3d7554cd259917.png"><img alt="_images/b0e38561de54d6d46c077aaf0f9fec636f31655cf83ab2e84a3d7554cd259917.png" src="_images/b0e38561de54d6d46c077aaf0f9fec636f31655cf83ab2e84a3d7554cd259917.png" style="width: 720px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/81fd3bc0e86dc70d65b83b6b22ea5f344f3b87046fdfc5b774338d985b36ceac.png"><img alt="_images/81fd3bc0e86dc70d65b83b6b22ea5f344f3b87046fdfc5b774338d985b36ceac.png" src="_images/81fd3bc0e86dc70d65b83b6b22ea5f344f3b87046fdfc5b774338d985b36ceac.png" style="width: 720px; height: 420px;" /></a>
 </div>
 </div>
 <p>Either way, the key point is that we are able to <em>see</em> the model fit and assess it visually. This is one of the most important steps of building a statistical model as there is generally no substitute for looking at the data and understanding what your model is trying to say.</p>
@@ -733,7 +728,6 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-slope">The Slope</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-intercept">The Intercept</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-variance">The Variance</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reaching-conclusions">Reaching Conclusions</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-estimates">Visualising the Estimates</a></li>
