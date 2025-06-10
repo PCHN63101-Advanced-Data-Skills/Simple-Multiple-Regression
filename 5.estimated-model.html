@@ -543,6 +543,20 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </div>
 </div>
 </div>
+<p>or we can calculate it manually, given what we know, using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sigma2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">mod</span><span class="o">$</span><span class="n">residuals</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">mod</span><span class="o">$</span><span class="n">df.residual</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">sigma2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 9.277398
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="interpreting-the-estimates">
 <h2>Interpreting the Estimates<a class="headerlink" href="#interpreting-the-estimates" title="Link to this heading">#</a></h2>
