@@ -543,6 +543,20 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </div>
 </div>
 </div>
+<p>or we can calculate it manually, given what we know, using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sigma2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">mod</span><span class="o">$</span><span class="n">residuals</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">mod</span><span class="o">$</span><span class="n">df.residual</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">sigma2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 9.277398
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="interpreting-the-estimates">
 <h2>Interpreting the Estimates<a class="headerlink" href="#interpreting-the-estimates" title="Link to this heading">#</a></h2>
@@ -554,7 +568,7 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </section>
 <section id="the-intercept">
 <h3>The Intercept<a class="headerlink" href="#the-intercept" title="Link to this heading">#</a></h3>
-<p>The intercept is often of less interest in a simple regression model. In part, this is because its interpretation is usually uninteresting within the context of the data analysis. In addition, the value is often not very meaningful. For instance, in the context of <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset, and intercept of 37.2851 can be interpreted as the predicted value oh <code class="docutils literal notranslate"><span class="pre">mpg</span></code> for a <code class="docutils literal notranslate"><span class="pre">wt</span></code> of 0. This can be seen to fall out of the regression equation, as</p>
+<p>The intercept is often of less interest in a simple regression model. In part, this is because its interpretation is usually uninteresting within the context of the data analysis. In addition, the value is often not very meaningful. For instance, in the context of the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset, an intercept of 37.2851 can be interpreted as the predicted value of MPG for a  car that Weighs 0 lbs. This can be seen to fall out of the regression equation, as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align*}
@@ -563,10 +577,10 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
              &amp;= \beta_{0}
 \end{align*}
 \end{split}\]</div>
-<p>However, it should be clear that this estimate does not make much sense. A car that weights nothing should really have an MPG of 0, rather than an MPG of 37.2851. To make the intercept make more sense, one option would be to rescale the regression model so that the intercept represents the value of MPG for the <em>average</em> Weight in the sample. Another option would be to drop the intercept entirely and perform <em>regression through the origin</em>, where we force the value of MPG for a weight of 0 to be 0. This is more realistic, however, this can result in a <em>worse</em> model fit. We can see this below in <code class="docutils literal notranslate"><span class="pre">R</span></code>, where removing the intercept (using <code class="docutils literal notranslate"><span class="pre">-1</span></code> inside the model formula) results in much larger variance than keeping it in the model.</p>
+<p>However, it should be clear that this estimate does not make much sense. A car that weights nothing should really have an MPG of 0, rather than an MPG of 37.2851. To make the intercept make more sense, one option would be to rescale the regression model so that the intercept represents the value of MPG for the <em>average</em> Weight in the sample. This is what <em>mean-centering</em> does, which we will discuss more next week. Another option would be to drop the intercept entirely and perform <em>regression through the origin</em>, where we force the value of MPG for a weight of 0 to be 0. This is more realistic, however, this can result in a <em>worse</em> model fit. We can see this below in <code class="docutils literal notranslate"><span class="pre">R</span></code>, where removing the intercept (by including <code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">1</span></code> in the model formula) results in much larger variance than keeping it in the model.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="w"> </span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod.2</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -580,8 +594,8 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 <p>This makes sense because forcing the intercept to have a value of 0 on the <span class="math notranslate nohighlight">\(y\)</span> axis forces the regression slope to be <em>positive</em>, which we know is not appropriate. We could fix this by modelling the <em>inverse</em> of Weight instead</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">i.wt</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">/</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
-<span class="n">mod.3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">i.wt</span><span class="w"> </span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">inv.wt</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">/</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
+<span class="n">mod.3</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">inv.wt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod.3</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -592,11 +606,11 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </div>
 </div>
 </div>
-<p>which is clearly better than the model with no intercept and the raw values of <code class="docutils literal notranslate"><span class="pre">wt</span></code>. However, this is not only going to be more difficult to interpret, but it is still a worse fit than just leaving the intercept in. As such, the intercept is often necessary to provide a good overall model fit, even if the value is somewhat meaningless. Indeed, a car with a weight of 0 is pretty meaningless anyway, as is any car with a weight below a certain threshold. As such, this is an element of the model prediction that we would likely ignore for practical purposes.</p>
+<p>which is clearly better than the model with no intercept and the raw values of <code class="docutils literal notranslate"><span class="pre">wt</span></code>. However, this is going to be harder to interpret <em>and</em> is still a worse fit than just leaving the intercept in. As such, the intercept is often necessary to provide a good overall model fit, even if the value is somewhat meaningless. Indeed, a car with a weight of 0 is pretty meaningless anyway, as is any car with a weight below or above certain thresholds. As such, this model will have practical limits in terms of sensible predictions. Although the regression line theoretically extends across values of Weight from <span class="math notranslate nohighlight">\(-\infty\)</span> to <span class="math notranslate nohighlight">\(+\infty\)</span>, the reality is that there will be some sharp cut-offs based on both the <em>lightest</em> and <em>heaviest</em> cars that are feasible. Any predictions outside that range are essentially meaningless. As such, the intercept in its current form is an element of the model prediction that we would likely ignore for practical purposes.</p>
 </section>
 <section id="the-variance">
 <h3>The Variance<a class="headerlink" href="#the-variance" title="Link to this heading">#</a></h3>
-<p>On its own, the value of the variance is not that easy to interpret. We can, of course, take the square-root and arrive at the standard deviation instead. In the case of the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> data, this gives</p>
+<p>On its own, the estimated value of the variance is not that easy to interpret. We can, of course, take the square-root and arrive at the estimated standard deviation instead. In the <code class="docutils literal notranslate"><span class="pre">R</span></code> output, the estimated standard deviation is labelled in the summary table as the <code class="docutils literal notranslate"><span class="pre">Residual</span> <span class="pre">standard</span> <span class="pre">error</span></code>. We can extract it with</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span><span class="p">)</span>
@@ -609,12 +623,26 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </div>
 </div>
 </div>
-<p>meaning that, on average, the data deviates from the regression line by around 3.046 MPG. This is quite small on the scale of MPG, and so would seem quite good. However, on its own, we do not really have a way to interpret this value. As such, we tend to treat the variance or standard deviation as a <em>relative</em> measure during the course of model building. Our aim, very generally, is to find the model that makes this value as <em>small</em> as possible. Returing back to our conceptualisation from earlier of</p>
+<p>or calculate it manually from the information in the <code class="docutils literal notranslate"><span class="pre">mod</span></code> object</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">mod</span><span class="o">$</span><span class="n">residuals</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="o">/</span><span class="n">mod</span><span class="o">$</span><span class="n">df.residual</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 3.045882
+</pre></div>
+</div>
+</div>
+</div>
+<p>Either way, this means that, on average, the data deviates from the regression line by around 3.046 MPG. This is quite small on the scale of MPG, and so would seem quite good. However, on its own, we do not really have a way to interpret this value. As such, we tend to treat the variance or standard deviation as a <em>relative</em> measure during the course of model building. Our aim, very generally, is to find the model that makes this value as <em>small</em> as possible. Returing back to our conceptualisation from earlier of</p>
 <div class="math notranslate nohighlight">
 \[
 \sigma^{2}_{\text{Total}} = \sigma^{2}_{\text{Line}} + \sigma^{2}_{\text{Error}},
 \]</div>
-<p>our aim is to find the model that partitions the largest chunk of the total variance into the variance explained by the regression line, thus making the variance attributable to error as small as possible. This will have a direct influence on <em>inference</em>, as we will see next week, but also makes intuitive sense. From this perspective, we will use variance as a relative measure to see whether one model is able to reduce the error variance more than another. We already saw that above when assessing whether regression through the origin or regression through the origin with inverse weight were better models. We will see examples that formalise this more when we get to the concept of ANOVAs within the linear models framework.</p>
+<p>our aim is to find the model that partitions the largest chunk of the total variance into the variance explained by the regression line, thus making the variance attributable to error as small as possible. This will have a direct influence on <em>inference</em>, as we will see next week, but also makes intuitive sense. From this perspective, we will use variance as a relative measure to see whether one model is able to reduce the error variance more than another. We already saw that above when assessing whether regression through the origin or regression through the origin with inverse weight were better models. We will see examples that formalise this more when we get to the concept of ANOVAs a little later on this unit.</p>
 </section>
 </section>
 <section id="visualising-the-estimates">
@@ -633,7 +661,7 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 <a class="reference internal image-reference" href="_images/d72dc772a8529990353fd9a7014ca1da762b043747a1ff1ec8dee2b8d4312821.png"><img alt="_images/d72dc772a8529990353fd9a7014ca1da762b043747a1ff1ec8dee2b8d4312821.png" src="_images/d72dc772a8529990353fd9a7014ca1da762b043747a1ff1ec8dee2b8d4312821.png" style="width: 720px; height: 420px;" /></a>
 </div>
 </div>
-<p>This plot is not going to win any awards for visual style, but it is simple and effective as a quick means of drawing the model fit. It is the sort of plot we would use during the process of analysis, just to have a quick look, as there is no point spending a long time styling a plot as part of an analysis. If we wanted something better for a publication, we can also do this using the more verbose syntax of <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></p>
+<p>This plot is not going to win any awards for visual style, but it is simple and effective as a quick means of drawing the model fit. It is the sort of plot we would use during the process of analysis, just to have a quick look, as there is no point spending a long time styling a plot for this purpose. Getting distracted building a plot is a trap you need to try and avoid during the course of an analysis. Unless the results are final and you are creating something for a publication, this is almost always a waste of time. In the event that we do want something better for a publication, we can use the more flexible plotting options within <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
@@ -644,16 +672,16 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 <span class="w">    </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="s">&quot;cornflowerblue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span><span class="w"> </span><span class="n">stroke</span><span class="o">=</span><span class="m">1.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">    </span><span class="nf">geom_abline</span><span class="p">(</span><span class="n">intercept</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">slope</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">    </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;MPG as a function of weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="s">&quot;Weight (1000 lbs)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
-<span class="w">    </span><span class="nf">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">22</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">28</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
 <span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="o">=</span><span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/81fd3bc0e86dc70d65b83b6b22ea5f344f3b87046fdfc5b774338d985b36ceac.png"><img alt="_images/81fd3bc0e86dc70d65b83b6b22ea5f344f3b87046fdfc5b774338d985b36ceac.png" src="_images/81fd3bc0e86dc70d65b83b6b22ea5f344f3b87046fdfc5b774338d985b36ceac.png" style="width: 720px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/7b841500d98fdc236321e617558455db6e9aaedc3566ab97e8da6cc2e1274a95.png"><img alt="_images/7b841500d98fdc236321e617558455db6e9aaedc3566ab97e8da6cc2e1274a95.png" src="_images/7b841500d98fdc236321e617558455db6e9aaedc3566ab97e8da6cc2e1274a95.png" style="width: 720px; height: 420px;" /></a>
 </div>
 </div>
-<p>Either way, the key point is that we are able to <em>see</em> the model fit and assess it visually. This is one of the most important steps of building a statistical model as there is generally no substitute for looking at the data and understanding what your model is trying to say.</p>
+<p>Either way, the key point is that we are able to <em>see</em> the model fit and assess it visually. This is one of the most important steps of building a statistical model as there is generally no substitute for looking at the data and understanding what your model is trying to say. If you manage to “complete” an analysis without creating any plots along the way, then you have not performed the analysis correctly.</p>
 </section>
 </section>
 
