@@ -370,9 +370,16 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-a-plane-to-data">Fitting a <em>Plane</em> to Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multiple-regression-model">The Multiple Regression Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multiple-regression-model">The Multiple Regression Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-estimation">Parameter Estimation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-interpretation">Parameter Interpretation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#r-output-for-multiple-regression"><code class="docutils literal notranslate"><span class="pre">R</span></code> Output for Multiple Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-the-model">Plotting the Model</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -386,11 +393,11 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="multiple-linear-regression">
 <h1>Multiple Linear Regression<a class="headerlink" href="#multiple-linear-regression" title="Link to this heading">#</a></h1>
-<p>As a final topic for this lesson, we are going to take everything we have discussed so far and generalise it to cases where there are <em>more than one</em> predictor variables. This expands the <em>simple</em> regression model to a <em>multiple</em> regression model. Although this will add complexity, the nice thing about muliple regression is that the vast majority of ideas from simple regression still apply. This should make it relatively easy to move from the simple case to the more complex case. Indeed, the way to conceptualise this information is that simple regression is really a <em>special case</em> of multiple regression. As such, for all the information below it is worth noting that if we set <span class="math notranslate nohighlight">\(k=1\)</span>, everything will reduce to the simple regression case. Because of this, you only really need to understand multiple regression, as simple regression appears as a special case with no other changes necessary.</p>
+<p>As a final topic for this lesson, we are going to take everything we have discussed so far and generalise it to cases where there are <em>more than one</em> predictor variables. This expands the <em>simple</em> regression model to a <em>multiple</em> regression model. Although this will add complexity, the nice thing about muliple regression is that the vast majority of ideas from simple regression still apply. This should make it relatively easy to move from the simple case to the more complex case. Indeed, the way to conceptualise this information is that simple regression is really a <em>special case</em> of multiple regression. As such, for all the information below it is worth noting that if we set <span class="math notranslate nohighlight">\(k=1\)</span>, everything will reduce to simple regression. Because of this, you only really need to understand multiple regression, as simple regression appears as a special case with no other changes necessary.</p>
 <section id="fitting-a-plane-to-data">
 <h2>Fitting a <em>Plane</em> to Data<a class="headerlink" href="#fitting-a-plane-to-data" title="Link to this heading">#</a></h2>
-<p>At the beginning of this lesson, we start with an informal description of simple regression as a means of fitting a straight-line through a cloud of datapoints. Mutliple regression differs only in the fact that we are now fitting a <em>multidimensional plane</em> through a cloud of datapoints. The number of dimensions is <span class="math notranslate nohighlight">\(k\)</span>, which corresponds to the number of predictor variables. As such, when <span class="math notranslate nohighlight">\(k = 2\)</span> we can visualise this, but when <span class="math notranslate nohighlight">\(k &gt; 2\)</span> we cannot. Nevertheless, all the results still generalise, even if the limits of 3D space prevent visualisations.</p>
-<p>As an example using <code class="docutils literal notranslate"><span class="pre">mtcars</span></code>, consider plotting <code class="docutils literal notranslate"><span class="pre">mpg</span></code> against <em>two</em> predictors, namely <code class="docutils literal notranslate"><span class="pre">wt</span></code> and <code class="docutils literal notranslate"><span class="pre">hp</span></code> (horsepower). Each predictor defines a new dimension, leading to the plot shown below. Make sure you spend some time rotating this so you get a sense of how we are able to view the relationships within the data in relation to <em>multiple</em> predictors.</p>
+<p>At the beginning of this lesson, we started with an informal description of simple regression as a means of fitting a straight-line through a cloud of datapoints. Mutliple regression differs only in the fact that we are now fitting a <em>multidimensional plane</em> through a cloud of datapoints. The number of dimensions is <span class="math notranslate nohighlight">\(k\)</span>, which corresponds to the number of predictor variables. When <span class="math notranslate nohighlight">\(k = 2\)</span> we can visualise this, but when <span class="math notranslate nohighlight">\(k &gt; 2\)</span> we cannot. Nevertheless, all the results still generalise.</p>
+<p>As an example using <code class="docutils literal notranslate"><span class="pre">mtcars</span></code>, consider plotting <code class="docutils literal notranslate"><span class="pre">mpg</span></code> against <em>two</em> predictors, namely <code class="docutils literal notranslate"><span class="pre">wt</span></code> and <code class="docutils literal notranslate"><span class="pre">hp</span></code> (horsepower). Each predictor defines a new dimension, leading to the plot shown below. Make sure you spend some time rotating this so you get a sense of how we are able to view the relationships within the data irelative to <em>both</em> predictors simultaneously.</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><!doctype html>
@@ -428,7 +435,7 @@
 </html>
 </div></div>
 </div>
-<p>To capture the apparent relationship within this 3D cloud of points, the simplest approach is to draw a flat plane. This is a generalisation of drawing a straight-line, but defined across multiple dimensions. An example of this is shown below.</p>
+<p>At the beginning of this lesson, we argued that the simplest means of capturing a relationship within a single dimension was to draw a straight line. We can generalise this argument into two dimensions by drawing a <em>flat plane</em>. Rather than drawing a straight line, this is akin to place a piece of paper within the 3D cloud of points. An example is shown below. Again, rotate this around to get a sense of how the plane relates to the data.</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><!doctype html>
@@ -466,10 +473,58 @@
 </html>
 </div></div>
 </div>
+<p>This plane provides exactly the same function as a line, in the sense that it <em>summarises</em> and <em>simplifies</em> the relationships within the data. The main difference is that it captures these relationships across the mutliple variables <em>simultaneously</em>. This is something of a balancing act, due to the fact that the plane is a fixed shape. As such, the presence of <em>all</em> the other variables will affect how the plane is balanced. So this is not like fitting straight lines individually for each variable, as we will see further below.</p>
 </section>
 <section id="the-multiple-regression-model">
 <h2>The Multiple Regression Model<a class="headerlink" href="#the-multiple-regression-model" title="Link to this heading">#</a></h2>
-<p>which we can more succintly write as</p>
+<p>Turning the straight line of a simple regression model into the multidimensional plane of a multiple regression model is not as difficult as it may sound. For each additional variable, we simply add another parameter to the sum in the mean function. As such, if <span class="math notranslate nohighlight">\(k=2\)</span> then</p>
+<div class="math notranslate nohighlight">
+\[
+E(y_{i}|x_{i},x_{2}) = \beta_{0} + \beta_{1}x_{i1} + \beta_{2}x_{i2}.
+\]</div>
+<p>Notice that we have now added an extra index to <span class="math notranslate nohighlight">\(x\)</span> to indicate both the specific observation of <span class="math notranslate nohighlight">\(x\)</span> and which particular predictor we are referring to. So, each predictor is now denoted <span class="math notranslate nohighlight">\(x_{ij}\)</span>, where <span class="math notranslate nohighlight">\(i\)</span> indexes the observations <span class="math notranslate nohighlight">\((i = 1, \dots, n)\)</span> and <span class="math notranslate nohighlight">\(j\)</span> indexes the predictor itself <span class="math notranslate nohighlight">\((j = 1,\dots,k)\)</span>. The 5th observation of predictor 2 would be indicated by <span class="math notranslate nohighlight">\(x_{5,2}\)</span>, the 3rd observation of predictor 1 would be indicated by <span class="math notranslate nohighlight">\(x_{3,1}\)</span>, and so on<a class="footnote-reference brackets" href="#commafoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Conceptualising the Multiple Regression Equation</p>
+<p>Much like we conceptualised the straight line equation as instructions for walking along the axes to reach the point on the line, the multidimensional case is simply instructions for reaching a point on the plane. We start in a far corner of the plane where all the variables are equal to zero (i.e. at <span class="math notranslate nohighlight">\(\beta_{0}\)</span>). We then walk <span class="math notranslate nohighlight">\(x_{i1}\)</span> units along the <em>first</em> axis and arrive at <span class="math notranslate nohighlight">\(y = \beta_{0} + \beta_{1}x_{i1}\)</span>. We then walk <span class="math notranslate nohighlight">\(x_{i2}\)</span> units along the <em>second</em> axis and arrive at our final destination of <span class="math notranslate nohighlight">\(y = \beta_{0} + \beta_{1}x_{i1} + \beta_{2}x_{i2}\)</span>. The order of the variables does not matter here, as we could follow the instructions in any order and it would simply be a different route to the same destination.</p>
+</div>
+<p>For cases <span class="math notranslate nohighlight">\(k &gt; 2\)</span>, we simply keep adding terms to the regression equation. We can still concieve of this as instructions for reaching a point on a plane, we just cannot visualise this as it exists beyond the 3 dimensions of space. However, everything still generalises. Indeed, this lack of ability to visualise is not really a problem. In mathematics, dimesions are really just a tool for keeping track of information. We can just keep adding dimensions as the problem gets more complex, but still use the same tools and methods as we did in the 2-dimensional case. The more general multiple regression equation is therefore</p>
+<div class="math notranslate nohighlight">
+\[
+E(y_{i}|x_{i}) = \beta_{0} + \beta_{1}x_{i1} + \beta_{2}x_{i2} + \dots + \beta_{k}x_{ik},
+\]</div>
+<p>where we are just using <span class="math notranslate nohighlight">\(x_{i}\)</span> generically to refer to the <span class="math notranslate nohighlight">\(i\)</span>th value of <em>all</em> the predictors (i.e. <span class="math notranslate nohighlight">\(x_{i} = \{x_{i1},x_{i2},\dots,x_{ik}\}\)</span>). We can then write this more succintly using Big Sigma notation (see the box below) to give</p>
+<div class="math notranslate nohighlight">
+\[
+E(y_{i}|x_{i}) = \beta_{0} + \sum_{j=1}^{k} \beta_{j}x_{ij}.
+\]</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Big Sigma Notation</p>
+<p>Big Sigma notation, denoted by the captitol Greek letter <span class="math notranslate nohighlight">\(\Sigma\)</span>, is used as a shorthand for <em>addition</em>. Below the big Sigma, we define our indexing variable, as well as its starting value. Above the big Sigma, we indicate the value where we stop. So the notation</p>
+<div class="math notranslate nohighlight">
+\[
+S = \sum_{j=1}^{3} \beta_{j}x_{j}
+\]</div>
+<p>is equivalent to</p>
+<div class="math notranslate nohighlight">
+\[
+S = \beta_{1}x_{1} + \beta_{2}x_{2} + \beta_{3}x_{3},
+\]</div>
+<p>In code, this is the same as shortening</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">3</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">){</span>
+<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>So, much like the Big Pi notation we saw earlier, you can think of the Big Sigma notation as a <em>summation loop</em> over a certain set of indices.</p>
+</div>
+<section id="the-normal-probability-model">
+<h3>The Normal Probability Model<a class="headerlink" href="#the-normal-probability-model" title="Link to this heading">#</a></h3>
+<p>We can now place the multiple regression model within the context of the normal linear model by simply changing the mean function to</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align*}
@@ -485,34 +540,8 @@
     \epsilon_{i} &amp;\sim \mathcal{N}\left(0,\sigma^{2}\right).
 \end{align*}
 \end{split}\]</div>
-<p>See the box below if you are unfamiliar with “big sigma” notation.</p>
-<div class="tip dropdown admonition">
-<p class="admonition-title">Big Sigma Notation</p>
-<p>So the notation</p>
-<div class="math notranslate nohighlight">
-\[
-S = \sum_{j=1}^{k} \beta_{j}x_{j}
-\]</div>
-<p>is equivalent to</p>
-<div class="math notranslate nohighlight">
-\[
-S = \beta_{1}x_{1} + \beta_{2}x_{2} + \beta_{3}x_{3},
-\]</div>
-<p>if we take <span class="math notranslate nohighlight">\(k=3\)</span>. In code, is the same as shortening</p>
-<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="m">3</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>to</p>
-<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">k</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
-<span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
-
-<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">){</span>
-<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>So, you can think of the Big Sigma notation as a <em>summation loop</em> over a certain set of indices.</p>
-</div>
+<p>Notice that if we set <span class="math notranslate nohighlight">\(k=1\)</span>, these both simplify to the simple regression model we discussed earlier. An important point here is that the regression equation produces a <em>single number</em> for the mean function. So this is <em>not</em> a multidimensional normal distribution (which would have a different mean for each dimension). Instead, every single point on the regression plane is associated with a 1D normal distribution of values for <span class="math notranslate nohighlight">\(y\)</span>. Unfortunately, we cannot visualise these distributions on top of the regression plane because we would need a 4th dimension to represent the probability density. However, you can imagine moving and tilting the regression plane along the vertical axis. As you do so, the probability of the plane will shift. The rate at which this probability changes is governed by the shape of the normal distribution. As such, you can imagine that there is a normal distribution associated with every point on the regression plane that governs the probability of the plane, depending upon where it is positioned relative to the data.</p>
+</section>
 </section>
 <section id="parameter-estimation">
 <h2>Parameter Estimation<a class="headerlink" href="#parameter-estimation" title="Link to this heading">#</a></h2>
@@ -521,6 +550,19 @@ S = \beta_{1}x_{1} + \beta_{2}x_{2} + \beta_{3}x_{3},
 <section id="parameter-interpretation">
 <h2>Parameter Interpretation<a class="headerlink" href="#parameter-interpretation" title="Link to this heading">#</a></h2>
 <p>… This dependence between parameters can be thought of like trying to balance the regression plane. You cannot balance the plane by only looking within a single dimension. Instead, you need to consider all variables together to provide a good balance. Importantly, this means that you cannot expect the estimates from simple regression to be the same as multiple regression and any attempt to equate the two is flawed. This is most applicable when it comes to <em>plotting</em> the multiple regression effects. You cannot just plot multiple simple regressions and expect the result to be accurate.</p>
+</section>
+<section id="r-output-for-multiple-regression">
+<h2><code class="docutils literal notranslate"><span class="pre">R</span></code> Output for Multiple Regression<a class="headerlink" href="#r-output-for-multiple-regression" title="Link to this heading">#</a></h2>
+<section id="plotting-the-model">
+<h3>Plotting the Model<a class="headerlink" href="#plotting-the-model" title="Link to this heading">#</a></h3>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="commafoot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Using commas within the indices is often good practice to remove ambiguity, but does make the notation messy. We will only use these when needed. For instance, <span class="math notranslate nohighlight">\(x_{32}\)</span> could be misunderstood as the 32nd index of <span class="math notranslate nohighlight">\(x\)</span>, rather than <span class="math notranslate nohighlight">\(i=3\)</span> and <span class="math notranslate nohighlight">\(j=2\)</span>. In this case, writing <span class="math notranslate nohighlight">\(x_{3,2}\)</span> is needed.</p>
+</aside>
+</aside>
+</section>
 </section>
 </section>
 
@@ -590,9 +632,16 @@ S = \beta_{1}x_{1} + \beta_{2}x_{2} + \beta_{3}x_{3},
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-a-plane-to-data">Fitting a <em>Plane</em> to Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multiple-regression-model">The Multiple Regression Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-multiple-regression-model">The Multiple Regression Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-probability-model">The Normal Probability Model</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-estimation">Parameter Estimation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-interpretation">Parameter Interpretation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#r-output-for-multiple-regression"><code class="docutils literal notranslate"><span class="pre">R</span></code> Output for Multiple Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-the-model">Plotting the Model</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
