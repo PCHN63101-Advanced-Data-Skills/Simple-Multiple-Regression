@@ -65,7 +65,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '2.simple-regression';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Maximum Likelihood" href="4.maximum-likelihood.html" />
+    <link rel="next" title="Maximum Likelihood" href="3.maximum-likelihood.html" />
     <link rel="prev" title="Fitting a Straight Line to Data" href="1.straight-line.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -173,8 +173,8 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The Simple Regression Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.maximum-likelihood.html">Maximum Likelihood</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.estimated-model.html">The Estimated Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.maximum-likelihood.html">Maximum Likelihood</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.estimated-model.html">The Estimated Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
@@ -560,11 +560,22 @@ y_{i} = b_{0} + b_{1}x_{i} + e_{i}.
 y_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i} + e_{i}.
 \]</div>
 <p>This is helpful, because it makes it clearer that the residuals are not really a parameter, rather thay are a <em>derived</em> quantity. So we keep Greek letters wearing hats for our estimated parameters, and lower-case Latin letters for everything else.</p>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have explored how the concept of fitting a straight line to data can be formalised into a statistical model, leading to <em>simple linear regression</em>. After reading this section, you should have a good sense of:</p>
+<ul class="simple">
+<li><p>How the population distriution, mean function and variance function are defined to give the simple regression model <span class="math notranslate nohighlight">\(y_{i} \sim  \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i}, \sigma^{2}\right)\)</span>.</p></li>
+<li><p>How the simplicity of this method is justified using the concept of <em>Occam’s Razor</em>, which is a guiding principle for building statistical models.</p></li>
+<li><p>How simple regression is an example of a <em>linear model</em>, which is the more general framework we will be using throughout this course.</p></li>
+<li><p>How the notation <span class="math notranslate nohighlight">\(\hat{\beta}_{1}\)</span> differs from <span class="math notranslate nohighlight">\(\beta_{1}\)</span> in terms of indicating an <em>estimate</em>, rather than the true population value.</p></li>
+<li><p>Similarly, why the distinction between <em>errors</em> and <em>residuals</em> is important.</p></li>
+</ul>
+</aside>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="greekfoot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>If you are not very comfortable with the Greek alphabet, you may want to spend some time learning the names of the letters and how to pronounce them.</p>
+<p>If you are not very comfortable with the Greek alphabet, you may want to spend some time learning the names of the letters and how to pronounce them. Be slightly careful though, many of the letters are not pronounced the same way as the actual Greek language and also differ between American English and British English. <a class="reference external" href="https://www.youtube.com/watch?v=CnotqG06t_A">This video</a> is a good resource containing the British English pronounciation of the letters.</p>
 </aside>
 </aside>
 </section>
@@ -611,7 +622,7 @@ y_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i} + e_{i}.
       </div>
     </a>
     <a class="right-next"
-       href="4.maximum-likelihood.html"
+       href="3.maximum-likelihood.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
