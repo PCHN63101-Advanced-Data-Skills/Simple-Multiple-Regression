@@ -62,10 +62,10 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '4.maximum-likelihood';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '3.maximum-likelihood';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="The Estimated Model" href="5.estimated-model.html" />
+    <link rel="next" title="The Estimated Model" href="4.estimated-model.html" />
     <link rel="prev" title="The Simple Regression Model" href="2.simple-regression.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,7 +174,7 @@
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.simple-regression.html">The Simple Regression Model</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Maximum Likelihood</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.estimated-model.html">The Estimated Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.estimated-model.html">The Estimated Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
@@ -253,7 +253,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2F4.maximum-likelihood.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2F3.maximum-likelihood.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -283,7 +283,7 @@
       
       
       
-      <li><a href="_sources/4.maximum-likelihood.ipynb" target="_blank"
+      <li><a href="_sources/3.maximum-likelihood.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -678,23 +678,36 @@ y^{\ast} = \left[27, 4, -2, -29\right].
 <p>The importance of this for statistical models is that the act of estimation <em>imposes a constraint</em> on the values that are produced. Although our outcomes <span class="math notranslate nohighlight">\(y\)</span> starts with <span class="math notranslate nohighlight">\(n\)</span> degrees of freedom, estimating parameters limits the number of possible values that can be produced by the model. For the residuals, their values are constrained by the parameter estimates. Each new parameter “uses up” a single degree of freedom. So if we have <span class="math notranslate nohighlight">\(k\)</span> parameters, then the number of residual degrees of freedom is <span class="math notranslate nohighlight">\(n-k\)</span>. For simple regression, <span class="math notranslate nohighlight">\(k = 2\)</span> (the slope and the intercept) and so the first <span class="math notranslate nohighlight">\(n-2\)</span> residuals are free to be any possible value, but the value of the final 2 are constrained by the estimated values of <span class="math notranslate nohighlight">\(\beta_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}\)</span>. This also has a direct connection with Bessel’s correction, because estimating the variance of a sample requires an estimate of the mean. This constrains the number of independent pieces of information that can be used to estimate the variance from <span class="math notranslate nohighlight">\(n\)</span> to <span class="math notranslate nohighlight">\(n-1\)</span>.</p>
 <p>The concept of degrees of freedom can be quite difficult to grasp. In fact, the origin of the concept came from Fisher’s geometric perspective on linear models. Unfortunately, this requires a much deeper understanding of linear models than we will have time to establish on this course. In brief, we conceptualise quantities such as the residuals as vectors (arrows) in multidimensional space. The number of dimensions these vectors occupy is given by the degrees of freedom. As such, to compare vectors that lie in different numbers of dimensions, we summarise them by producing an <em>average value per-dimension</em>. This makes the act of dividing quantities by their degrees of freedom make more sense, but this is not a perspective we would recommend trying to master at this stage. However, it is worth knowing that a more intuitive perspective on degrees of freedom does exist, if you want to look into it at a later date.</p>
 </div>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have explored the method of Maximum Likelihood as a means of estimating the simple regression parameters using a sample of data. After reading this section, you should have a good sense of:</p>
+<ul class="simple">
+<li><p>Why MLE is a more general-purpose and useful approach to focus on, even though OLS is typically used for estimating basic linear models.</p></li>
+<li><p>The concept that the likelihood function is really just a probability statement about the <em>data</em> given some estimates for the <em>parameters</em>.</p></li>
+<li><p>The concept that evaluating the likelihood function involves taking the assumed distribution of the data, as well as some guess for the parameters, and then using that information to generate a probability for each data point. These probabilities are then multiplied together to provide an <em>overall</em> probability of the data we have collected.</p></li>
+<li><p>The concept that <em>maximising</em> the likelihood involves finding guesses for the parameters that makes the probability of the data as <em>large</em> as possible.</p></li>
+<li><p>The concept that there are <em>two</em> approaches to finding the parameters that maximise the likelihood. For well-behaved problems, exact solutions have already been found, whereas for more difficult problems, iterative algorithms need to be used to search for solutions.</p></li>
+<li><p>The results that, for simple linear models assuming a normal distribution, the exact solutions for the slope and intercept are <em>identical</em> when using either MLE or OLS.</p></li>
+<li><p>The result that MLE produces a <em>biased</em> estimate of the variance and thus needs to be corrected using <em>restricted maximum likelihood</em> (REML).</p></li>
+</ul>
+</aside>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="searlefoot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>This is the perspective taken by <a class="reference external" href="https://www.librarysearch.manchester.ac.uk/permalink/44MAN_INST/1r887gn/alma9930787964401631">McCulloch, Searle &amp; Neuhaus (2008)</a>, who are leading experts on the use of linear models and their derivatives within statistics. This book gives everything you need to understand about the mathematical theory behind this framework, though it is not for the faint of heart!</p>
+<p>This is the perspective taken by <a class="reference external" href="https://www.librarysearch.manchester.ac.uk/permalink/44MAN_INST/1r887gn/alma9930787964401631">McCulloch, Searle &amp; Neuhaus (2008)</a>, who are leading experts on the use of linear models within statistics.</p>
 </aside>
 <aside class="footnote brackets" id="bayesfoot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<p>This may seem like the wrong quantity. Surely, we are interested in <span class="math notranslate nohighlight">\(P(\boldsymbol{\theta}|\mathcal{D})\)</span>? In other words, finding the parameters that are most probable, given the data. Unfortunately, evaluating the probability <span class="math notranslate nohighlight">\(P(\boldsymbol{\theta}|\mathcal{D})\)</span> requires Bayesian methods and so cannot be evaluated from a purely Frequentist perspective. This is why the likelihood has such an awkward definition.</p>
+<p>This may seem like the wrong quantity. Surely, we are interested in <span class="math notranslate nohighlight">\(P(\boldsymbol{\theta}|\mathcal{D})\)</span>? In other words, finding the parameters that are most probable, given the data. Unfortunately, evaluating the probability <span class="math notranslate nohighlight">\(P(\boldsymbol{\theta}|\mathcal{D})\)</span> requires Bayesian methods and so cannot be evaluated from a purely Frequentist perspective.</p>
 </aside>
 <aside class="footnote brackets" id="likprobsfoot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
-<p>This is often a problem of just getting values of 0 due to issues with computational precision when working with many small probabilities. Taking logs not only changes the scale so that this does not happen, but it also turns <em>multiplication</em> into <em>summation</em>. Historically, this made calculating the likelihood much easier by hand. If you ever want to get back to the likelihood value, you can just undo the logs by using <code class="docutils literal notranslate"><span class="pre">exp(loglik)</span></code>.</p>
+<p>This is a problem of getting values of 0 due to issues with computational precision when working with many small probabilities. Taking logs not only changes the scale so that this does not happen, but it also turns <em>multiplication</em> into <em>summation</em>. Historically, this made calculating the likelihood much easier by hand. If you ever want to get back to the likelihood value, you can just undo the logs by using <code class="docutils literal notranslate"><span class="pre">exp(loglik)</span></code>.</p>
 </aside>
 <aside class="footnote brackets" id="minmaxfoot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
-<p>Making the <em>negative</em> log-likelihood <em>smaller</em> is the same as making the <em>positive</em> log-likelihood <em>bigger</em>. All we need to do to turn a maxmisation problem into a minimisation problem is to multiply the value returned by the function by <span class="math notranslate nohighlight">\(-1\)</span>.</p>
+<p>Making the <em>negative</em> log-likelihood <em>smaller</em> is the same as making the <em>positive</em> log-likelihood <em>bigger</em>. All we need to do to turn a maxmisation problem into a minimisation problem is to multiply the value of the objective function by <span class="math notranslate nohighlight">\(-1\)</span>.</p>
 </aside>
 </aside>
 </section>
@@ -741,7 +754,7 @@ y^{\ast} = \left[27, 4, -2, -29\right].
       </div>
     </a>
     <a class="right-next"
-       href="5.estimated-model.html"
+       href="4.estimated-model.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>

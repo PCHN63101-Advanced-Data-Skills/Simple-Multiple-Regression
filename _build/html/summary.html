@@ -60,6 +60,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'summary';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -170,8 +172,8 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.simple-regression.html">The Simple Regression Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.maximum-likelihood.html">Maximum Likelihood</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.estimated-model.html">The Estimated Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.maximum-likelihood.html">Maximum Likelihood</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.estimated-model.html">The Estimated Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Summary</a></li>
 </ul>
@@ -370,6 +372,8 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="summary">
 <h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>In this lesson, we have covered a lot of information around regression models. Starting with the idea of drawing a line through a cloud of points, we then formalised this approach using the statistical modelling framework discussed last week. This led us to the <em>simple linear regression</em> model, characterised by assuming a normal distribution of outcome values for each value of the predictor, where the mean function was defined using the equation for a straight line and the variance function was constant. We then discussed how the population parameters that define this line can be <em>estimated</em> from a sample of data. Although typically taught through the lens of least-squares, we instead introduced <em>maximum likelihood</em> as a more general-purpose approach to estimation that is grounded in the probabilistic assumptions made by the model. After discussing the interpretation of these estimates, we then turned to expanding <em>simple</em> regression into <em>multiple</em> regression, by adding more predictor variables. This transforms the regression <em>line</em> into a regression <em>plane</em> however, most of the information from simple regression remains applicable. The only major difference concerns the <em>interpretation</em> and subsequent <em>plotting</em> of the model parameters.</p>
+<p>Next week, we will stick to the topic of multiple regression and discuss <em>statistical inference</em> using the parameter estimates. This is one of the more controversial aspects of classical statistics, as we will need to discuss <span class="math notranslate nohighlight">\(p\)</span>-values both in terms of their interpretation, but also in terms of their flaws. We will also be examining how to explore whether the many assumptions we have made during this lesson actually hold for a specific dataset. Finally, we will explore data <em>transformations</em>, both as a means of aiding with any violated assumptions, but also as a means of improving both the model fit and model interpretation.</p>
 </section>
 
     <script type="text/x-thebe-config">

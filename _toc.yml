@@ -6,7 +6,7 @@ root: 0.intro
 chapters:
 - file: 1.straight-line
 - file: 2.simple-regression
-- file: 4.maximum-likelihood
-- file: 5.estimated-model
+- file: 3.maximum-likelihood
+- file: 4.estimated-model
 - file: 5.multiple-regression
 - file: summary

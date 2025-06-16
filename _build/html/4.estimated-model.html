@@ -62,11 +62,11 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '5.estimated-model';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '4.estimated-model';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Multiple Linear Regression" href="5.multiple-regression.html" />
-    <link rel="prev" title="Maximum Likelihood" href="4.maximum-likelihood.html" />
+    <link rel="prev" title="Maximum Likelihood" href="3.maximum-likelihood.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -173,7 +173,7 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.straight-line.html">Fitting a Straight Line to Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.simple-regression.html">The Simple Regression Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.maximum-likelihood.html">Maximum Likelihood</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.maximum-likelihood.html">Maximum Likelihood</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The Estimated Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.multiple-regression.html">Multiple Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -253,7 +253,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2F5.estimated-model.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63101-Advanced-Data-Skills/Simple-Multiple-Regression/issues/new?title=Issue%20on%20page%20%2F4.estimated-model.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -283,7 +283,7 @@
       
       
       
-      <li><a href="_sources/5.estimated-model.ipynb" target="_blank"
+      <li><a href="_sources/4.estimated-model.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -577,7 +577,7 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
              &amp;= \beta_{0}
 \end{align*}
 \end{split}\]</div>
-<p>However, it should be clear that this estimate does not make much sense. A car that weights nothing should really have an MPG of 0, rather than an MPG of 37.2851. To make the intercept make more sense, one option would be to rescale the regression model so that the intercept represents the value of MPG for the <em>average</em> Weight in the sample. This is what <em>mean-centering</em> does, which we will discuss more next week. Another option would be to drop the intercept entirely and perform <em>regression through the origin</em>, where we force the value of MPG for a weight of 0 to be 0. This is more realistic, however, this can result in a <em>worse</em> model fit. We can see this below in <code class="docutils literal notranslate"><span class="pre">R</span></code>, where removing the intercept (by including <code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">1</span></code> in the model formula) results in much larger variance than keeping it in the model.</p>
+<p>However, it should be clear that this estimate does not make much sense. A car that weights nothing should really have an MPG of 0, rather than an MPG of 37.2851. To make the intercept make more sense, one option would be to rescale the regression model so that the intercept represents the value of MPG for the <em>average</em> Weight in the sample. This is what <em>mean-centering</em> does, which we will discuss more next week. Another option would be to drop the intercept entirely and perform <em>regression through the origin</em>, where we force the value of MPG for a weight of 0 to be 0. This is more realistic, however, this can result in a <em>worse</em> model fit. We can see this below in <code class="docutils literal notranslate"><span class="pre">R</span></code>, where removing the intercept (by including <code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">1</span></code> in the model formula) results in much larger variance than keeping it in the model<a class="footnote-reference brackets" href="#interceptfoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
@@ -661,27 +661,27 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 <a class="reference internal image-reference" href="_images/d72dc772a8529990353fd9a7014ca1da762b043747a1ff1ec8dee2b8d4312821.png"><img alt="_images/d72dc772a8529990353fd9a7014ca1da762b043747a1ff1ec8dee2b8d4312821.png" src="_images/d72dc772a8529990353fd9a7014ca1da762b043747a1ff1ec8dee2b8d4312821.png" style="width: 720px; height: 420px;" /></a>
 </div>
 </div>
-<p>This plot is not going to win any awards for visual style, but it is simple and effective as a quick means of drawing the model fit. It is the sort of plot we would use during the process of analysis, just to have a quick look, as there is no point spending a long time styling a plot for this purpose. Getting distracted building a plot is a trap you need to try and avoid during the course of an analysis. Unless the results are final and you are creating something for a publication, this is almost always a waste of time. In the event that we do want something better for a publication, we can use the more flexible plotting options within <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
-
-<span class="n">beta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
-
-<span class="nf">ggplot</span><span class="p">(</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">mpg</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
-<span class="w">    </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="s">&quot;cornflowerblue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span><span class="w"> </span><span class="n">stroke</span><span class="o">=</span><span class="m">1.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">    </span><span class="nf">geom_abline</span><span class="p">(</span><span class="n">intercept</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">slope</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">    </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;MPG as a function of weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="s">&quot;Weight (1000 lbs)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
-<span class="w">    </span><span class="nf">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">28</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
-<span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="o">=</span><span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/7b841500d98fdc236321e617558455db6e9aaedc3566ab97e8da6cc2e1274a95.png"><img alt="_images/7b841500d98fdc236321e617558455db6e9aaedc3566ab97e8da6cc2e1274a95.png" src="_images/7b841500d98fdc236321e617558455db6e9aaedc3566ab97e8da6cc2e1274a95.png" style="width: 720px; height: 420px;" /></a>
-</div>
-</div>
-<p>Either way, the key point is that we are able to <em>see</em> the model fit and assess it visually. This is one of the most important steps of building a statistical model as there is generally no substitute for looking at the data and understanding what your model is trying to say. If you manage to “complete” an analysis without creating any plots along the way, then you have not performed the analysis correctly.</p>
+<p>This plot is not going to win any awards for visual style, but it is simple and effective as a quick means of drawing the model fit. It is the sort of plot we would use during the process of analysis, just to have a quick look, as there is no point spending a long time styling a plot for this purpose. Getting distracted building a plot is a trap you need to try and avoid during the course of an analysis. Unless the results are final and you are creating something for a publication, this is almost always a waste of time. The key point is that we are able to <em>see</em> the model fit and assess it visually. This is one of the most important steps of building a statistical model as there is no substitute for looking at the data and understanding what your model is trying to say. If you manage to “complete” an analysis without creating any plots along the way, then you have not performed the analysis correctly.</p>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have explored the results of estimating a simple regression model, either using OLS or using MLE (with REML for the variance). After reading this section, you should have a good sense of:</p>
+<ul class="simple">
+<li><p>How the final estimates can be used to complete the unknowns in the regression equation, producing both predicted (also known as <em>fitted</em>) values and residuals.</p></li>
+<li><p>How the <code class="docutils literal notranslate"><span class="pre">R</span></code> formula interface can be used to specify the mean function of the model using <code class="docutils literal notranslate"><span class="pre">lm()</span></code>.</p></li>
+<li><p>How to interpret some of the <code class="docutils literal notranslate"><span class="pre">R</span></code> output table from the <code class="docutils literal notranslate"><span class="pre">lm()</span></code> function, as well as how to extract some basic results from the fitted model object.</p></li>
+<li><p>The meaning of the <em>slope</em> estimate in terms of quantifying the average change in <span class="math notranslate nohighlight">\(y\)</span> for a unit-change in <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
+<li><p>The meaning of the <em>intercept</em> estimate in terms of quantifying the value of <span class="math notranslate nohighlight">\(y\)</span> when <span class="math notranslate nohighlight">\(x = 0\)</span>.</p></li>
+<li><p>The meaning of the <em>variance</em> estimate and how this would typically be used more as a tool for <em>model comparison</em>, rather than directly interpreted.</p></li>
+<li><p>How the model fit can be visualised using some basic plots in <code class="docutils literal notranslate"><span class="pre">R</span></code>.</p></li>
+</ul>
+</aside>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="interceptfoot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The <code class="docutils literal notranslate"><span class="pre">1</span></code> can also be used to fit an intercept-only model to the data. For instance, <code class="docutils literal notranslate"><span class="pre">mpg</span> <span class="pre">~</span> <span class="pre">1</span></code> would fit a model containing only the parameter <span class="math notranslate nohighlight">\(\beta_{0}\)</span>. In the absence of any predictors, this would simply be the <em>mean</em> of MPG.</p>
+</aside>
+</aside>
 </section>
 </section>
 
@@ -716,7 +716,7 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="4.maximum-likelihood.html"
+       href="3.maximum-likelihood.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
