@@ -16,30 +16,34 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -66,6 +70,7 @@
     <link rel="prev" title="Introduction" href="0.intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -81,19 +86,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -101,7 +95,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -109,8 +102,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -126,7 +119,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -156,21 +150,17 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="LM I: Simple and Multiple Regression - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="LM I: Simple and Multiple Regression - Home"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="LM I: Simple and Multiple Regression - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -196,9 +186,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -342,24 +337,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -410,34 +397,32 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
-<span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
 <span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/123d98e9a273fb9559a05f1db91434934fadbe37468fd7acb9352c80c2b9ef59.png"><img alt="_images/123d98e9a273fb9559a05f1db91434934fadbe37468fd7acb9352c80c2b9ef59.png" src="_images/123d98e9a273fb9559a05f1db91434934fadbe37468fd7acb9352c80c2b9ef59.png" style="width: 720px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/191e82958e63308c9c7e45c76d8a25bbe75e04ed79408cf6416aded55b08ed49.png"><img alt="_images/191e82958e63308c9c7e45c76d8a25bbe75e04ed79408cf6416aded55b08ed49.png" src="_images/191e82958e63308c9c7e45c76d8a25bbe75e04ed79408cf6416aded55b08ed49.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
 <p>As <code class="docutils literal notranslate"><span class="pre">wt</span></code> increases there is clear <em>decrease</em> in the value of <code class="docutils literal notranslate"><span class="pre">mpg</span></code>. Although the relationship is not perfect, we could probably do a fairly good job of capturing this by simply drawing a line through the cloud of the datapoints. Although this line may only intersect a few of the measured datapoints, the hope would be that, in some sense, the line captures the <em>general pattern</em> we can see in the data.</p>
 <p>An example of such a line is shown below. For the moment, do not worry about how this has been defined or the numbers that have been used. The main point is just gaining intuition for <em>why</em> we would want to do this.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">35</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">35</span><span class="p">))</span>
 <span class="nf">abline</span><span class="p">(</span><span class="n">coef</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">37.2851</span><span class="p">,</span><span class="m">-5.3445</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/31ca425eb2f7b5eed2e785ca2c906f31d734e259a611f1a7d6b605a47272e334.png"><img alt="_images/31ca425eb2f7b5eed2e785ca2c906f31d734e259a611f1a7d6b605a47272e334.png" src="_images/31ca425eb2f7b5eed2e785ca2c906f31d734e259a611f1a7d6b605a47272e334.png" style="width: 720px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/bca135a652fce631036f3e575cc718de289012421531c84a7c261271a3444f57.png"><img alt="_images/bca135a652fce631036f3e575cc718de289012421531c84a7c261271a3444f57.png" src="_images/bca135a652fce631036f3e575cc718de289012421531c84a7c261271a3444f57.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
-<p>This line does appear to do a good job of capturing the general pattern we can see in the data. As a means of summarising the data, the line does intersect certain measurements, whereas others are further away. Neverthless, in a very general sense, this seems a reasonable summary that captures the essence of the fact that as weight increases, the MPG decreases. Furthermore, there are points on this line that have no corresponding data (e.g. between <code class="docutils literal notranslate"><span class="pre">wt</span></code> measurements of 4 and 5). As such, these elements of the line represent a <em>prediction</em> about what value of MPG we would expect for those values of weight, despite them not being measured.</p>
+<p>This line does appear to do a good job of capturing the general pattern we can see in the data. As a means of summarising the data, the line does intersect certain measurements, whereas others are further away. Neverthless, in a very general sense, this seems a reasonable summary that captures the essence of the fact that as weight increases, the MPG decreases. Furthermore, there are points on this line that have no corresponding data (e.g. between <code class="docutils literal notranslate"><span class="pre">wt</span></code> measurements of 4 and 5). As such, these elements of the line represent a <em>prediction</em> about what value of MPG we would expect for those particular values of weight.</p>
 </section>
 <section id="the-straight-line-equation">
 <h2>The Straight Line Equation<a class="headerlink" href="#the-straight-line-equation" title="Link to this heading">#</a></h2>
-<p>In order to fully appreciate how a straight-line provides a <em>simplification</em> of the data, we need to examine how a straight-line is defined mathematically. The classic algebraic expression of a line is</p>
+<p>In order to fully appreciate how a straight line provides a <em>simplification</em> of the data, we need to examine how a straight line is defined mathematically. The classic algebraic expression of a line is</p>
 <div class="math notranslate nohighlight">
 \[
 y = mx + b,
@@ -447,21 +432,28 @@ y = mx + b,
 \[
 \text{MPG} = m \times \text{Weight} + b.
 \]</div>
-<p>Understanding this equation can be made more simple by conceptualising it as instructions for how far to climb up the <span class="math notranslate nohighlight">\(y\)</span>-axis, after walking a certain distance along the <span class="math notranslate nohighlight">\(x\)</span>-axis. We always start our walk from an <span class="math notranslate nohighlight">\(x\)</span>-value of 0. The intercept, <span class="math notranslate nohighlight">\(b\)</span>, tells us how far we need to climb up <span class="math notranslate nohighlight">\(y\)</span> before we start walking. For the line shown above, we start from <span class="math notranslate nohighlight">\(x = 0\)</span> and <span class="math notranslate nohighlight">\(y = b = 37.2851\)</span>. So we need to climb all the way up to a value of <span class="math notranslate nohighlight">\(37.2851\)</span> before we start. The slope then tells us how far we would need to climb up <span class="math notranslate nohighlight">\(y\)</span> if we take <em>one step</em> along the <span class="math notranslate nohighlight">\(x\)</span>-axis. For the line shown above, we had <span class="math notranslate nohighlight">\(m = -5.3445\)</span>. So, if we move along the <span class="math notranslate nohighlight">\(x\)</span>-axis by one unit of <code class="docutils literal notranslate"><span class="pre">wt</span></code>, then we need to move <em>down</em> the <span class="math notranslate nohighlight">\(y\)</span>-axis by <span class="math notranslate nohighlight">\(5.3445\)</span>. For any other distance, we can simply multiply how far we are walking by the value of <span class="math notranslate nohighlight">\(m\)</span>. For instance, if we walked 2-units along <span class="math notranslate nohighlight">\(x\)</span> we would have <span class="math notranslate nohighlight">\(m \times 2 = -10.689\)</span>, whereas if we move only half a unit we would have <span class="math notranslate nohighlight">\(m \times 0.5 = -2.6723\)</span>.</p>
-<p>Given the information above, knowing the <span class="math notranslate nohighlight">\(y\)</span>-value of a line only depends upon <em>three</em> pieces of information: the <em>intercept</em> (our starting point), the <em>slope</em> (how <span class="math notranslate nohighlight">\(y\)</span> changes for a single unit change in <span class="math notranslate nohighlight">\(x\)</span>) and <span class="math notranslate nohighlight">\(x\)</span> (how far we are actually walking). In the context of our example, we already know the values of <span class="math notranslate nohighlight">\(x\)</span> as these are given by the <code class="docutils literal notranslate"><span class="pre">wt</span></code> variable. As such, there are only <em>two</em> values we need to choose (<span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(m\)</span>). Importantly, once we have values for both the intercept and slope, we have effectively reduced all the information in the data to <em>two numbers</em>. For the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> example, we have therefore gone from 32 values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> and 32 values of <code class="docutils literal notranslate"><span class="pre">wt</span></code> to only 2 numbers. These 2 numbers capture everything we need to know about the <em>general</em> relationship in the data, which hopefully makes it clear how a straight-line allows for a dramatic simplification of our data.</p>
+<p>Understanding this equation can be made simpler by conceptualising it as instructions for how far to climb up the <span class="math notranslate nohighlight">\(y\)</span>-axis, after walking a certain distance along the <span class="math notranslate nohighlight">\(x\)</span>-axis. We always start our walk from an <span class="math notranslate nohighlight">\(x\)</span>-value of 0. The intercept, <span class="math notranslate nohighlight">\(b\)</span>, tells us how far we need to climb up <span class="math notranslate nohighlight">\(y\)</span> before we start walking. For the line we showed above, we start from <span class="math notranslate nohighlight">\(x = 0\)</span> and <span class="math notranslate nohighlight">\(y = b = 37.2851\)</span>. So, we need to climb all the way up to a value of <span class="math notranslate nohighlight">\(37.2851\)</span> before we start walking. The slope then tells us how far we would need to climb up <span class="math notranslate nohighlight">\(y\)</span> if we take <em>one step</em> along the <span class="math notranslate nohighlight">\(x\)</span>-axis. For the line shown above, we had <span class="math notranslate nohighlight">\(m = -5.3445\)</span>. So, if we move along the <span class="math notranslate nohighlight">\(x\)</span>-axis by one unit of <code class="docutils literal notranslate"><span class="pre">wt</span></code>, then we need to move <em>down</em> the <span class="math notranslate nohighlight">\(y\)</span>-axis by <span class="math notranslate nohighlight">\(5.3445\)</span>. For any other distance, we can simply multiply how far we are walking by the value of <span class="math notranslate nohighlight">\(m\)</span>. For instance, if we walked 2-units along <span class="math notranslate nohighlight">\(x\)</span> we would have <span class="math notranslate nohighlight">\(m \times 2 = -10.689\)</span>, whereas if we move only half a unit we would have <span class="math notranslate nohighlight">\(m \times 0.5 = -2.6723\)</span>.</p>
+<p>Given the information above, knowing the <span class="math notranslate nohighlight">\(y\)</span>-value of a line only depends upon <em>three</em> pieces of information: the <em>intercept</em> (our starting point), the <em>slope</em> (how <span class="math notranslate nohighlight">\(y\)</span> changes for a single unit change in <span class="math notranslate nohighlight">\(x\)</span>) and <span class="math notranslate nohighlight">\(x\)</span> (how far we are actually walking). In the context of our example, we already know the values of <span class="math notranslate nohighlight">\(x\)</span> as these are given by the <code class="docutils literal notranslate"><span class="pre">wt</span></code> variable. As such, there are only <em>two</em> values we need to choose (<span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(m\)</span>). Importantly, once we have values for both the intercept and slope, we have effectively reduced all the information in the data to <em>two numbers</em>. For the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> example, we have therefore gone from 32 values of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> and 32 values of <code class="docutils literal notranslate"><span class="pre">wt</span></code> to only two summary values. These two numbers capture everything we need to know about the <em>general</em> relationship in the data. Hopefully this makes it clear how a straight line allows for a dramatic simplification of our data.</p>
 </section>
 <section id="finding-the-best-line">
 <h2>Finding the “Best” Line<a class="headerlink" href="#finding-the-best-line" title="Link to this heading">#</a></h2>
 <p>In the example above, the values of <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(m\)</span> were already given. However, in any real-world analysis, these will be unknown. As such, we need to consider <em>how</em> to find reasonable values for these parameters? This requires some rule for determining which line we think is “best” for capturing the relationship in our data.</p>
 <p>In general, we want this line to be as <em>close</em> to our data as possible. In other words, we want the average distance of the datapoints from the line to be as <em>small</em> as possible. These distances are shown in the plot below for the line we used earlier.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">35</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot data and line</span>
 <span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">37.2851</span><span class="w"> </span><span class="c1"># intercept</span>
 <span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-5.3445</span><span class="w"> </span><span class="c1"># slope</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">35</span><span class="p">))</span>
 <span class="nf">abline</span><span class="p">(</span><span class="n">coef</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">m</span><span class="p">))</span>
-<span class="nf">for </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)){</span>
+
+<span class="c1"># draw vertical dashed lines for each data point</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)){</span>
 <span class="w">    </span><span class="n">x.start</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="w">    </span><span class="n">x.end</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="w">    </span><span class="n">y.start</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
@@ -471,11 +463,12 @@ y = mx + b,
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/0d3810abce620c1bbea2c13e745f328fbbfd56b1d9f0d8f6b56e2dd543d93ded.png"><img alt="_images/0d3810abce620c1bbea2c13e745f328fbbfd56b1d9f0d8f6b56e2dd543d93ded.png" src="_images/0d3810abce620c1bbea2c13e745f328fbbfd56b1d9f0d8f6b56e2dd543d93ded.png" style="width: 720px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/43795d130b7b591ee48358ae56467bd0034f32f279bb0ab60001b5d79eee1d03.png"><img alt="_images/43795d130b7b591ee48358ae56467bd0034f32f279bb0ab60001b5d79eee1d03.png" src="_images/43795d130b7b591ee48358ae56467bd0034f32f279bb0ab60001b5d79eee1d03.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
-<p>Does this picture look familiar? If you remember from last week, we used the same form of visualisation when we were exploring the concept of <em>variance</em>. The only difference now is that our reference point is no longer the mean of the data, rather it is the <em>regression line</em>. So, if we want a line that minimises these vertical distances, what we are really looking for is a line that <em>minimises the variance around the regression line</em>. If we define the expected values of <span class="math notranslate nohighlight">\(y\)</span> to be the regression equation, then <span class="math notranslate nohighlight">\(\text{Var}(y)\)</span> precisely captures these vertical distances.</p>
+<p>Does this picture look familiar? If you remember from last week, we used the same form of visualisation when we were exploring the concept of <em>variance</em>. The only difference now is that our reference point is no longer the mean of the data, rather it is the <em>regression line</em>. So, if we want a line that minimises these vertical distances, what we are really looking for is a line that <em>minimises the variance around the regression line</em>. If we define the <em>expected values</em> of <span class="math notranslate nohighlight">\(y\)</span> to be the regression equation, then <span class="math notranslate nohighlight">\(\text{Var}(y)\)</span> precisely captures these vertical distances.</p>
 <p>To see this formally, we can take</p>
 <div class="math notranslate nohighlight">
 \[
@@ -489,18 +482,25 @@ E(y) = mx + b.
                   &amp;= E\left[\left(y - \left[mx + b\right]\right)^{2}\right],
 \end{align*}
 \end{split}\]</div>
-<p>which should be familiar from last week. As also discussed last week, subtracting an expectation from the raw data produces a quantity known as the <em>errors</em>. The variance therefore captures the value of the <em>mean squared errors</em> (MSE).</p>
-<p>As we know, the errors are centred around 0 so that, in the context of a straight-line, removing the expectation produces the following</p>
-<div class="cell docutils container">
+<p>which should be familiar from last week. As also discussed last week, subtracting an expectation from the raw data produces a quantity known as the <em>errors</em>. The variance therefore captures the value of the <em>mean squared errors</em> (MSE). As we know, the errors are centred around 0 so that, in the context of a straight-line, removing the expectation produces the following</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w">   </span><span class="c1"># plot scaling</span>
-<span class="n">b</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">37.2851</span><span class="w">                            </span><span class="c1"># intercept</span>
-<span class="n">m</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-5.3445</span><span class="w">                            </span><span class="c1"># slope</span>
-<span class="n">err</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="c1"># errors</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># line parameters</span>
+<span class="n">b</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">37.2851</span><span class="w"> </span><span class="c1"># intercept</span>
+<span class="n">m</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-5.3445</span><span class="w"> </span><span class="c1"># slope</span>
 
+<span class="c1"># subtract the line from the data</span>
+<span class="n">err</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="c1"># errors = data - (mx+b)</span>
+
+<span class="c1"># plot data and line</span>
 <span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Errors&quot;</span><span class="p">)</span>
 <span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="m">0</span><span class="p">)</span>
-<span class="nf">for </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)){</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)){</span>
 <span class="w">    </span><span class="n">x.start</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="w">    </span><span class="n">x.end</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="w">    </span><span class="n">y.start</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
@@ -510,22 +510,27 @@ E(y) = mx + b.
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/3cb972d5f9de1a382b4909ef41ff381ad60785398d4ebcc2ce832ae54aa8e583.png"><img alt="_images/3cb972d5f9de1a382b4909ef41ff381ad60785398d4ebcc2ce832ae54aa8e583.png" src="_images/3cb972d5f9de1a382b4909ef41ff381ad60785398d4ebcc2ce832ae54aa8e583.png" style="width: 720px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/68b536a5e30ae3823731188ed28760d4b18c5685e803b90dd384e1c2ee3ea0a5.png"><img alt="_images/68b536a5e30ae3823731188ed28760d4b18c5685e803b90dd384e1c2ee3ea0a5.png" src="_images/68b536a5e30ae3823731188ed28760d4b18c5685e803b90dd384e1c2ee3ea0a5.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
-<p>The errors as therefore deflections from the expected value which, in this case, is the regression line. The regression line that is <em>closest</em> to the data is the one that makes these defections as small as possible, on average. As we known, in order to stop the positive and negative deflections from cancelling, we typically <em>square</em> these values. As such, we are looking for a line that minimises the <em>squared</em> distances, as shown below.</p>
-<div class="cell docutils container">
+<p>The errors are therefore deflections from the expected value which, in this case, is the regression line. The regression line that is <em>closest</em> to the data is the one that makes the average defection as small as possible. To stop the positive and negative deflections from cancelling when we calculate the average, we typically <em>square</em> these values. As such, we are looking for a line that minimises the <em>squared</em> distances, as shown below.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w">   </span><span class="c1"># plot scaling</span>
-<span class="n">b</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">37.2851</span><span class="w">                            </span><span class="c1"># intercept</span>
-<span class="n">m</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-5.3445</span><span class="w">                            </span><span class="c1"># slope</span>
-<span class="n">err</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="c1"># errors</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">37.2851</span><span class="w">                            </span><span class="c1"># intercept</span>
+<span class="n">m</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-5.3445</span><span class="w">                            </span><span class="c1"># slope</span>
+<span class="n">err</span><span class="w">    </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="c1"># errors</span>
 <span class="n">sq.err</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">err</span><span class="o">^</span><span class="m">2</span>
 
 <span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">sq.err</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Squared Errors&quot;</span><span class="p">)</span>
 <span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="m">0</span><span class="p">)</span>
-<span class="nf">for </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)){</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">)){</span>
 <span class="w">    </span><span class="n">x.start</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="w">    </span><span class="n">x.end</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="w">    </span><span class="n">y.start</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
@@ -535,24 +540,25 @@ E(y) = mx + b.
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/24ce6a8622e526519450361c0bfb8c636b4e1b516c1c2ffc47d6e34ec70df3bd.png"><img alt="_images/24ce6a8622e526519450361c0bfb8c636b4e1b516c1c2ffc47d6e34ec70df3bd.png" src="_images/24ce6a8622e526519450361c0bfb8c636b4e1b516c1c2ffc47d6e34ec70df3bd.png" style="width: 720px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/69eb04e3cf317abff46eefba4a7c24314adaeb235e42e7daa4e20525d3c526a0.png"><img alt="_images/69eb04e3cf317abff46eefba4a7c24314adaeb235e42e7daa4e20525d3c526a0.png" src="_images/69eb04e3cf317abff46eefba4a7c24314adaeb235e42e7daa4e20525d3c526a0.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
-<p>As we can see above, squaring is a useful thing to do because it makes larger distances more extreme. This means that not all data are treated equally when finding a line. Instead, the regression line is weighted towards making those larger distances smaller. The only downside of this is that if there are very extreme points (known as <em>outliers</em>) then the line may be unduly influences by those individual points. We will come back to this point in terms of the concept of <em>leverage</em> later on the unit.</p>
+<p>As we can see above, squaring is a useful thing to do because it makes all values <em>positive</em> and makes larger deflections <em>more extreme</em>. This means that not all data are treated equally when finding a line. Instead, the regression line is weighted towards making larger deflections smaller. The only downside of this is that if there are very extreme points (known as <em>outliers</em>) then the line may be unduly influenced by those individual points. We will come back to this point later on the unit.</p>
 <div class="tip admonition">
 <p class="admonition-title">Minimising Variance</p>
-<p>The main point to take away from this is that finding the “best” line is an exercise in minimising variance, when we take the expected value of <span class="math notranslate nohighlight">\(y\)</span> to be the regression line. You may already be making the connection with the concepts of a <em>mean function</em> and <em>variance function</em> from last week. We will get to this in the next section. For the moment, it is useful to now see why we defined the variance in terms of the expected value and not the usual simplification of the mean. As stated last week, the mean is a typical <em>reference point</em> for calculating variation, when no other information is available. However, in this case, we also have the variable Weight. As such, what we are really interested in is the variance of MPG <em>after</em> taking Weight into account. In other words, <span class="math notranslate nohighlight">\(\text{Var}\left(y|x\right)\)</span>. If our assumption is that the relationship between MPG and Weight is captured by a straight-line, then we want to remove this relationship and see how much variation remains. If we make sure that the variation that remains is a <em>small</em> as possible, then we have position the line in such a way that it captures the most amount of variation in the data.</p>
-<p>If we remember from last week that the aim of a statistical model is to split the <em>total</em> variation in the data into multiple parts, what we are really doing is partitioning our original definition of variation in the data into</p>
+<p>The main point to take away from this is that finding the “best” line is an exercise in minimising variance. You may already be making the connection with the concepts of a <em>mean function</em> and <em>variance function</em> from last week. We will get to this in the next section. For the moment, it is useful to now see why we defined the variance in terms of the regression line and not just the overall mean of the data. As stated last week, the mean is a typical <em>reference point</em> for calculating variation, but one that is used when <em>no other information is available</em>. In this example, we do have extra information in the form of the variable Weight. As such, if we want to talk about <em>errors</em> as deflections from what we expect to see, what we are really interested in is the data <em>after</em> taking Weight into account. In order to make the variation that remains as <em>small</em> as possible, we therefore have to position the line in such a way that it captures the most amount of variation in the data.</p>
+<p>If we remember from last week that the aim of a statistical model is to split the <em>total</em> variation in the data into multiple parts, what we are really doing is partitioning our original definition of variation into</p>
 <div class="math notranslate nohighlight">
 \[
-\sigma^{2}_{\text{Total}} = \sigma^{2}_{\text{Line}} + \sigma^{2}_{\text{Errors}}
+\sigma^{2}_{\text{Total}} = \sigma^{2}_{\text{Line}} + \sigma^{2}_{\text{Errors}}.
 \]</div>
-<p>So we take the total amount of variance we can see in the data without taking anything else into account (i.e. just using the mean as the baseline). We then split this value into the amount of this variation we can explain using the regression line and then see what we have left over. Finding the best line is therefore equivalent to making <span class="math notranslate nohighlight">\(\sigma^{2}_{\text{Line}}\)</span> as <em>big</em> as possible, which is then equivalent to making <span class="math notranslate nohighlight">\(\sigma^{2}_{\text{Errors}}\)</span> as <em>small</em> as possible.</p>
+<p>So, we take the total amount of variance we can see in the data without taking anything else into account (i.e. just using the mean as the baseline). We then split this value into the amount variation we can explain using the regression line and the amount that is left over. Finding the best line is equivalent to making <span class="math notranslate nohighlight">\(\sigma^{2}_{\text{Line}}\)</span> as <em>big</em> as possible, which is therefore equivalent to making <span class="math notranslate nohighlight">\(\sigma^{2}_{\text{Errors}}\)</span> as <em>small</em> as possible. Thus, minimising the errors, defined as deflections from the regression line, automatically partitions the <em>maximum</em> amount of variance from the total into the regression line, leaving us with as little error variance as possible.</p>
 </div>
 <section id="ordinary-least-squares">
 <h3>Ordinary Least Squares<a class="headerlink" href="#ordinary-least-squares" title="Link to this heading">#</a></h3>
-<p>So, how do we find the line that minimises the errors? Later in this lesson we will look at the method of Maxmimum Likelihood, that can be used to find this line based on <em>probability</em>. However, there is a simpler approach for regression models that leads to the same answer, known as <em>ordinary least squares</em> (OLS). As the name implies, the aim of least squares is to make the squared errors as small as possible. This involves minimising the <em>sum of squared errors</em> (SSE), which we can express as</p>
+<p>So, how do we find the line that minimises the errors? Later in this lesson we will look at the method of Maxmimum Likelihood, that can be used to find this line based on <em>probability</em>. However, there is a simpler approach for regression models that leads to the same answer. This is known as <em>ordinary least squares</em> (OLS). As the name implies, the aim of least squares is to make the squared errors as small as possible. This involves minimising the <em>sum of squared errors</em> (SSE), which we can express as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align*}
@@ -561,8 +567,33 @@ E(y) = mx + b.
                &amp;= \sum_{i=1}^{n}\epsilon_{i}^{2}
 \end{align*}
 \end{split}\]</div>
-<p>Notice that this is basically <em>identical</em> to the expression for the variance around the regression line, except that it is not an <em>average</em> it is a <em>sum</em>. However, because creating an average just involves dividing by a constant, it makes no difference to the outcome. As such, it is just simpler mathematically to remove the constant and work with the SSE rather than the MSE.</p>
-<p>So, how do we find the <em>minimum</em> SSE? This where the tools of calculus are need to find the minimum of a function. This is way beyond the scope of this lesson (and this course). However, we do not really need to understand the derivation. The only important point practically is that, for linear regression problems, a <em>closed-form solution</em> exists to find the line that minimises the SSE. What this means is that we do not need to use iterative algorithms to search for a solution amongst many possibilities. Instead, a <em>single set of equations</em> can be applied to any regression problem to find this line. These are given by</p>
+<p>If we are unfamiliar with the <span class="math notranslate nohighlight">\(\Sigma\)</span> notation, it is explained in the box below. Notice that this expression is basically <em>identical</em> to the expression for the variance around the regression line, except that it is not an <em>average</em> it is a <em>sum</em><a class="footnote-reference brackets" href="#sum-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Big Sigma Notation</p>
+<p>Big Sigma notation, denoted by the captitol Greek letter <span class="math notranslate nohighlight">\(\Sigma\)</span>, is used as a shorthand for <em>addition</em>. Below the big Sigma, we define our indexing variable, as well as its starting value. Above the big Sigma, we indicate the value where we stop. So the notation</p>
+<div class="math notranslate nohighlight">
+\[
+S = \sum_{j=1}^{3} x_{j}
+\]</div>
+<p>is equivalent to</p>
+<div class="math notranslate nohighlight">
+\[
+S = x_{1} + x_{2} + x_{3},
+\]</div>
+<p>In code, this is the same as shortening</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">){</span>
+<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can therefore think of the Big Sigma notation as a <em>summation loop</em> over a certain set of indices. Note,however, that sometimes, in the interests of space, the summation indices are dropped and a sum is just written as <span class="math notranslate nohighlight">\(\sum{x_{j}}\)</span>. In these instances, the index and the range is <em>implied</em> rather than explicit. For instance, we would just assume that the sum runs across all values of <span class="math notranslate nohighlight">\(j\)</span>, given that this is the only index in the expression.</p>
+</div>
+<p>So, how do we find the <em>minimum</em> SSE? This where the tools of calculus are need to find the minimum of a function. This is beyond the scope of this lesson (and this unit and this course). However, we do not really need to understand the derivation. The only important practical point is that, for linear regression problems, a <em>closed-form solution</em> exists to find the line that minimises the SSE. What this means is that we do not need to use iterative algorithms to search for a solution amongst many possibilities. Instead, a <em>single set of equations</em> can be applied to any regression problem to find this line. These are given by</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align*}
@@ -570,14 +601,13 @@ E(y) = mx + b.
     b &amp;= \bar{y} - m\bar{x} \\ 
 \end{align*}
 \end{split}\]</div>
-<p>where the <em>bar</em> symbol indicates the <em>mean</em>. Again, we do not really need to dig into why this works, especially as we will be seeing a more general method for arriving at this result later. However, it can be useful to demonstrate that it <em>does</em> work using the <code class="docutils literal notranslate"><span class="pre">R</span></code> code below.</p>
+<p>where <span class="math notranslate nohighlight">\(\bar{y}\)</span> is the mean of <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(\bar{x}\)</span> is the mean of <span class="math notranslate nohighlight">\(x\)</span>. Again, we do not really need to dig into why this works, especially as we will be seeing a more general method for arriving at this result later. However, it can be useful to demonstrate that it <em>does</em> work using the <code class="docutils literal notranslate"><span class="pre">R</span></code> code below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
 <span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span>
-
-<span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
-<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="c1"># slope estimate</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w">                                   </span><span class="c1"># intercept estimate</span>
 
 <span class="nf">print</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">m</span><span class="p">))</span>
 </pre></div>
@@ -589,22 +619,7 @@ E(y) = mx + b.
 </div>
 </div>
 </div>
-<p>This produces the same values we saw earlier for both the intercept and the slope. These are also the same values that the <code class="docutils literal notranslate"><span class="pre">R</span></code> functions for linear regression will produce. We will explore these later in the lesson, but just to demonstrate that everything discussed so far works, we can use:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">reg.model</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
-
-<span class="nf">print</span><span class="p">(</span><span class="nf">coef</span><span class="p">(</span><span class="n">reg.model</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Intercept)          wt 
-  37.285126   -5.344472 
-</pre></div>
-</div>
-</div>
-</div>
+<p>This produces the same values we saw earlier for both the intercept and the slope. As such, we have successfully estimated the line that best summarises these data in terms of minimising the sum-of-squared errors. This is the <em>least-squares line</em>.</p>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
 <p>In this section, we have explored the general idea of capturing the relationship between two variables by fitting a straight line to the data. After reading this section, you should have a good sense of:</p>
@@ -612,8 +627,15 @@ E(y) = mx + b.
 <li><p>How a line can be used to <em>simplify</em> and <em>summarise</em> the pattern you can see when plotting one variable against another.</p></li>
 <li><p>How a line can be described mathematically using the expression <span class="math notranslate nohighlight">\(y = mx + b\)</span>.</p></li>
 <li><p>How finding the “best” line can be achieved by minimising the sum of squared errors between the line and the raw data.</p></li>
-<li><p>How this exericse in minimisation relates to the concept of <em>variance</em> and how closed-form solutions to this problem form the method of Ordinary Least Squres (OLS).</p></li>
+<li><p>How this exericse in minimisation relates to the concept of <em>variance</em> and how closed-form solutions to this problem are known as the method of Ordinary Least Squres (OLS).</p></li>
 </ul>
+</aside>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="sum-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The reasons for using a sum rather than an average are actually a bit complicated. We will come back to this in later lessons on ANOVA models. If you are returning here after the ANOVA lessons, it should now be clearer why OLS works on partitioning the sums-of-squares, rather than the sample variance. If this is your first time reading this lesson, do not worry about this detail for now.</p>
+</aside>
 </aside>
 </section>
 </section>
@@ -674,7 +696,8 @@ E(y) = mx + b.
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -737,8 +760,8 @@ By Dr Martyn McFarquhar & Dr George Farmer
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
