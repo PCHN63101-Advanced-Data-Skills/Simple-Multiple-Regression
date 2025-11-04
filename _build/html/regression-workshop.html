@@ -371,7 +371,10 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimising-error-with-a-line">Minimising Error With a Line</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-model-equations">Different Model Equations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood">Maximum Likelihood</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-as-a-mean-and-variance-function">Regression as a Mean and Variance Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-r-formula-interface">The <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface</a></li>
 </ul>
             </nav>
         </div>
@@ -417,6 +420,106 @@
 <div class="alert alert-block alert-info"> 
 <b>ACTIVITY</b> Try changing the values of <code>m</code> and <code>b</code> in the code above. Can you make the error sum-of-squares smaller than the OLS estimates?
 </div></section>
+<section id="different-model-equations">
+<h2>Different Model Equations<a class="headerlink" href="#different-model-equations" title="Link to this heading">#</a></h2>
+<p>Note the use of the <code class="docutils literal notranslate"><span class="pre">set.seed()</span></code> function before each random draw. This gurantees that the “random” selection is always the same every time the code is run. Thus, though there is a “random” element, we can keep it fixed for this demonstration to show that both model forms results in <em>identical</em> data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100</span>
+<span class="n">x</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">from</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="o">=</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+<span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0.5</span>
+<span class="n">sigma</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0.2</span>
+
+<span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
+<span class="c1">#===================================================#</span>
+<span class="c1"># y ~ N(beta.0 + beta.1*x, sigma)                   #</span>
+<span class="c1">#===================================================#</span>
+<span class="n">y.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+
+<span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
+<span class="c1">#===================================================#</span>
+<span class="c1"># y = beta.0 + beta.1*x + e                         #</span>
+<span class="c1"># e ~ N(0, sigma)                                   #</span>
+<span class="c1">#===================================================#</span>
+<span class="n">err</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="n">y.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span>
+
+<span class="c1"># plots</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y.1</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/f20fd01b06e650129dac2592d5b6618cca9f3ae7bfa19a3f2208755e52668c76.png"><img alt="_images/f20fd01b06e650129dac2592d5b6618cca9f3ae7bfa19a3f2208755e52668c76.png" src="_images/f20fd01b06e650129dac2592d5b6618cca9f3ae7bfa19a3f2208755e52668c76.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/11db5173d4ed99aeab77ffce294b2bad5a8aa590de92d5b3284e7dd0592bbcc7.png"><img alt="_images/11db5173d4ed99aeab77ffce294b2bad5a8aa590de92d5b3284e7dd0592bbcc7.png" src="_images/11db5173d4ed99aeab77ffce294b2bad5a8aa590de92d5b3284e7dd0592bbcc7.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<p>The second form can be thoughts of as simply “line + error”. For each value of <span class="math notranslate nohighlight">\(x\)</span>, the line is <em>constant</em>, whereas the data that floats around the line changes with each sample. So it is the <em>deflections from the line</em> that are random, <em>not</em> the line itself. Hence, it is the errors that are a random variable. They are where the randomness comes from. So, our systematic variance is fixed and predictable (a <em>constant</em>) whereas the errors changes with each observation (a <em>random variable</em>). We can see this more clearly in the plots below. Adding the first plot to the second plot gives the final model in the third plot. The model is simply the <em>addition</em> of both these elements: the fixed line <em>plus</em> the random error.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w">       </span><span class="c1"># fixed line</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-1.5</span><span class="p">,</span><span class="m">1.5</span><span class="p">))</span><span class="w">   </span><span class="c1"># random error</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span><span class="p">)</span><span class="w"> </span><span class="c1"># fixed line + random error (full model)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/76013b5f372edc970ed932b9067e1711ea5ce19778c8cb1701795d1505219e06.png"><img alt="_images/76013b5f372edc970ed932b9067e1711ea5ce19778c8cb1701795d1505219e06.png" src="_images/76013b5f372edc970ed932b9067e1711ea5ce19778c8cb1701795d1505219e06.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/dd94000cdc5aa30ab394a05a6e4a30d5fd76c72515a2a26d293998688da3450d.png"><img alt="_images/dd94000cdc5aa30ab394a05a6e4a30d5fd76c72515a2a26d293998688da3450d.png" src="_images/dd94000cdc5aa30ab394a05a6e4a30d5fd76c72515a2a26d293998688da3450d.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/38b70c09494c0016c6d1c2d72576c3dbccb47d2d693b4b0d69075ca6e4425b11.png"><img alt="_images/38b70c09494c0016c6d1c2d72576c3dbccb47d2d693b4b0d69075ca6e4425b11.png" src="_images/38b70c09494c0016c6d1c2d72576c3dbccb47d2d693b4b0d69075ca6e4425b11.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<p>Notice that the errors represent a random scattering around 0. This is important. The mean of the errors is 0 which implies that, on average, the deflections from the regression line are 0. As such, on average, we expect the data to sit along the regression line. The errors are also evenly scattered <em>above</em> and <em>below</em> 0. This is also important because it implies that there is nothing systematic that makes the regression line <em>under-estimate</em> or <em>over-estimate</em> the data. Thus, the random errors are just that: random deflections that are equally likely to place a given data point above the regression or below the regression line. Because the errors are normally distributed, the probability decreases they larger they become. Again, this implies that the data is most likely to be <em>closer</em> to the regression line rather than <em>further away</em>. Finally, because <span class="math notranslate nohighlight">\(\sigma\)</span> is fixed, the random scattering around the regression line does not change with the value of <span class="math notranslate nohighlight">\(x\)</span>. In other words, the value of our predictor variable is <em>unrelated</em> to the spread around the regression line. This is a <em>simplifying assumption</em> made in linear regression and one we will return to later on the unit.</p>
+</section>
+<section id="maximum-likelihood">
+<h2>Maximum Likelihood<a class="headerlink" href="#maximum-likelihood" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span>
+<span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
+<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span>
+
+<span class="c1"># Define negative log-likelihood</span>
+<span class="n">neg.loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">params</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
+<span class="w">  </span><span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">params</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
+<span class="w">  </span><span class="n">sigma</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">params</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
+
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="n">sigma</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="kr">return</span><span class="p">(</span><span class="m">1e10</span><span class="p">)</span>
+
+<span class="w">  </span><span class="n">mu</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="w">    </span>
+<span class="w">  </span><span class="n">loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">dnorm</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span><span class="w"> </span><span class="n">log</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span><span class="w"> </span><span class="c1"># log-likelihood</span>
+<span class="w">  </span><span class="kr">return</span><span class="p">(</span><span class="o">-</span><span class="n">loglik</span><span class="p">)</span><span class="w">                                      </span><span class="c1"># -ve log-likelihood</span>
+<span class="p">}</span>
+
+<span class="c1"># Starting values (guesses for intercept, slope and SD)</span>
+<span class="n">init.params</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="nf">sd</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+<span class="c1"># Run optimisation</span>
+<span class="n">mle</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">nlm</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="n">neg.loglik</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="n">init.params</span><span class="p">)</span>
+
+<span class="c1"># Print results</span>
+<span class="n">mle_pars</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mle</span><span class="o">$</span><span class="n">estimate</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">mle_pars</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beta.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sigma&quot;</span><span class="p">)</span>
+<span class="nf">cat</span><span class="p">(</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Estimation complete in &quot;</span><span class="p">,</span><span class="n">mle</span><span class="o">$</span><span class="n">iterations</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; iterations:\n\n&quot;</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">mle_pars</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Estimation complete in 15 iterations:
+
+   beta.0    beta.1     sigma 
+37.285127 -5.344472  2.949163 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY</b> Try changing the starting values in <code>init.params</code>. What does this do to the number of iterations required? Can you break the estimation and get the algorithm to converge on very different parameter estimates? What does this tell you about the process of optimisation?
+</div></section>
 <section id="regression-as-a-mean-and-variance-function">
 <h2>Regression as a Mean and Variance Function<a class="headerlink" href="#regression-as-a-mean-and-variance-function" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -428,7 +531,7 @@
 </div>
 </div>
 <p>We can see that the fitted/predicted values from the regression are <em>exactly</em> the results given by the mean function for the different measured values of <code class="docutils literal notranslate"><span class="pre">wt</span></code>.</p>
-<p>We can also simulate some data based on this model and see whether it looks similar to the data we have measured. This simulated data will capture the general <em>pattern</em> in the data as well as the <em>spread</em> around the regression line. In the example below, we use a range of <span class="math notranslate nohighlight">\(x\)</span>-values from 1 to 6 (using the <code class="docutils literal notranslate"><span class="pre">seq()</span></code> function). We then replicate this range 3 times, so that we simulate 3 value of <span class="math notranslate nohighlight">\(y\)</span> for each value of <span class="math notranslate nohighlight">\(x\)</span>. We then simulate each <span class="math notranslate nohighlight">\(y\)</span>-value using the mean and variance functions. The result of the simulation is plotted below.</p>
+<p>We can also simulate some data based on this model and see whether it looks similar to the data we have measured. This simulated data will capture the <em>general pattern</em> in the data (the systematic variance) as well as the <em>spread</em> around the regression line (the random error variance). In the example below, we generate a range of <span class="math notranslate nohighlight">\(x\)</span>-values from 1 to 6 (using the <code class="docutils literal notranslate"><span class="pre">seq()</span></code> function). We then replicate this range 3 times, so that we will end up simulating 3 value of <span class="math notranslate nohighlight">\(y\)</span> for each value of <span class="math notranslate nohighlight">\(x\)</span>. We then simulate each <span class="math notranslate nohighlight">\(y\)</span>-value using the mean and variance functions. The result of the simulation is plotted below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mean.func</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">x</span><span class="p">){</span>
@@ -447,27 +550,30 @@
 <span class="n">n.x</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">50</span>
 <span class="n">n.reps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
 
+<span class="c1"># generate x values</span>
 <span class="n">x</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">from</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="o">=</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">n.x</span><span class="p">)</span>
 <span class="n">x</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">n.reps</span><span class="p">)</span>
+
+<span class="c1"># simulate y</span>
 <span class="n">nsubs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="n">y.sim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">nsubs</span><span class="p">)</span>
-
 <span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nsubs</span><span class="p">){</span>
 <span class="w">    </span><span class="n">y.sim</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="nf">mean.func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">var.func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">x</span><span class="p">)))</span>
 <span class="p">}</span>
 
+<span class="c1"># plot</span>
 <span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y.sim</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Simulated MPG&quot;</span><span class="p">)</span>
 <span class="nf">abline</span><span class="p">(</span><span class="n">reg</span><span class="o">=</span><span class="n">mod</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/eb3aba9d7797a93825ec977857a7abc1dde4511f09e7d01718bd320f96612125.png"><img alt="_images/eb3aba9d7797a93825ec977857a7abc1dde4511f09e7d01718bd320f96612125.png" src="_images/eb3aba9d7797a93825ec977857a7abc1dde4511f09e7d01718bd320f96612125.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/27e9235d1bb850a3c2b30362783c96d048a2e9489e2c3ef11b00b7327c33aad7.png"><img alt="_images/27e9235d1bb850a3c2b30362783c96d048a2e9489e2c3ef11b00b7327c33aad7.png" src="_images/27e9235d1bb850a3c2b30362783c96d048a2e9489e2c3ef11b00b7327c33aad7.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
 <b>ACTIVITY</b> Have a play around with the values of <code>n.x</code> and <code>n.reps</code> in the code above. These control how many values of <code>wt</code> are included in the simulations, as well as how many cars at each value of <code>wt</code> we measure.
-</div><p>Notice that this simulation does <em>not</em> reflect the fact that, in the real data, at both lower and higher values of <code class="docutils literal notranslate"><span class="pre">wt</span></code>, the measures of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> lie <em>above</em> the regression line. So while this simulation matches some elements of the data, it does not match all of them. Indeed, as we will see in future weeks, a <em>curved</em> line may be a better fit here than a <em>straight</em> line. We can see this as the curved yellow line in the plot below. We will discuss this type of visualisation in more detail a little later on the unit. For now, just try and make sure it is clear that the simulated data is based on the straight-line fit, yet this will not accurately reflect any <em>non-linearities</em> in the real data. The simulation is what our model says the data-generating process is, but we need to be sure that this agrees with what we can <em>actually</em> see.</p>
+</div><p>Notice that this simulation does <em>not</em> reflect the fact that, in the real data, at both lower and higher values of <code class="docutils literal notranslate"><span class="pre">wt</span></code>, the measures of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> lie <em>above</em> the regression line. So while this simulation matches some elements of the data, it does not match all of them. Indeed, as we will see in future weeks, a <em>curved</em> line may be a better fit here than a <em>straight</em> line. We can see this as the curved yellow line in the plot below. We will discuss this type of visualisation in more detail a little later on the unit. For now, just try and make sure it is clear that the simulated data is based on assuming the straight-line fit is accurate. The simulation is what our model says the data-generating process is, but we need to be sure that this agrees with what we can <em>actually</em> see.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">effects</span><span class="p">)</span>
@@ -476,7 +582,112 @@
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+
+lattice theme set by effectsTheme()
+See ?effectsTheme for details.
+</pre></div>
+</div>
 <a class="reference internal image-reference" href="_images/6875f5a20b1af1ee2471d83bdbd839d05db0e9110a35cca09b5bba260c7c6c0c.png"><img alt="_images/6875f5a20b1af1ee2471d83bdbd839d05db0e9110a35cca09b5bba260c7c6c0c.png" src="_images/6875f5a20b1af1ee2471d83bdbd839d05db0e9110a35cca09b5bba260c7c6c0c.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="the-r-formula-interface">
+<h2>The <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface<a class="headerlink" href="#the-r-formula-interface" title="Link to this heading">#</a></h2>
+<p>… So, we can specify a model with an intercept in two different ways</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w">     </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span><span class="w"> </span><span class="c1"># intercept implied</span>
+<span class="n">mod.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span><span class="w"> </span><span class="c1"># intercept explicit</span>
+
+<span class="n">mod.1</span>
+<span class="n">mod.2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Coefficients:
+(Intercept)           wt  
+     37.285       -5.344  
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg ~ 1 + wt, data = mtcars)
+
+Coefficients:
+(Intercept)           wt  
+     37.285       -5.344  
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also specify a model <em>without</em> an intercept in two different ways</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span><span class="w"> </span><span class="c1"># an intercept of 0</span>
+<span class="n">mod.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span><span class="w"> </span><span class="c1"># remove intercept</span>
+
+<span class="n">mod.1</span>
+<span class="n">mod.2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg ~ 0 + wt, data = mtcars)
+
+Coefficients:
+   wt  
+5.292  
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg ~ wt - 1, data = mtcars)
+
+Coefficients:
+   wt  
+5.292  
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can use whichever format feels most intuitive to you. Most examples of <code class="docutils literal notranslate"><span class="pre">lm()</span></code> that you will see in the wild use the <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">x1</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">x1</span> <span class="pre">-</span> <span class="pre">1</span></code> formats, though you may personally prefer <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">x1</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">0</span> <span class="pre">+</span> <span class="pre">x1</span></code> as it makes the model form clearer. Just note that if you want a model that <em>only</em> contains an intercept, you need to use</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span><span class="w"> </span><span class="c1"># intercept only</span>
+<span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg ~ 1, data = mtcars)
+
+Coefficients:
+(Intercept)  
+      20.09  
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can even specify a model without anything in it by writing an intercept-only model using <code class="docutils literal notranslate"><span class="pre">0</span></code>. Why you would want this is anyone’s guess, but it is possible.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span><span class="w"> </span><span class="c1"># model containing nothing</span>
+<span class="n">mod</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg ~ 0, data = mtcars)
+
+No coefficients
+</pre></div>
+</div>
 </div>
 </div>
 </section>
@@ -530,7 +741,10 @@
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimising-error-with-a-line">Minimising Error With a Line</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-model-equations">Different Model Equations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood">Maximum Likelihood</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-as-a-mean-and-variance-function">Regression as a Mean and Variance Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-r-formula-interface">The <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface</a></li>
 </ul>
   </nav></div>
 
