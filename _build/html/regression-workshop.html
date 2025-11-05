@@ -374,7 +374,18 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-model-equations">Different Model Equations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood">Maximum Likelihood</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-as-a-mean-and-variance-function">Regression as a Mean and Variance Function</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-r-formula-interface">The <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intercepts-and-the-r-formula-interface">Intercepts and the <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#declaring-an-intercept">Declaring an Intercept</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#removing-the-intercept">Removing the Intercept</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-through-the-origin-and-mean-centering">Regression Through the Origin and Mean-centering</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-simple-regression-with-ggplot2">Visualising Simple Regression with <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression">Multiple Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-regression-plane">Visualising the Regression Plane</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-interpretation-and-added-variable-plots">Parameter Interpretation and Added Variable Plots</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -475,13 +486,23 @@
 </section>
 <section id="maximum-likelihood">
 <h2>Maximum Likelihood<a class="headerlink" href="#maximum-likelihood" title="Link to this heading">#</a></h2>
+<p>In the accompanying lesson, we discussed both <em>least-squares</em> and <em>maximum likelihood</em> as options for estimating regression models. Due to its simplicity and the availbility of closed-form solutions, least-squares is usually preferred for regression problems. However, maximum likelihood is preferred more generally because it can be applied to situations where no closed-form solution exists, particularly those that use different distributions to the normal distribution. As such, if there is a <em>single</em> estimation approach we should try to understand, it is maximum likelihood.</p>
+<p>Although possible to derive closed-form solutions using maximum likelihood, for situations where this is not possible we can make use of <em>iterative</em> maximum likelihood. Effectively, this involves getting the computer to search through hundreds or thousands of guesses for the parameters to try and find the “best” ones. Such approaches are know as <em>optimisation</em> algorithms. Now, it is worth making clear that you will never need to implement an estimation algorithm yourself. Those who develop methods inside <code class="docutils literal notranslate"><span class="pre">R</span></code> will spend a lot of time making sure that the estimation is correct. This is a tricky and complex topic that lies at the heart of the field of Statistical Computing. However, it can be useful to see a <em>simple</em> example so that you can get some intuition for iterative maximum likelihood.</p>
+<p>Before we do so, let us save the least-squares estimates so we can compare. We will use <code class="docutils literal notranslate"><span class="pre">mpg</span></code> and <code class="docutils literal notranslate"><span class="pre">wt</span></code> from <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> for this purpose</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span>
-<span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
-<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span>
-
-<span class="c1"># Define negative log-likelihood</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w">             </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">ols.ests</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+<span class="n">ols.ests</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">ols.ests</span><span class="p">,</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span><span class="p">)</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">ols.ests</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beta.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sigma&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Within R the generic functions <code class="docutils literal notranslate"><span class="pre">optim()</span></code>, <code class="docutils literal notranslate"><span class="pre">nlm()</span></code> and <code class="docutils literal notranslate"><span class="pre">nlminb()</span></code> can all be used for optimisation. In the example below, we choose <code class="docutils literal notranslate"><span class="pre">nlm()</span></code> (<code class="docutils literal notranslate"><span class="pre">n</span></code>on<code class="docutils literal notranslate"><span class="pre">l</span></code>inear <code class="docutils literal notranslate"><span class="pre">m</span></code>inimisation) as it is generally quite robust for MLE problems. This function needs some starting guesses for the parameters, so in the example below we set <span class="math notranslate nohighlight">\(\hat{\beta}_{0} = \bar{y}\)</span>, <span class="math notranslate nohighlight">\(\hat{\beta}_{1} = 0\)</span> and <span class="math notranslate nohighlight">\(\hat{\sigma} = \text{SD}(y)\)</span>. As the name implies, this function <em>minimises</em>, so we return the <em>negative</em> log-likelihood.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define negative log-likelihood function</span>
 <span class="n">neg.loglik</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">params</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
 <span class="w">  </span><span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">params</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
@@ -494,32 +515,45 @@
 <span class="w">  </span><span class="kr">return</span><span class="p">(</span><span class="o">-</span><span class="n">loglik</span><span class="p">)</span><span class="w">                                      </span><span class="c1"># -ve log-likelihood</span>
 <span class="p">}</span>
 
+<span class="c1"># data</span>
+<span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
+<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span>
+
 <span class="c1"># Starting values (guesses for intercept, slope and SD)</span>
 <span class="n">init.params</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="nf">sd</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 
 <span class="c1"># Run optimisation</span>
 <span class="n">mle</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">nlm</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="n">neg.loglik</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="n">init.params</span><span class="p">)</span>
 
-<span class="c1"># Print results</span>
-<span class="n">mle_pars</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mle</span><span class="o">$</span><span class="n">estimate</span>
-<span class="nf">names</span><span class="p">(</span><span class="n">mle_pars</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beta.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sigma&quot;</span><span class="p">)</span>
-<span class="nf">cat</span><span class="p">(</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Estimation complete in &quot;</span><span class="p">,</span><span class="n">mle</span><span class="o">$</span><span class="n">iterations</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; iterations:\n\n&quot;</span><span class="p">))</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">mle_pars</span><span class="p">)</span>
+<span class="c1"># Results</span>
+<span class="n">mle.ests</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mle</span><span class="o">$</span><span class="n">estimate</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">mle.ests</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beta.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sigma&quot;</span><span class="p">)</span>
+
+<span class="c1"># Print</span>
+<span class="nf">cat</span><span class="p">(</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;MLE Estimation complete in &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mle</span><span class="o">$</span><span class="n">iterations</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; iterations\n\n&quot;</span><span class="p">))</span>
+<span class="nf">cat</span><span class="p">(</span><span class="s">&quot;MLE estimates:\n&quot;</span><span class="p">)</span>
+<span class="nf">cat</span><span class="p">(</span><span class="n">mle.ests</span><span class="p">)</span>
+<span class="nf">cat</span><span class="p">(</span><span class="s">&quot;\n\nOLS estimates:\n&quot;</span><span class="p">)</span>
+<span class="nf">cat</span><span class="p">(</span><span class="n">ols.ests</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Estimation complete in 15 iterations:
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MLE Estimation complete in 15 iterations
 
-   beta.0    beta.1     sigma 
-37.285127 -5.344472  2.949163 
+MLE estimates:
+37.28513 -5.344472 2.949163
+
+OLS estimates:
+37.28513 -5.344472 3.045882
 </pre></div>
 </div>
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
 <b>ACTIVITY</b> Try changing the starting values in <code>init.params</code>. What does this do to the number of iterations required? Can you break the estimation and get the algorithm to converge on very different parameter estimates? What does this tell you about the process of optimisation?
-</div></section>
+</div><p>As explained in the lesson, the variance estimation from maximum likelihood is <em>biased</em> as it does not implement Bessel’s correction. Restricted maximum likelihood (REML) is therefore the preferred option in practice. However, this is more complex to demonstrate and so we will not discuss it in any more detail.</p>
+</section>
 <section id="regression-as-a-mean-and-variance-function">
 <h2>Regression as a Mean and Variance Function<a class="headerlink" href="#regression-as-a-mean-and-variance-function" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -592,8 +626,11 @@ See ?effectsTheme for details.
 </div>
 </div>
 </section>
-<section id="the-r-formula-interface">
-<h2>The <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface<a class="headerlink" href="#the-r-formula-interface" title="Link to this heading">#</a></h2>
+<section id="intercepts-and-the-r-formula-interface">
+<h2>Intercepts and the <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface<a class="headerlink" href="#intercepts-and-the-r-formula-interface" title="Link to this heading">#</a></h2>
+<p>…</p>
+<section id="declaring-an-intercept">
+<h3>Declaring an Intercept<a class="headerlink" href="#declaring-an-intercept" title="Link to this heading">#</a></h3>
 <p>… So, we can specify a model with an intercept in two different ways</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -624,6 +661,9 @@ Coefficients:
 </div>
 </div>
 </div>
+</section>
+<section id="removing-the-intercept">
+<h3>Removing the Intercept<a class="headerlink" href="#removing-the-intercept" title="Link to this heading">#</a></h3>
 <p>We can also specify a model <em>without</em> an intercept in two different ways</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -691,6 +731,161 @@ No coefficients
 </div>
 </div>
 </section>
+<section id="regression-through-the-origin-and-mean-centering">
+<h3>Regression Through the Origin and Mean-centering<a class="headerlink" href="#regression-through-the-origin-and-mean-centering" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">reg.through.orig</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm </span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">5.5</span><span class="p">),</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">35</span><span class="p">))</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">reg</span><span class="o">=</span><span class="n">reg.through.orig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/41c068dad668f6e2712711b1464c2a16476256c06e5a8b650520e6d4be4305fe.png"><img alt="_images/41c068dad668f6e2712711b1464c2a16476256c06e5a8b650520e6d4be4305fe.png" src="_images/41c068dad668f6e2712711b1464c2a16476256c06e5a8b650520e6d4be4305fe.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<p>So while <em>technically</em> a model where a weight of 0 is coupled with an MPG of 0, forcing the single straight line of the regression model to pass through 0 clearly does not lead to a very good model. This is because the regression line has to be straight and so there is no other way of fitting this model if we force the line to pass through 0. In addition, we can think of this problem as being <em>constrained</em> to only a sensible range of the <code class="docutils literal notranslate"><span class="pre">wt</span></code> variable. Cars will have a minimum and maximum weight and so any value outside that range is uninterpretable and should be ignored. Even if the regression model can technically calculate MPG for an infinite range of weights, the problem should constrain the use of this model to only realistic values. As such, the fact that the intercept is not very meaningfully can simply be ignored.</p>
+<p>As an alternative, if we find the interpretation of the intercept particularly distasteful, we can choose to <em>mean-centre</em> the weight variable. This is a simple operation where we subtract the mean of weight from each observation. This renders the average of the centred variable 0, with each observation now representing a <em>deflection</em> from the mean. Let us see what this does to the intercept parameter estimate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">wt.cent</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">))</span>
+<span class="n">reg.cent</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm </span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">wt.cent</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">reg.cent</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg ~ 1 + wt.cent, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  20.0906     0.5384  37.313  &lt; 2e-16 ***
+wt.cent      -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
+</pre></div>
+</div>
+</div>
+</div>
+<p>So now, the value of the intercept is the estimated MPG for an <em>average</em> value of <code class="docutils literal notranslate"><span class="pre">wt</span></code>. This is potentially more helpful, because we can see that an average car (in terms of weight) has an associated fuel efficiency of around 20.1 MPG. The inferential test on this value is still not very useful (as will be clearer in the coming weeks), but the estimate itself may be more interesting. Of importance, notice that the value of the <em>slope</em> is identical to the non-centred model, so the only thing that centering changes is the intercept. We can see this by plotting the model fit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">wt.cent</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight (centred)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">reg</span><span class="o">=</span><span class="n">reg.cent</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/17c1d94b9e8f316264f411fbe5c370790ff1881680cd7b6162eaba8e2495776b.png"><img alt="_images/17c1d94b9e8f316264f411fbe5c370790ff1881680cd7b6162eaba8e2495776b.png" src="_images/17c1d94b9e8f316264f411fbe5c370790ff1881680cd7b6162eaba8e2495776b.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<p>We could also centre the MPG variable. This would render the average value of MPG for an average Weight 0, so we can drop the intercept and return to regression through the origin.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">wt.cent</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">))</span>
+<span class="n">mpg.cent</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">))</span>
+<span class="n">reg.cent.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg.cent</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">wt.cent</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span><span class="w"> </span><span class="c1"># or mpg.cent ~ wt.cent - 1</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">reg.cent.2</span><span class="p">)</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">wt.cent</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mpg.cent</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight (centred)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG (centred)&quot;</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">reg</span><span class="o">=</span><span class="n">reg.cent.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg.cent ~ 0 + wt.cent, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+        Estimate Std. Error t value Pr(&gt;|t|)    
+wt.cent   -5.345      0.550  -9.717 6.33e-11 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.996 on 31 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7449 
+F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/c0ebc47ac04283d9e2a6e288010173d3444c5767c7be8a9a1c9488b7057b026b.png"><img alt="_images/c0ebc47ac04283d9e2a6e288010173d3444c5767c7be8a9a1c9488b7057b026b.png" src="_images/c0ebc47ac04283d9e2a6e288010173d3444c5767c7be8a9a1c9488b7057b026b.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<p>Notice that the fit is exactly the same, we have just removed the need for an intercept. In practice, there is often little call for doing this, especially as it then causes some interpretational issues given the mean-centred scale. This can be overcome by adding the means back in when visualising the model fit, but this usually just amounts to unnecessary fiddling for limited gain. <em>However</em>, this can be instructive in terms of understanding how regression models work and why the intercept is there in the first place.</p>
+</section>
+</section>
+<section id="visualising-simple-regression-with-ggplot2">
+<h2>Visualising Simple Regression with <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code><a class="headerlink" href="#visualising-simple-regression-with-ggplot2" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+
+<span class="n">mod</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+<span class="n">beta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">mtcars</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">mpg</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="s">&quot;cornflowerblue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span><span class="w"> </span><span class="n">stroke</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">    </span><span class="nf">geom_abline</span><span class="p">(</span><span class="n">intercept</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">slope</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">    </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Regression of MPG and Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="s">&quot;Weight (1000 lbs)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">20</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="o">=</span><span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/2289fd38523a02ca61e696c1a7c4ad4fca48970c523b9fe64daf893886b18f1c.png"><img alt="_images/2289fd38523a02ca61e696c1a7c4ad4fca48970c523b9fe64daf893886b18f1c.png" src="_images/2289fd38523a02ca61e696c1a7c4ad4fca48970c523b9fe64daf893886b18f1c.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="multiple-regression">
+<h2>Multiple Regression<a class="headerlink" href="#multiple-regression" title="Link to this heading">#</a></h2>
+<section id="visualising-the-regression-plane">
+<h3>Visualising the Regression Plane<a class="headerlink" href="#visualising-the-regression-plane" title="Link to this heading">#</a></h3>
+<p>… A simple non-interactive 3D scatter plot with the regression plan added can be created using the code below. You do not need to understand all of this, but could easily adapt it for any 2-variable regression models that you are using to get a visual sense of what the model is fitting.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># model</span>
+<span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">hp</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
+
+<span class="c1"># regression plane as a grid</span>
+<span class="n">x</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">),</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">),</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="m">30</span><span class="p">)</span><span class="w">   </span><span class="c1"># wt axis</span>
+<span class="n">z</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">hp</span><span class="p">),</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">hp</span><span class="p">),</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="m">30</span><span class="p">)</span><span class="w">   </span><span class="c1"># hp axis</span>
+<span class="n">grid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">expand.grid</span><span class="p">(</span><span class="n">wt</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">hp</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+<span class="n">fit</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">predict</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="o">=</span><span class="n">grid</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="nf">length</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+
+<span class="c1"># draw regression plane</span>
+<span class="n">pr</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Horsepower&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">zlab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">theta</span><span class="o">=</span><span class="m">50</span><span class="p">,</span><span class="w"> </span><span class="n">phi</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
+
+<span class="c1"># Add data points</span>
+<span class="nf">points</span><span class="p">(</span><span class="nf">trans3d</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">hp</span><span class="p">,</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">pr</span><span class="p">),</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.5</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/45785f32c47e6eb5695c3e1bb47446004e2dfcadfacb7e7519825f8f6a0e9937.png"><img alt="_images/45785f32c47e6eb5695c3e1bb47446004e2dfcadfacb7e7519825f8f6a0e9937.png" src="_images/45785f32c47e6eb5695c3e1bb47446004e2dfcadfacb7e7519825f8f6a0e9937.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY</b> Try changing the values of <code>theta</code> and <code>phi</code> to change the perspective of the visualisation. You can also change the value of <code>pch</code> to change the symbol used for the data points (refer to a website such as <a href="https://www.r-bloggers.com/2021/06/r-plot-pch-symbols-different-point-shapes-in-r/">this</a> to see all the symbols available), change the value of <code>cex</code> to adjust the symbol size and change the colour of the points to whatever you like.
+</div></section>
+<section id="parameter-interpretation-and-added-variable-plots">
+<h3>Parameter Interpretation and Added Variable Plots<a class="headerlink" href="#parameter-interpretation-and-added-variable-plots" title="Link to this heading">#</a></h3>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -744,7 +939,18 @@ No coefficients
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-model-equations">Different Model Equations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood">Maximum Likelihood</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-as-a-mean-and-variance-function">Regression as a Mean and Variance Function</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-r-formula-interface">The <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intercepts-and-the-r-formula-interface">Intercepts and the <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#declaring-an-intercept">Declaring an Intercept</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#removing-the-intercept">Removing the Intercept</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-through-the-origin-and-mean-centering">Regression Through the Origin and Mean-centering</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-simple-regression-with-ggplot2">Visualising Simple Regression with <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression">Multiple Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-regression-plane">Visualising the Regression Plane</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-interpretation-and-added-variable-plots">Parameter Interpretation and Added Variable Plots</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
