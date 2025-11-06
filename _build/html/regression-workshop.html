@@ -371,8 +371,8 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimising-error-with-a-line">Minimising Error With a Line</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-model-equations">Different Model Equations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood">Maximum Likelihood</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-model-equations">Different Model Equations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-as-a-mean-and-variance-function">Regression as a Mean and Variance Function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intercepts-and-the-r-formula-interface">Intercepts and the <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#declaring-an-intercept">Declaring an Intercept</a></li>
@@ -380,12 +380,13 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-through-the-origin-and-mean-centering">Regression Through the Origin and Mean-centering</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-simple-regression-with-ggplot2">Visualising Simple Regression with <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression">Multiple Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-regression">Visualising Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-regession-and-ggplot2">Simple Regession and <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression-and-ggplot2">Multiple Regression and <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-regression-plane">Visualising the Regression Plane</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-interpretation-and-added-variable-plots">Parameter Interpretation and Added Variable Plots</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
 </ul>
             </nav>
         </div>
@@ -399,107 +400,69 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="pchn63101-regression-workshop">
 <h1>PCHN63101 Regression Workshop<a class="headerlink" href="#pchn63101-regression-workshop" title="Link to this heading">#</a></h1>
-<p>In the accompanying lesson to this workshop we explored …</p>
+<p>In the accompanying lesson to this workshop we explored both simple and multiple regression as core modelling tools in statistics. Indeed, regression is the foundation of <em>everything</em> we will be studying going forward. Once you understand regression, you understand the vast majority of applied statistics. Because of this, it is <em>essential</em> that you are as comfortable as possible with the regression framework, otherwise you will be lost going forward. In this workshop, the aim is to provide more concrete examples of many of the key concepts from the lesson. As with last week, demonstrating statistical theory within <code class="docutils literal notranslate"><span class="pre">R</span></code> allows you to gain more intuition, particularly as you can play around with the code and see the consequences. It can also help you gain a more detailed understanding of the mathematical notation by seeing it represented within code. Together, this should help solidify your understanding of many of the ideas behind regression, statistical models, estimation, visualisation and the <code class="docutils literal notranslate"><span class="pre">R</span></code> formula interface.</p>
 <section id="minimising-error-with-a-line">
 <h2>Minimising Error With a Line<a class="headerlink" href="#minimising-error-with-a-line" title="Link to this heading">#</a></h2>
+<p>To begin with, we will explore the idea of the “best” regression line being the one that <em>minimises</em> the error sums-of-squares. Although easy enough to state that the least-squares solutions are the ones that make this quantity as <em>small</em> as possible, it can be useful to actually demonstrate this. The code below is set to produce a regression line, which is visualised in the plot below. Do not worry about the code that adjusts the plot limits, this is just to prevent the regression line from disappearing from the plot view, no matter the chosen parameter values. The important point is that the error sums-of-squares are displayed in the title of the plot.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
 <span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span>
 <span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
-<span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-5.3445</span><span class="w"> </span><span class="c1"># OLS m = -5.3445</span>
-<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">37.2851</span><span class="w"> </span><span class="c1"># OLS b = 37.2851</span>
+
+<span class="c1"># regression parameters</span>
+<span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">20</span>
+<span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>
+<span class="n">y.hat</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span>
 
 <span class="c1"># error sum-of-squares</span>
-<span class="n">error.SS</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">))</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+<span class="n">error.SS</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">((</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y.hat</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
 
 <span class="c1"># figure out y-limits based on the range of estimated values and the data</span>
-<span class="n">est.lims</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="nf">min</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="n">b</span><span class="p">,</span><span class="n">m</span><span class="o">*</span><span class="nf">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="n">b</span><span class="p">)</span>
+<span class="n">est.lims</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="nf">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span>
+<span class="w">               </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="nf">max</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 <span class="n">est.range</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">est.lims</span><span class="p">),</span><span class="nf">max</span><span class="p">(</span><span class="n">est.lims</span><span class="p">))</span>
 <span class="n">plot.lim</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="n">est.range</span><span class="p">[</span><span class="m">1</span><span class="p">]),</span><span class="w"> </span>
 <span class="w">               </span><span class="nf">max</span><span class="p">(</span><span class="nf">max</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="n">est.range</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span>
 
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Error SS = &quot;</span><span class="p">,</span><span class="nf">round</span><span class="p">(</span><span class="n">error.SS</span><span class="p">,</span><span class="m">4</span><span class="p">)),</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="n">plot.lim</span><span class="p">)</span>
-<span class="nf">abline</span><span class="p">(</span><span class="n">coef</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">m</span><span class="p">))</span>
+<span class="c1"># plot data and regression line</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Error SS = &quot;</span><span class="p">,</span><span class="nf">round</span><span class="p">(</span><span class="n">error.SS</span><span class="p">,</span><span class="m">4</span><span class="p">)),</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="n">plot.lim</span><span class="p">,</span><span class="w"> </span><span class="n">xlim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">5.5</span><span class="p">))</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">coef</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">beta.0</span><span class="p">,</span><span class="n">beta.1</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/44c49d975a8fe740e0acfd5ab17f11adec8a33f685c07e0f833dcb1c5308691a.png"><img alt="_images/44c49d975a8fe740e0acfd5ab17f11adec8a33f685c07e0f833dcb1c5308691a.png" src="_images/44c49d975a8fe740e0acfd5ab17f11adec8a33f685c07e0f833dcb1c5308691a.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/7bda3d2ed7ee7db6d84d0b657f544a4acd89425ab9ccf8a062745248c0c828a3.png"><img alt="_images/7bda3d2ed7ee7db6d84d0b657f544a4acd89425ab9ccf8a062745248c0c828a3.png" src="_images/7bda3d2ed7ee7db6d84d0b657f544a4acd89425ab9ccf8a062745248c0c828a3.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> Try changing the values of <code>m</code> and <code>b</code> in the code above. Can you make the error sum-of-squares smaller than the OLS estimates?
+<b>ACTIVITY</b> Try changing the values of <code>beta.0</code> and <code>beta.1</code> in the code above. Can you find the OLS estimates by making the error sum-of-squares as small as possible? You can move the line up and down by changing <code>beta.0</code> and then adjust its angle using <code>beta.1</code>.
 </div></section>
-<section id="different-model-equations">
-<h2>Different Model Equations<a class="headerlink" href="#different-model-equations" title="Link to this heading">#</a></h2>
-<p>Note the use of the <code class="docutils literal notranslate"><span class="pre">set.seed()</span></code> function before each random draw. This gurantees that the “random” selection is always the same every time the code is run. Thus, though there is a “random” element, we can keep it fixed for this demonstration to show that both model forms results in <em>identical</em> data.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100</span>
-<span class="n">x</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">from</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="o">=</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
-<span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
-<span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0.5</span>
-<span class="n">sigma</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0.2</span>
-
-<span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
-<span class="c1">#===================================================#</span>
-<span class="c1"># y ~ N(beta.0 + beta.1*x, sigma)                   #</span>
-<span class="c1">#===================================================#</span>
-<span class="n">y.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
-
-<span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
-<span class="c1">#===================================================#</span>
-<span class="c1"># y = beta.0 + beta.1*x + e                         #</span>
-<span class="c1"># e ~ N(0, sigma)                                   #</span>
-<span class="c1">#===================================================#</span>
-<span class="n">err</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
-<span class="n">y.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span>
-
-<span class="c1"># plots</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y.1</span><span class="p">)</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y.2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/f20fd01b06e650129dac2592d5b6618cca9f3ae7bfa19a3f2208755e52668c76.png"><img alt="_images/f20fd01b06e650129dac2592d5b6618cca9f3ae7bfa19a3f2208755e52668c76.png" src="_images/f20fd01b06e650129dac2592d5b6618cca9f3ae7bfa19a3f2208755e52668c76.png" style="width: 420px; height: 420px;" /></a>
-<a class="reference internal image-reference" href="_images/11db5173d4ed99aeab77ffce294b2bad5a8aa590de92d5b3284e7dd0592bbcc7.png"><img alt="_images/11db5173d4ed99aeab77ffce294b2bad5a8aa590de92d5b3284e7dd0592bbcc7.png" src="_images/11db5173d4ed99aeab77ffce294b2bad5a8aa590de92d5b3284e7dd0592bbcc7.png" style="width: 420px; height: 420px;" /></a>
-</div>
-</div>
-<p>The second form can be thoughts of as simply “line + error”. For each value of <span class="math notranslate nohighlight">\(x\)</span>, the line is <em>constant</em>, whereas the data that floats around the line changes with each sample. So it is the <em>deflections from the line</em> that are random, <em>not</em> the line itself. Hence, it is the errors that are a random variable. They are where the randomness comes from. So, our systematic variance is fixed and predictable (a <em>constant</em>) whereas the errors changes with each observation (a <em>random variable</em>). We can see this more clearly in the plots below. Adding the first plot to the second plot gives the final model in the third plot. The model is simply the <em>addition</em> of both these elements: the fixed line <em>plus</em> the random error.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w">       </span><span class="c1"># fixed line</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-1.5</span><span class="p">,</span><span class="m">1.5</span><span class="p">))</span><span class="w">   </span><span class="c1"># random error</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span><span class="p">)</span><span class="w"> </span><span class="c1"># fixed line + random error (full model)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/76013b5f372edc970ed932b9067e1711ea5ce19778c8cb1701795d1505219e06.png"><img alt="_images/76013b5f372edc970ed932b9067e1711ea5ce19778c8cb1701795d1505219e06.png" src="_images/76013b5f372edc970ed932b9067e1711ea5ce19778c8cb1701795d1505219e06.png" style="width: 420px; height: 420px;" /></a>
-<a class="reference internal image-reference" href="_images/dd94000cdc5aa30ab394a05a6e4a30d5fd76c72515a2a26d293998688da3450d.png"><img alt="_images/dd94000cdc5aa30ab394a05a6e4a30d5fd76c72515a2a26d293998688da3450d.png" src="_images/dd94000cdc5aa30ab394a05a6e4a30d5fd76c72515a2a26d293998688da3450d.png" style="width: 420px; height: 420px;" /></a>
-<a class="reference internal image-reference" href="_images/38b70c09494c0016c6d1c2d72576c3dbccb47d2d693b4b0d69075ca6e4425b11.png"><img alt="_images/38b70c09494c0016c6d1c2d72576c3dbccb47d2d693b4b0d69075ca6e4425b11.png" src="_images/38b70c09494c0016c6d1c2d72576c3dbccb47d2d693b4b0d69075ca6e4425b11.png" style="width: 420px; height: 420px;" /></a>
-</div>
-</div>
-<p>Notice that the errors represent a random scattering around 0. This is important. The mean of the errors is 0 which implies that, on average, the deflections from the regression line are 0. As such, on average, we expect the data to sit along the regression line. The errors are also evenly scattered <em>above</em> and <em>below</em> 0. This is also important because it implies that there is nothing systematic that makes the regression line <em>under-estimate</em> or <em>over-estimate</em> the data. Thus, the random errors are just that: random deflections that are equally likely to place a given data point above the regression or below the regression line. Because the errors are normally distributed, the probability decreases they larger they become. Again, this implies that the data is most likely to be <em>closer</em> to the regression line rather than <em>further away</em>. Finally, because <span class="math notranslate nohighlight">\(\sigma\)</span> is fixed, the random scattering around the regression line does not change with the value of <span class="math notranslate nohighlight">\(x\)</span>. In other words, the value of our predictor variable is <em>unrelated</em> to the spread around the regression line. This is a <em>simplifying assumption</em> made in linear regression and one we will return to later on the unit.</p>
-</section>
 <section id="maximum-likelihood">
 <h2>Maximum Likelihood<a class="headerlink" href="#maximum-likelihood" title="Link to this heading">#</a></h2>
-<p>In the accompanying lesson, we discussed both <em>least-squares</em> and <em>maximum likelihood</em> as options for estimating regression models. Due to its simplicity and the availbility of closed-form solutions, least-squares is usually preferred for regression problems. However, maximum likelihood is preferred more generally because it can be applied to situations where no closed-form solution exists, particularly those that use different distributions to the normal distribution. As such, if there is a <em>single</em> estimation approach we should try to understand, it is maximum likelihood.</p>
-<p>Although possible to derive closed-form solutions using maximum likelihood, for situations where this is not possible we can make use of <em>iterative</em> maximum likelihood. Effectively, this involves getting the computer to search through hundreds or thousands of guesses for the parameters to try and find the “best” ones. Such approaches are know as <em>optimisation</em> algorithms. Now, it is worth making clear that you will never need to implement an estimation algorithm yourself. Those who develop methods inside <code class="docutils literal notranslate"><span class="pre">R</span></code> will spend a lot of time making sure that the estimation is correct. This is a tricky and complex topic that lies at the heart of the field of Statistical Computing. However, it can be useful to see a <em>simple</em> example so that you can get some intuition for iterative maximum likelihood.</p>
-<p>Before we do so, let us save the least-squares estimates so we can compare. We will use <code class="docutils literal notranslate"><span class="pre">mpg</span></code> and <code class="docutils literal notranslate"><span class="pre">wt</span></code> from <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> for this purpose</p>
+<p>In the accompanying lesson, we discussed both <em>least-squares</em> and <em>maximum likelihood</em> as options for estimating regression models. Due to its simplicity and the availbility of closed-form solutions, least-squares is usually preferred for regression problems. However, maximum likelihood is preferred more generally because it can be applied to situations where no closed-form solution exists. This is particularly true of models that that use a <em>different</em> distributions to the normal distribution. As such, if there is a <em>single</em> estimation approach we should try to understand, it is maximum likelihood.</p>
+<p>Although possible to derive closed-form solutions using maximum likelihood, for situations where this is not possible we can make use of <em>iterative</em> maximum likelihood. Effectively, this involves getting the computer to search through hundreds or thousands of guesses for the parameters to try and find the “best” ones. This is effectively what you were doing in the example above. So, let us start by saving the least-squares estimates so we can compare.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w">             </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
 <span class="n">ols.ests</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">coef</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
 <span class="n">ols.ests</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">ols.ests</span><span class="p">,</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span><span class="p">)</span>
 <span class="nf">names</span><span class="p">(</span><span class="n">ols.ests</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;beta.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beta.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sigma&quot;</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">ols.ests</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   beta.0    beta.1     sigma 
+37.285126 -5.344472  3.045882 
 </pre></div>
 </div>
 </div>
 </div>
-<p>Within R the generic functions <code class="docutils literal notranslate"><span class="pre">optim()</span></code>, <code class="docutils literal notranslate"><span class="pre">nlm()</span></code> and <code class="docutils literal notranslate"><span class="pre">nlminb()</span></code> can all be used for optimisation. In the example below, we choose <code class="docutils literal notranslate"><span class="pre">nlm()</span></code> (<code class="docutils literal notranslate"><span class="pre">n</span></code>on<code class="docutils literal notranslate"><span class="pre">l</span></code>inear <code class="docutils literal notranslate"><span class="pre">m</span></code>inimisation) as it is generally quite robust for MLE problems. This function needs some starting guesses for the parameters, so in the example below we set <span class="math notranslate nohighlight">\(\hat{\beta}_{0} = \bar{y}\)</span>, <span class="math notranslate nohighlight">\(\hat{\beta}_{1} = 0\)</span> and <span class="math notranslate nohighlight">\(\hat{\sigma} = \text{SD}(y)\)</span>. As the name implies, this function <em>minimises</em>, so we return the <em>negative</em> log-likelihood.</p>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY</b> How close were you to finding the OLS estimates in the example earlier? Try inserting the OLS estimates into that code and see how close the true minimum error sum-of-squares was to the value you managed to get.
+</div><p>In the field of numeric computing, methods that search around to find the “best” parameters are known as <em>optimisation</em> algorithms. TO gain a bit more intuition about this, we will have a brief look as optimisation within the context of maximum likelihood. In practice, you would never need to implement this type of approach yourself, but it can be helpful for understanding. Within <code class="docutils literal notranslate"><span class="pre">R</span></code>, the functions <code class="docutils literal notranslate"><span class="pre">nlm()</span></code> can be used for optimisation (<code class="docutils literal notranslate"><span class="pre">n</span></code>on<code class="docutils literal notranslate"><span class="pre">l</span></code>inear <code class="docutils literal notranslate"><span class="pre">m</span></code>inimisation). This function needs some starting guesses for the parameters, so in the example below we set <span class="math notranslate nohighlight">\(\hat{\beta}_{0} = \bar{y}\)</span>, <span class="math notranslate nohighlight">\(\hat{\beta}_{1} = 0\)</span> and <span class="math notranslate nohighlight">\(\hat{\sigma} = \text{SD}(y)\)</span>. This is effectively the point you started at in the exercise above (minus the variance estimation). As the name implies, this function <em>minimises</em>, so we need to return the <em>negative</em> log-likelihood.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define negative log-likelihood function</span>
@@ -554,8 +517,77 @@ OLS estimates:
 <b>ACTIVITY</b> Try changing the starting values in <code>init.params</code>. What does this do to the number of iterations required? Can you break the estimation and get the algorithm to converge on very different parameter estimates? What does this tell you about the process of optimisation?
 </div><p>As explained in the lesson, the variance estimation from maximum likelihood is <em>biased</em> as it does not implement Bessel’s correction. Restricted maximum likelihood (REML) is therefore the preferred option in practice. However, this is more complex to demonstrate and so we will not discuss it in any more detail.</p>
 </section>
+<section id="different-model-equations">
+<h2>Different Model Equations<a class="headerlink" href="#different-model-equations" title="Link to this heading">#</a></h2>
+<p>Within the accompanying lesson, we discussed how the regression model can be written two equivalent ways:</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i}, \sigma^{2}\right)
+\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{i}        &amp;=    \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} \\
+    \epsilon_{i} &amp;\sim \mathcal{N}\left(0, \sigma^{2}\right)
+\end{alignat*}
+\end{split}\]</div>
+<p>Students sometimes find this confusing and struggle to connect these two different expressions. To help, we have provided code below that shows simulated data generated using <em>both</em> forms of model equation. As long as we set the random seed to the same number each time, we can show that the simulated data is <em>identical</em>, no matter which expression we use.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100</span>
+<span class="n">x</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">from</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="o">=</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<span class="n">beta.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+<span class="n">beta.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0.5</span>
+<span class="n">sigma</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0.2</span>
+
+<span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
+<span class="c1">#===================================================#</span>
+<span class="c1"># y ~ N(beta.0 + beta.1*x, sigma)                   #</span>
+<span class="c1">#===================================================#</span>
+<span class="n">y.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+
+<span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
+<span class="c1">#===================================================#</span>
+<span class="c1"># y = beta.0 + beta.1*x + e                         #</span>
+<span class="c1"># e ~ N(0, sigma)                                   #</span>
+<span class="c1">#===================================================#</span>
+<span class="n">err</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+<span class="n">y.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span>
+
+<span class="c1"># plots</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y.1</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/f20fd01b06e650129dac2592d5b6618cca9f3ae7bfa19a3f2208755e52668c76.png"><img alt="_images/f20fd01b06e650129dac2592d5b6618cca9f3ae7bfa19a3f2208755e52668c76.png" src="_images/f20fd01b06e650129dac2592d5b6618cca9f3ae7bfa19a3f2208755e52668c76.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/11db5173d4ed99aeab77ffce294b2bad5a8aa590de92d5b3284e7dd0592bbcc7.png"><img alt="_images/11db5173d4ed99aeab77ffce294b2bad5a8aa590de92d5b3284e7dd0592bbcc7.png" src="_images/11db5173d4ed99aeab77ffce294b2bad5a8aa590de92d5b3284e7dd0592bbcc7.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<p>The key to understanding the equivalence is recognising that it is only the deviations from the line that are random, whereas the regression equation is fixed. In the first form, this is implicit because we set the mean of the normal distribution (the <em>fixed</em>, <em>predictable</em> or <em>systematic</em> part) to the regression line and then sample data from around that point. In the second form, this is more explicit because we effectively generate the regression line and then <em>add</em> random noise to it.</p>
+<p>This second form can be thought of as simply “line + error”. For each value of <span class="math notranslate nohighlight">\(x\)</span>, the line is <em>constant</em>, whereas the data that floats around the line changes with each sample. So it is the <em>deflections from the line</em> that are random, <em>not</em> the line itself. Hence, the errors are a random variable. They are where the randomness comes from. So, our systematic variance is fixed and predictable (a <em>constant</em>) whereas the errors changes with each observation (a <em>random variable</em>). We can see this more clearly in the plots below. Adding the first plot to the second plot gives the final model in the third plot. The model is simply the <em>addition</em> of both these elements: the fixed line <em>plus</em> the random error.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w">       </span><span class="c1"># fixed line</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-1.5</span><span class="p">,</span><span class="m">1.5</span><span class="p">))</span><span class="w">   </span><span class="c1"># random error</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">beta.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beta.1</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span><span class="p">)</span><span class="w"> </span><span class="c1"># fixed line + random error (full model)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="_images/76013b5f372edc970ed932b9067e1711ea5ce19778c8cb1701795d1505219e06.png"><img alt="_images/76013b5f372edc970ed932b9067e1711ea5ce19778c8cb1701795d1505219e06.png" src="_images/76013b5f372edc970ed932b9067e1711ea5ce19778c8cb1701795d1505219e06.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/dd94000cdc5aa30ab394a05a6e4a30d5fd76c72515a2a26d293998688da3450d.png"><img alt="_images/dd94000cdc5aa30ab394a05a6e4a30d5fd76c72515a2a26d293998688da3450d.png" src="_images/dd94000cdc5aa30ab394a05a6e4a30d5fd76c72515a2a26d293998688da3450d.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/38b70c09494c0016c6d1c2d72576c3dbccb47d2d693b4b0d69075ca6e4425b11.png"><img alt="_images/38b70c09494c0016c6d1c2d72576c3dbccb47d2d693b4b0d69075ca6e4425b11.png" src="_images/38b70c09494c0016c6d1c2d72576c3dbccb47d2d693b4b0d69075ca6e4425b11.png" style="width: 420px; height: 420px;" /></a>
+</div>
+</div>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY</b> Focus on the plot of errors above. Why is the mean of the errors 0? Why is the data evenly scattered above and below 0? Why does this scattering appear constant for all values of <code>x</code>?
+</div></section>
 <section id="regression-as-a-mean-and-variance-function">
 <h2>Regression as a Mean and Variance Function<a class="headerlink" href="#regression-as-a-mean-and-variance-function" title="Link to this heading">#</a></h2>
+<p>To further help conceptualise the regression model, we can return to the concept of a <em>mean function</em> and a <em>variance function</em>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">data</span><span class="p">(</span><span class="n">mtcars</span><span class="p">)</span>
@@ -827,8 +859,12 @@ F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
 <p>Notice that the fit is exactly the same, we have just removed the need for an intercept. In practice, there is often little call for doing this, especially as it then causes some interpretational issues given the mean-centred scale. This can be overcome by adding the means back in when visualising the model fit, but this usually just amounts to unnecessary fiddling for limited gain. <em>However</em>, this can be instructive in terms of understanding how regression models work and why the intercept is there in the first place.</p>
 </section>
 </section>
-<section id="visualising-simple-regression-with-ggplot2">
-<h2>Visualising Simple Regression with <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code><a class="headerlink" href="#visualising-simple-regression-with-ggplot2" title="Link to this heading">#</a></h2>
+<section id="visualising-regression">
+<h2>Visualising Regression<a class="headerlink" href="#visualising-regression" title="Link to this heading">#</a></h2>
+<p>As a final topic in this workshop, we will discuss more about visualising regression models. Although the base <code class="docutils literal notranslate"><span class="pre">R</span></code> graphics are perfectly serviceable, in terms of publication it is likely you will want to use a decided plotting library, such as <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code>. In the sections below, we will provide examples of plotting simple regression and multiple regression in <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code>. We will then provide a final example in base <code class="docutils literal notranslate"><span class="pre">R</span></code> of plotting the 3-dimensional regression plane, for situations where you may find this useful.</p>
+<section id="simple-regession-and-ggplot2">
+<h3>Simple Regession and <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code><a class="headerlink" href="#simple-regession-and-ggplot2" title="Link to this heading">#</a></h3>
+<p>The code below provides a basic example of plotting simple regression using the <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code> framework. This is clearly more verbose and more effort than base <code class="docutils literal notranslate"><span class="pre">R</span></code>, but for the purpose of creating high-quality visualisations, there are few more powerful alternatives. Of note is that, for the purpose of something like a data analysis report, it is rarely worth your time making a pretty plot. This effort should only really be spent when you are publishing work or including results in a presentation or poster. Make sure you do not get side-tracked playing with <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code> in a context where it is not necessary. All this demonstrates is an ability to focus on the most important elements of the data analysis.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
@@ -840,21 +876,25 @@ F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
 <span class="w">    </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="s">&quot;cornflowerblue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span><span class="w"> </span><span class="n">stroke</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">    </span><span class="nf">geom_abline</span><span class="p">(</span><span class="n">intercept</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">slope</span><span class="o">=</span><span class="n">beta</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">    </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Regression of MPG and Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="s">&quot;Weight (1000 lbs)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
-<span class="w">    </span><span class="nf">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">20</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">18</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
 <span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="o">=</span><span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/2289fd38523a02ca61e696c1a7c4ad4fca48970c523b9fe64daf893886b18f1c.png"><img alt="_images/2289fd38523a02ca61e696c1a7c4ad4fca48970c523b9fe64daf893886b18f1c.png" src="_images/2289fd38523a02ca61e696c1a7c4ad4fca48970c523b9fe64daf893886b18f1c.png" style="width: 420px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/3b80ed57d85a43675e81a6dd76380f41aa43a7392ace7d38093b0b9624589344.png"><img alt="_images/3b80ed57d85a43675e81a6dd76380f41aa43a7392ace7d38093b0b9624589344.png" src="_images/3b80ed57d85a43675e81a6dd76380f41aa43a7392ace7d38093b0b9624589344.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
+<div class="alert alert-block alert-info"> 
+<b>ACTIVITY</b> Have a play around with all the numeric graphical parameters (e.g. <code>size</code>, <code>pch</code>, <code>stroke</code>, <code>base_size</code> etc.) and the colour parameters (e.g. <code>fill</code> and <code>colour</code>) to change how the plot is displayed. This should give you a good sense of the flexibility of the visualisation. You could try changing <code>theme_bw</code> to something else as well (you can search online for <code>ggplot2 themes</code>).
+</div></section>
+<section id="multiple-regression-and-ggplot2">
+<h3>Multiple Regression and <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code><a class="headerlink" href="#multiple-regression-and-ggplot2" title="Link to this heading">#</a></h3>
+<p>In the case of multiple regression, things are a little more complex because we need to use <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code> to create <em>added variable</em> plots. This means we need to <em>residualise</em> each variable in terms of all other variables in the model before plotting.</p>
 </section>
-<section id="multiple-regression">
-<h2>Multiple Regression<a class="headerlink" href="#multiple-regression" title="Link to this heading">#</a></h2>
 <section id="visualising-the-regression-plane">
 <h3>Visualising the Regression Plane<a class="headerlink" href="#visualising-the-regression-plane" title="Link to this heading">#</a></h3>
-<p>… A simple non-interactive 3D scatter plot with the regression plan added can be created using the code below. You do not need to understand all of this, but could easily adapt it for any 2-variable regression models that you are using to get a visual sense of what the model is fitting.</p>
+<p>As a final topic, you may want to visualise the regression plane when you have a multiple regression with 2 predictor variables. Although advanced 3D rendering packages such as <code class="docutils literal notranslate"><span class="pre">rgl</span></code> exist, the most simple non-interactive 3D scatter plot with the regression plane can be created in base <code class="docutils literal notranslate"><span class="pre">R</span></code> using the code below. You do not need to understand all of this, but could easily adapt it for any of your own 2-variable regression models.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># model</span>
@@ -867,8 +907,7 @@ F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
 <span class="n">fit</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">predict</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="o">=</span><span class="n">grid</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="nf">length</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
 
 <span class="c1"># draw regression plane</span>
-<span class="n">pr</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Horsepower&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">zlab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="n">theta</span><span class="o">=</span><span class="m">50</span><span class="p">,</span><span class="w"> </span><span class="n">phi</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
+<span class="n">pr</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Horsepower&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">zlab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">theta</span><span class="o">=</span><span class="m">50</span><span class="p">,</span><span class="w"> </span><span class="n">phi</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
 
 <span class="c1"># Add data points</span>
 <span class="nf">points</span><span class="p">(</span><span class="nf">trans3d</span><span class="p">(</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">hp</span><span class="p">,</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">pr</span><span class="p">),</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.5</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">)</span>
@@ -882,9 +921,9 @@ F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
 <div class="alert alert-block alert-info"> 
 <b>ACTIVITY</b> Try changing the values of <code>theta</code> and <code>phi</code> to change the perspective of the visualisation. You can also change the value of <code>pch</code> to change the symbol used for the data points (refer to a website such as <a href="https://www.r-bloggers.com/2021/06/r-plot-pch-symbols-different-point-shapes-in-r/">this</a> to see all the symbols available), change the value of <code>cex</code> to adjust the symbol size and change the colour of the points to whatever you like.
 </div></section>
-<section id="parameter-interpretation-and-added-variable-plots">
-<h3>Parameter Interpretation and Added Variable Plots<a class="headerlink" href="#parameter-interpretation-and-added-variable-plots" title="Link to this heading">#</a></h3>
 </section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -936,8 +975,8 @@ F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimising-error-with-a-line">Minimising Error With a Line</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-model-equations">Different Model Equations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood">Maximum Likelihood</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#different-model-equations">Different Model Equations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-as-a-mean-and-variance-function">Regression as a Mean and Variance Function</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intercepts-and-the-r-formula-interface">Intercepts and the <code class="docutils literal notranslate"><span class="pre">R</span></code> Formula Interface</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#declaring-an-intercept">Declaring an Intercept</a></li>
@@ -945,12 +984,13 @@ F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-through-the-origin-and-mean-centering">Regression Through the Origin and Mean-centering</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-simple-regression-with-ggplot2">Visualising Simple Regression with <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression">Multiple Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-regression">Visualising Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-regession-and-ggplot2">Simple Regession and <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression-and-ggplot2">Multiple Regression and <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-regression-plane">Visualising the Regression Plane</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-interpretation-and-added-variable-plots">Parameter Interpretation and Added Variable Plots</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
 </ul>
   </nav></div>
 
