@@ -16,22 +16,20 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -39,11 +37,10 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -70,7 +67,6 @@
     <link rel="prev" title="The Estimated Model" href="4.estimated-model.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -86,8 +82,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -95,6 +102,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -102,8 +110,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -119,8 +127,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -150,17 +157,21 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="LM I: Simple and Multiple Regression - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="LM I: Simple and Multiple Regression - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="LM I: Simple and Multiple Regression - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -186,14 +197,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -337,16 +343,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -527,7 +541,7 @@ E(y_{i}|\mathbf{x}_{i}) = \beta_{0} + \sum_{j=1}^{k} \beta_{j}x_{ij}.
 <section id="parameter-estimation">
 <h2>Parameter Estimation<a class="headerlink" href="#parameter-estimation" title="Link to this heading">#</a></h2>
 <p>Estimation of the parameters proceeds in the same fashion as simple regression, using either OLS or MLE/REML. For least-squares, the concept of finding a line that minimises the vertical distances to the data remains the same. The only difference is that we are balancing a plane within the cloud of data to minimise the vertical distances. For maximum likelihood, the concept of finding the plane that makes the data most probable remains the same. This will of course be the plane that is <em>closest</em> to the data, which is why these two perspectives agree.</p>
-<p>Like all simple linear models, exact solutions exist for the parameter estimates meaning the results are the same either way. We will not give the explicit algebraic formulas here because they end up being quite complex as the number of predictors increases and are never actually used in practice[^linal-foot]. However, we can see that specifying these models in <code class="docutils literal notranslate"><span class="pre">R</span></code> is as simply as adding another variable to the model formula. The exact OLS solutions for this example are therefore</p>
+<p>Like all simple linear models, exact solutions exist for the parameter estimates meaning the results are the same either way. We will not give the explicit algebraic formulas here because they end up being quite complex as the number of predictors increases and are never actually used in practice<a class="footnote-reference brackets" href="#linalg-foot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>. However, we can see that specifying these models in <code class="docutils literal notranslate"><span class="pre">R</span></code> is as simply as adding another variable to the model formula. The exact OLS solutions for this example are therefore</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">hp</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
@@ -645,7 +659,7 @@ E\left(y_{i}|x_{i1} = 0, x_{i2} = 0\right)  &amp;= \beta_{0} + \beta_{1}x_{i1} +
 </section>
 <section id="unique-variance-shared-variance-and-the-spotlight-analogy">
 <h3>Unique Variance, Shared Variance and the Spotlight Analogy<a class="headerlink" href="#unique-variance-shared-variance-and-the-spotlight-analogy" title="Link to this heading">#</a></h3>
-<p>An important element here is that even though the parameter estimates indicate the <em>unique</em> realtionships in the data, the model also accomodates the <em>shared</em> variance between the predictor variables. Unlike the implications of the Venn diagrams, this variance is not discarded. Looking back at the figures above, the intersection between MPG, Weight and Horsepower (right in the middle of the circles) is removed, but this is not what really happens. Instead, this shared variance is packaged-up into the model prediction. If it was not, than a big chunk of the variance in MPG that is explained by <em>both</em> variables would be unaccounted for and the model would be poorer.</p>
+<p>An important element here is that even though the parameter estimates indicate the <em>unique</em> relationships in the data, the model also accomodates the <em>shared</em> variance between the predictor variables. Unlike the implications of the Venn diagrams, this variance is not discarded. Looking back at the figures above, the intersection between MPG, Weight and Horsepower (right in the middle of the circles) is removed, but this is not what really happens. Instead, this shared variance is packaged-up into the model prediction. If it was not, than a big chunk of the variance in MPG that is explained by <em>both</em> variables would be unaccounted for and the model would be poorer.</p>
 <p>How is this done? In very general terms, any overlapping variance is <em>divided</em> amongst the predictors. This sounds quite abstract and can be difficult to get to grips with intuitively, but it is important to not get confused about what multiple regression is actually doing. This “division” is done implicitly, but is difficult to understand in a more concrete fashion without going much deeper into the linear algebraic geometry of least-squares. However, we can use an analogy to make the concept a little clearer.</p>
 <figure class="align-right">
 <a class="reference internal image-reference" href="_images/spotlights.png"><img alt="_images/spotlights.png" src="_images/spotlights.png" style="width: 307.2px; height: 307.2px;" /></a>
@@ -709,7 +723,7 @@ F-statistic: 44.57 on 3 and 28 DF,  p-value: 8.65e-11
 <a class="reference internal image-reference" href="_images/61f754927465d3a22b04b6e25ce5310f66b99312ddc396ab7e2248115afdd585.png"><img alt="_images/61f754927465d3a22b04b6e25ce5310f66b99312ddc396ab7e2248115afdd585.png" src="_images/61f754927465d3a22b04b6e25ce5310f66b99312ddc396ab7e2248115afdd585.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
-<p>However, it is a bit of a pain to do this manually for every predictor we want to plot. Although we could spend some time writing a loop to do this for us, an easier way is just to use the <code class="docutils literal notranslate"><span class="pre">avPlots()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">car</span></code> package<a class="footnote-reference brackets" href="#car-foot" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>. For example</p>
+<p>However, it is a bit of a pain to do this manually for every predictor we want to plot. Although we could spend some time writing a loop to do this for us, an easier way is just to use the <code class="docutils literal notranslate"><span class="pre">avPlots()</span></code> function from the <code class="docutils literal notranslate"><span class="pre">car</span></code> package<a class="footnote-reference brackets" href="#car-foot" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>. For example</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">suppressMessages</span><span class="p">(</span><span class="nf">library</span><span class="p">(</span><span class="n">car</span><span class="p">))</span>
@@ -758,8 +772,12 @@ F-statistic: 44.57 on 3 and 28 DF,  p-value: 8.65e-11
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
 <p>Note that there are not really any corners to the plane, as it extends infinitely in all directions.</p>
 </aside>
-<aside class="footnote brackets" id="car-foot" role="note">
+<aside class="footnote brackets" id="linalg-foot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>All software implementing linear models does so using a linear algebraic perspective that expresses the model using matrices. This simplifies both the structure of the model and the estimation of the parameters, but is beyond our current scope.</p>
+</aside>
+<aside class="footnote brackets" id="car-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
 <p>In this context, CAR means Companion to Applied Regression and has nothing to do with the fact that our example dataset contains measurements of cars.</p>
 </aside>
 </aside>
@@ -822,8 +840,7 @@ F-statistic: 44.57 on 3 and 28 DF,  p-value: 8.65e-11
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -896,8 +913,8 @@ By Dr Martyn McFarquhar & Dr George Farmer
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
