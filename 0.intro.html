@@ -37,6 +37,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -385,7 +386,8 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
-<p>Last week, we introduced a very general framework for statistical modelling. This week, we will start to see this framework being applied using the methods of <em>simple</em> and <em>multiple</em> regression. Although traditional statistical education within the behavioural sciences often characterises regression as just a method for prediction with continuous <em>outcome</em> variables and continuous <em>predictor</em> variables, the regression framework is actually much more general. Indeed, regression is the <em>foundation</em> of everything that will follow, providing a general-purpose system for analysing any type of data you may encounter. As such, understanding regression is paramount for understanding what will follow. In this lesson, we will explore simple regression within the statistical modelling framework we discussed last week. We will discuss estimation via both <em>least-squares</em> and <em>maximum likelihood</em>, as well as interpretation of the simple regression model. We will then expand this to cases of <em>multiple</em> regression. Importantly, we will not be discussing <em>inference</em> yet. This is partly to keep the amount of information in this lesson contained, but also because the calculation of <span class="math notranslate nohighlight">\(p\)</span>-values should not be seen as the primary goal of a regression analysis. As such, it is useful to discuss regression methods <em>without</em> being distracted by inference. We will cover this next week, but it is important to realise that <span class="math notranslate nohighlight">\(p\)</span>-values represent only a single piece of (arguably flawed) information within the context of a data analysis.</p>
+<p>Last week, we introduced a very general framework for statistical modelling. This week, we will start to see this framework being applied using the methods of <em>simple</em> and <em>multiple</em> regression. Although traditional statistical education often characterises regression as just a method for prediction with continuous variables, the regression framework is actually much more general. Indeed, regression is the <em>foundation</em> of everything that will follow, providing a general-purpose system for analysing any type of data you may encounter. As such, understanding regression is paramount for understanding everything that follows.</p>
+<p>In this lesson, we will explore simple regression within the statistical modelling framework we discussed last week. We will discuss estimation via both <em>least-squares</em> and <em>maximum likelihood</em>, as well as interpretation of the simple regression model. We will then expand this to cases of <em>multiple</em> regression. Importantly, we will not be discussing <em>inference</em> yet. This is partly to keep the amount of information in this lesson contained, but also because the calculation of <span class="math notranslate nohighlight">\(p\)</span>-values should not be seen as the primary goal of a regression analysis. As such, it is useful to discuss regression methods <em>without</em> being distracted by inference. We will cover this next week, but it is important to realise that <span class="math notranslate nohighlight">\(p\)</span>-values represent only a single piece of information within the context of a data analysis.</p>
 <section id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
@@ -415,10 +417,10 @@
 <figure class="align-right">
 <a class="reference internal image-reference" href="_images/george.jpg"><img alt="_images/george.jpg" src="_images/george.jpg" style="width: 190.4px; height: 190.4px;" /></a>
 </figure>
-<p><strong>Dr George Farmer | PhD</strong></p>
-<p>Lecturer</p>
-<p>… Dover Street Building | Division of Psychology, Communication and Human Neuroscience | School of Health Sciences | The University of Manchester M13 9PL</p>
-<p>t: +44 (0)161 275 … | e: <a class="reference external" href="mailto:george&#46;farmer&#37;&#52;&#48;manchester&#46;ac&#46;uk">george<span>&#46;</span>farmer<span>&#64;</span>manchester<span>&#46;</span>ac<span>&#46;</span>uk</a></p>
+<p><strong>Dr George Farmer | PhD FHEA</strong></p>
+<p>Lecturer in Experimental Psychology</p>
+<p>2.001 Dover Street Building | Division of Psychology, Communication and Human Neuroscience | School of Health Sciences | The University of Manchester M13 9PL</p>
+<p>t: +44 (0)161 275 0953 | e: <a class="reference external" href="mailto:george&#46;farmer&#37;&#52;&#48;manchester&#46;ac&#46;uk">george<span>&#46;</span>farmer<span>&#64;</span>manchester<span>&#46;</span>ac<span>&#46;</span>uk</a></p>
 </section>
 </section>
 
