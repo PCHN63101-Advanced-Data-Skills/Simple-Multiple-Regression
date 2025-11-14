@@ -37,6 +37,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -370,7 +371,7 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimates">The Final Estimates</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-r-output-for-simple-regression">The <code class="docutils literal notranslate"><span class="pre">R</span></code> Output for Simple Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-regression-in-r">Simple Regression in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-slope">The Slope</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-intercept">The Intercept</a></li>
@@ -391,7 +392,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="the-estimated-model">
 <h1>The Estimated Model<a class="headerlink" href="#the-estimated-model" title="Link to this heading">#</a></h1>
-<p>So, at this point, we can think of our parameter estimates either as those that minimise the sum-of-squared errors or, more generally, as those values that maximise the likelihood (i.e. make the data most probable). As argued previously, the likelihood perspective is more universally applicable and so it is useful to think of the estimates in proabilistic terms. As such, if our data are truly drawn from a normal distribution then these parameter values make the data more likely than any other possible combination of values.</p>
+<p>At this point, we can think of our parameter estimates either as those that minimise the sum of squared errors or, more generally, those values that maximise the likelihood (i.e. make the data most probable). As argued previously, the likelihood perspective is more universally applicable and so it is useful to think of the estimates in proabilistic terms. As such, if our data are truly drawn from a normal distribution then these parameter values make the data more likely than any other possible combination of values.</p>
 <section id="the-final-estimates">
 <h2>The Final Estimates<a class="headerlink" href="#the-final-estimates" title="Link to this heading">#</a></h2>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> example again, after using either OLS or MLE (with REML for the variance) we have:</p>
@@ -418,22 +419,46 @@
 \[
 e_{i} = \text{MPG}_{i} - \widehat{\text{MPG}}_{i},
 \]</div>
-<p>which is just the distance between the measured value of MPG and the point on the regression line for the corresponding value of Weight.</p>
-<p>We can also express this in terms of our probabilistic model like so</p>
+<p>which is just the distance between the measured value of MPG and the point on the regression line for the corresponding value of Weight. We can also express this in terms of our probabilistic model like so</p>
 <div class="math notranslate nohighlight">
 \[
 \text{MPG}_{i} \sim \mathcal{N}\left(37.2851 + -5.3445 \times \text{Weight}_{i}, 9.2774\right),
 \]</div>
-<p>though this starts to get a little difficult to parse. Neverthless, the point is that these estimates now complete every unknown element of the model.</p>
+<p>though this starts to get a bit messy. Nevertheless, the point is that these estimates now complete every unknown element of the model.</p>
 </section>
-<section id="the-r-output-for-simple-regression">
-<h2>The <code class="docutils literal notranslate"><span class="pre">R</span></code> Output for Simple Regression<a class="headerlink" href="#the-r-output-for-simple-regression" title="Link to this heading">#</a></h2>
-<p>As indicated in other parts of this lesson, the <code class="docutils literal notranslate"><span class="pre">R</span></code> function we use to fit a simple regression model is <code class="docutils literal notranslate"><span class="pre">lm()</span></code>, for <em>linear model</em>. We will learn more about how to use this in the synchronous session that accompanies this lesson. For now, it is worth just seeing the sort of general output we get from this function. Of note is that we specify a model <em>symbolically</em> using the <code class="docutils literal notranslate"><span class="pre">R</span></code> formula interface. We can think of this as specifying the <em>mean function</em> we want <code class="docutils literal notranslate"><span class="pre">lm()</span></code> to fit. Because linear models have a constant variance function, there is no option to specify this. In the example below, the model formula is given by <code class="docutils literal notranslate"><span class="pre">mpg</span> <span class="pre">~</span> <span class="pre">wt</span></code>, where the <code class="docutils literal notranslate"><span class="pre">~</span></code> symbol (called a <em>tilde</em>) is used to denote that <code class="docutils literal notranslate"><span class="pre">mpg</span></code> should be modelled as a function of <code class="docutils literal notranslate"><span class="pre">wt</span></code>. This is used instead of <code class="docutils literal notranslate"><span class="pre">=</span></code> because the equals symbol is already used to define named arguments within a function, as we can see below with <code class="docutils literal notranslate"><span class="pre">data=mtcars</span></code>. The <code class="docutils literal notranslate"><span class="pre">~</span></code> also provides a nice connection with the mathematical notation for the distribution of a random variable.</p>
-<p>In order to fit the model, we call <code class="docutils literal notranslate"><span class="pre">lm()</span></code> and then save the estimated model to an object we call <code class="docutils literal notranslate"><span class="pre">mod</span></code>. Inside <code class="docutils literal notranslate"><span class="pre">mod</span></code> are all the results from fitting the model. If we call <code class="docutils literal notranslate"><span class="pre">summary()</span></code> on the fitted object, we get a results table, as shown below.</p>
+<section id="simple-regression-in-r">
+<h2>Simple Regression in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#simple-regression-in-r" title="Link to this heading">#</a></h2>
+<p>As indicated in other parts of this lesson, the <code class="docutils literal notranslate"><span class="pre">R</span></code> function we use to fit a simple regression model is <code class="docutils literal notranslate"><span class="pre">lm()</span></code>. We specify this model <em>symbolically</em> using the <code class="docutils literal notranslate"><span class="pre">R</span></code> formula interface, which we can think of as specifying the <em>mean function</em> we want <code class="docutils literal notranslate"><span class="pre">lm()</span></code> to use. Because linear models have a constant variance, there is no option to specify any other variance function. In the example below, the model formula is given by <code class="docutils literal notranslate"><span class="pre">mpg</span> <span class="pre">~</span> <span class="pre">wt</span></code>, where the <code class="docutils literal notranslate"><span class="pre">~</span></code> symbol (called a <em>tilde</em>) is used to denote that <code class="docutils literal notranslate"><span class="pre">mpg</span></code> should be modelled as a function of <code class="docutils literal notranslate"><span class="pre">wt</span></code><a class="footnote-reference brackets" href="#equals-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. The symbol <code class="docutils literal notranslate"><span class="pre">~</span></code> also provides a nice connection with the mathematical notation for the distribution of a random variable.</p>
+<p>In order to fit the model, we call <code class="docutils literal notranslate"><span class="pre">lm()</span></code> and then save the estimated model to an object we call <code class="docutils literal notranslate"><span class="pre">mod</span></code> (though you can choose any name you like). This is shown below</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
-<span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Inside <code class="docutils literal notranslate"><span class="pre">mod</span></code> are all the results from fitting the model. We can get a basic report of the model fit by simply printing the model object</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Coefficients:
+(Intercept)           wt  
+     37.285       -5.344  
+</pre></div>
+</div>
+</div>
+</div>
+<p>and a much more detailed results table if we call <code class="docutils literal notranslate"><span class="pre">summary()</span></code> on the fitted object</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -459,8 +484,8 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </div>
 </div>
 </div>
-<p>We will discuss much more about the specifics of this table next week when we consider <em>inference</em>, <em>model assumptions</em> and <em>model fit</em>. For now, we can see that the parameter estimates are given in the <code class="docutils literal notranslate"><span class="pre">Estimates</span></code> column of the table, with the estimate of <span class="math notranslate nohighlight">\(\sigma\)</span> given below the table as the <code class="docutils literal notranslate"><span class="pre">Residual</span> <span class="pre">standard</span> <span class="pre">error</span></code>.</p>
-<p>We can also extract various bits of information from the model object. For instance, to get just the estimates of the regression line we can use</p>
+<p>We will discuss more about the specifics of this table over the rest of this unit. For now, we can see that the parameter estimates are given in the <code class="docutils literal notranslate"><span class="pre">Estimate</span></code> column of the table. The estimate of <span class="math notranslate nohighlight">\(\sigma\)</span> is given below the table as the <code class="docutils literal notranslate"><span class="pre">Residual</span> <span class="pre">standard</span> <span class="pre">error</span></code><a class="footnote-reference brackets" href="#resstd-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<p>We can extract various bits of information from the model object. For instance, to get the estimates of the regression parameters we can use</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">coef</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
@@ -533,7 +558,8 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 <p>Extracting the variance is a little more fiddly, but can be done using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">sigma</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -543,7 +569,7 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </div>
 </div>
 </div>
-<p>or we can calculate it manually, given what we know, using</p>
+<p>or we can calculate it manually using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sigma2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">mod</span><span class="o">$</span><span class="n">residuals</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">mod</span><span class="o">$</span><span class="n">df.residual</span>
@@ -560,15 +586,44 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </section>
 <section id="interpreting-the-estimates">
 <h2>Interpreting the Estimates<a class="headerlink" href="#interpreting-the-estimates" title="Link to this heading">#</a></h2>
-<p>So, we now have a bunch of numbers that correspond to our fitted model. Although we have focussed mainly on <em>how</em> to get these numbers, in practical terms our main interest is what does all of this actually mean?</p>
+<p>So, we now have some numbers that correspond to our fitted model. Although we have focussed mainly on <em>how</em> to get these numbers, in practical terms our main interest is the <em>meaning</em> of these numbers.</p>
 <section id="the-slope">
 <h3>The Slope<a class="headerlink" href="#the-slope" title="Link to this heading">#</a></h3>
 <p>We start with the slope of the regression line because this is typically of <em>most</em> interest. In short, there are two elements of note for the slope: its <em>magnitude</em> and its <em>direction</em>. The magnitude is given by the actual numeric value of the slope. This is interpreted as the amount that <span class="math notranslate nohighlight">\(y\)</span> changes for a <em>unit increase</em> in <span class="math notranslate nohighlight">\(x\)</span>. In context, this tells us how much MPG changes if we increase Weight by 1. Interpreting this therefore depends upon what a change of Weight by 1 actually means. For the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset, <code class="docutils literal notranslate"><span class="pre">wt</span></code> is measured in units of 1,000 lbs. So a unit change for this variable corresponds to an <em>increase</em> in weight of 1,000 lbs. As such, our estimated slope indicates that an increase in weight of 1,000 lbs results in a change in average MPG of 5.3445. In addition, if we look at the <em>sign</em> of the estimate, we can infer the <em>direction</em> of this relationship. Because the estimate is <em>negative</em>, this corresponds to a <em>reduction</em> in MPG. So, for each additional 1,000 lbs of weight, MPG decreases by 5.3445.</p>
-<p>Hopefully it is clear from this description that the parameter estimates are on the scale of the <em>outcome variable</em>, but also depend upon how that particular predictor is scaled. If we changed the scaling of <code class="docutils literal notranslate"><span class="pre">wt</span></code> to actual measurements of lbs (by multiplying it by 1,000), the model fit would be the same, but the scale of the estimates would shift. As such, the interpretation is dependent upon the scaling we choose. We will see next week how this can be made simpler by <em>standardising</em> the regression model. Determining whether this is a meaningful change in the outcome is something we will consider in more detail next week, but it should be possible based on the aims of the study and your own domain knowledge to make some sort of inference based on these estimates alone.</p>
+<p>Hopefully it is clear from this description that the parameter estimates are on the scale of the <em>outcome variable</em>, but depend upon the scale of the predictor for interpretation. If we changed the scaling of <code class="docutils literal notranslate"><span class="pre">wt</span></code> to actual measurements of lbs (by multiplying it by 1,000), the model fit would be the same, but the scale of the estimates would shift. In this case, a unit change would mean an increase in Weight of 1 lbs rather than 1,000 lbs. For instance</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">wt.scaled</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="o">*</span><span class="m">1000</span>
+<span class="nf">summary</span><span class="p">(</span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt.scaled</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = mpg ~ wt.scaled, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 37.2851262  1.8776273  19.858  &lt; 2e-16 ***
+wt.scaled   -0.0053445  0.0005591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="the-intercept">
 <h3>The Intercept<a class="headerlink" href="#the-intercept" title="Link to this heading">#</a></h3>
-<p>The intercept is often of less interest in a simple regression model. In part, this is because its interpretation is usually uninteresting within the context of the data analysis. In addition, the value is often not very meaningful. For instance, in the context of the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset, an intercept of 37.2851 can be interpreted as the predicted value of MPG for a  car that Weighs 0 lbs. This can be seen to fall out of the regression equation, as</p>
+<p>The intercept is often of less interest in a simple regression model. This is because its interpretation is usually uninteresting within the context of the data analysis. In addition, the value is often not very meaningful. For instance, in the context of the <code class="docutils literal notranslate"><span class="pre">mtcars</span></code> dataset, an intercept of 37.2851 can be interpreted as the predicted value of MPG for a  car that Weighs 0 lbs. This can be seen to fall out of the regression equation, as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align*}
@@ -577,40 +632,11 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
              &amp;= \beta_{0}
 \end{align*}
 \end{split}\]</div>
-<p>However, it should be clear that this estimate does not make much sense. A car that weights nothing should really have an MPG of 0, rather than an MPG of 37.2851. To make the intercept make more sense, one option would be to rescale the regression model so that the intercept represents the value of MPG for the <em>average</em> Weight in the sample. This is what <em>mean-centering</em> does, which we will discuss more next week. Another option would be to drop the intercept entirely and perform <em>regression through the origin</em>, where we force the value of MPG for a weight of 0 to be 0. This is more realistic, however, this can result in a <em>worse</em> model fit. We can see this below in <code class="docutils literal notranslate"><span class="pre">R</span></code>, where removing the intercept (by including <code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">1</span></code> in the model formula) results in much larger variance than keeping it in the model<a class="footnote-reference brackets" href="#interceptfoot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">wt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod.2</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 126.9876
-</pre></div>
-</div>
-</div>
-</div>
-<p>This makes sense because forcing the intercept to have a value of 0 on the <span class="math notranslate nohighlight">\(y\)</span> axis forces the regression slope to be <em>positive</em>, which we know is not appropriate. We could fix this by modelling the <em>inverse</em> of Weight instead</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">inv.wt</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">/</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span>
-<span class="n">mod.3</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">mpg</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">inv.wt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">mtcars</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod.3</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 9.470305
-</pre></div>
-</div>
-</div>
-</div>
-<p>which is clearly better than the model with no intercept and the raw values of <code class="docutils literal notranslate"><span class="pre">wt</span></code>. However, this is going to be harder to interpret <em>and</em> is still a worse fit than just leaving the intercept in. As such, the intercept is often necessary to provide a good overall model fit, even if the value is somewhat meaningless. Indeed, a car with a weight of 0 is pretty meaningless anyway, as is any car with a weight below or above certain thresholds. As such, this model will have practical limits in terms of sensible predictions. Although the regression line theoretically extends across values of Weight from <span class="math notranslate nohighlight">\(-\infty\)</span> to <span class="math notranslate nohighlight">\(+\infty\)</span>, the reality is that there will be some sharp cut-offs based on both the <em>lightest</em> and <em>heaviest</em> cars that are feasible. Any predictions outside that range are essentially meaningless. As such, the intercept in its current form is an element of the model prediction that we would likely ignore for practical purposes.</p>
+<p>However, it should be clear that this estimate does not make much sense. A car that weights nothing should really have an MPG of 0, rather than an MPG of 37.2851. We will go into more detail about this in the associated workshop next week.</p>
 </section>
 <section id="the-variance">
 <h3>The Variance<a class="headerlink" href="#the-variance" title="Link to this heading">#</a></h3>
-<p>On its own, the estimated value of the variance is not that easy to interpret. We can, of course, take the square-root and arrive at the estimated standard deviation instead. In the <code class="docutils literal notranslate"><span class="pre">R</span></code> output, the estimated standard deviation is labelled in the summary table as the <code class="docutils literal notranslate"><span class="pre">Residual</span> <span class="pre">standard</span> <span class="pre">error</span></code>. We can extract it with</p>
+<p>On its own, the estimated value of the variance is not that easy to interpret. We can, of course, take the square-root and arrive at the estimated standard deviation instead. In the <code class="docutils literal notranslate"><span class="pre">R</span></code> output, the estimated standard deviation is labelled in the summary table as the <code class="docutils literal notranslate"><span class="pre">Residual</span> <span class="pre">standard</span> <span class="pre">error</span></code>. We can also extract it with</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">summary</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="o">$</span><span class="n">sigma</span><span class="p">)</span>
@@ -623,63 +649,46 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 </div>
 </div>
 </div>
-<p>or calculate it manually from the information in the <code class="docutils literal notranslate"><span class="pre">mod</span></code> object</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">mod</span><span class="o">$</span><span class="n">residuals</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="o">/</span><span class="n">mod</span><span class="o">$</span><span class="n">df.residual</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 3.045882
-</pre></div>
-</div>
-</div>
-</div>
-<p>Either way, this means that, on average, the data deviates from the regression line by around 3.046 MPG. This is quite small on the scale of MPG, and so would seem quite good. However, on its own, we do not really have a way to interpret this value. As such, we tend to treat the variance or standard deviation as a <em>relative</em> measure during the course of model building. Our aim, very generally, is to find the model that makes this value as <em>small</em> as possible. Returing back to our conceptualisation from earlier of</p>
-<div class="math notranslate nohighlight">
-\[
-\sigma^{2}_{\text{Total}} = \sigma^{2}_{\text{Line}} + \sigma^{2}_{\text{Error}},
-\]</div>
-<p>our aim is to find the model that partitions the largest chunk of the total variance into the variance explained by the regression line, thus making the variance attributable to error as small as possible. This will have a direct influence on <em>inference</em>, as we will see next week, but also makes intuitive sense. From this perspective, we will use variance as a relative measure to see whether one model is able to reduce the error variance more than another. We already saw that above when assessing whether regression through the origin or regression through the origin with inverse weight were better models. We will see examples that formalise this more when we get to the concept of ANOVAs a little later on this unit.</p>
+<p>This means that, on average, the data deviates from the regression line by around 3.046 MPG. This is quite small on the scale of MPG, and so would seem quite good. However, on its own, we do not really have a way to interpret this value. In general, we treat the variance or standard deviation as a <em>relative</em> measure during the course of model building. We will see examples that formalise this more when we get to the concept of ANOVAs a little later on this unit.</p>
 </section>
 </section>
 <section id="visualising-the-estimates">
 <h2>Visualising the Estimates<a class="headerlink" href="#visualising-the-estimates" title="Link to this heading">#</a></h2>
-<p>As a final part of this section, one of the most important things we can do to aid interpretation is to <em>visualise</em> the model. For simple regression, this typically means drawing the estimated regression line over a scatter plot of the data. This provides an immediate visual sense of all the numeric elements discussed above. Although we will see more fleixble approaches to plotting using the <code class="docutils literal notranslate"><span class="pre">effects</span></code> package later, for the moment we will just demonstrate some simple methods of visualisation in base <code class="docutils literal notranslate"><span class="pre">R</span></code> and <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code>.</p>
-<p>The code below shows how to make a basic scatterplot with a regression line superimposed. We first create the scatterplot using the basic <code class="docutils literal notranslate"><span class="pre">plot()</span></code> function. We can then add the regression line using the <code class="docutils literal notranslate"><span class="pre">abline()</span></code> function, which has a useful <code class="docutils literal notranslate"><span class="pre">reg</span></code> option where we pass it the model object and the line is drawn automatically.</p>
+<p>As a final part of this section, one of the most important things we can do to aid interpretation is to <em>visualise</em> the model. For simple regression, this means drawing the estimated regression line over a scatter plot of the data. This provides an immediate visual sense of all the numeric elements discussed above.</p>
+<p>The code below shows how to make a basic scatterplot with a regression line superimposed. We first create the scatterplot using the basic <code class="docutils literal notranslate"><span class="pre">plot()</span></code> function. We can then add the regression line using the <code class="docutils literal notranslate"><span class="pre">abline()</span></code> function, which has a useful <code class="docutils literal notranslate"><span class="pre">reg</span></code> option where we pass the model object and the line is drawn automatically.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">cex.lab</span><span class="o">=</span><span class="m">1.3</span><span class="p">,</span><span class="w"> </span><span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span><span class="w"> </span><span class="n">cex</span><span class="o">=</span><span class="m">1.4</span><span class="p">)</span><span class="w"> </span><span class="c1"># plot scaling</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight (1000 lbs)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">wt</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">mtcars</span><span class="o">$</span><span class="n">mpg</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Weight (1000 lbs)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&quot;MPG&quot;</span><span class="p">)</span>
 <span class="nf">abline</span><span class="p">(</span><span class="n">reg</span><span class="o">=</span><span class="n">mod</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="_images/d72dc772a8529990353fd9a7014ca1da762b043747a1ff1ec8dee2b8d4312821.png"><img alt="_images/d72dc772a8529990353fd9a7014ca1da762b043747a1ff1ec8dee2b8d4312821.png" src="_images/d72dc772a8529990353fd9a7014ca1da762b043747a1ff1ec8dee2b8d4312821.png" style="width: 720px; height: 420px;" /></a>
+<a class="reference internal image-reference" href="_images/1120da8a8e689f764c46949040761f16d0fe973abfd6fa3f1ec1d141ebd17fb2.png"><img alt="_images/1120da8a8e689f764c46949040761f16d0fe973abfd6fa3f1ec1d141ebd17fb2.png" src="_images/1120da8a8e689f764c46949040761f16d0fe973abfd6fa3f1ec1d141ebd17fb2.png" style="width: 420px; height: 420px;" /></a>
 </div>
 </div>
-<p>This plot is not going to win any awards for visual style, but it is simple and effective as a quick means of drawing the model fit. It is the sort of plot we would use during the process of analysis, just to have a quick look, as there is no point spending a long time styling a plot for this purpose. Getting distracted building a plot is a trap you need to try and avoid during the course of an analysis. Unless the results are final and you are creating something for a publication, this is almost always a waste of time. The key point is that we are able to <em>see</em> the model fit and assess it visually. This is one of the most important steps of building a statistical model as there is no substitute for looking at the data and understanding what your model is trying to say. If you manage to “complete” an analysis without creating any plots along the way, then you have not performed the analysis correctly.</p>
+<p>This plot is not going to win any awards for visual style, but it is simple and effective as a quick means of drawing the model fit. It is the sort of plot we would use during the process of analysis, just to have a quick look. The key point is being able to <em>see</em> the model fit and assess it visually. This is one of the most important steps of building a statistical model as there is no substitute for <em>looking</em> at the data and seeing visually what your model is predicting.</p>
 <aside class="topic">
 <p class="topic-title">What do you now know?</p>
 <p>In this section, we have explored the results of estimating a simple regression model, either using OLS or using MLE (with REML for the variance). After reading this section, you should have a good sense of:</p>
 <ul class="simple">
-<li><p>How the final estimates can be used to complete the unknowns in the regression equation, producing both predicted (also known as <em>fitted</em>) values and residuals.</p></li>
+<li><p>How estimates can be used to complete the unknowns in the regression equation, producing both predicted (<em>fitted</em>) values and residuals.</p></li>
 <li><p>How the <code class="docutils literal notranslate"><span class="pre">R</span></code> formula interface can be used to specify the mean function of the model using <code class="docutils literal notranslate"><span class="pre">lm()</span></code>.</p></li>
-<li><p>How to interpret some of the <code class="docutils literal notranslate"><span class="pre">R</span></code> output table from the <code class="docutils literal notranslate"><span class="pre">lm()</span></code> function, as well as how to extract some basic results from the fitted model object.</p></li>
-<li><p>The meaning of the <em>slope</em> estimate in terms of quantifying the average change in <span class="math notranslate nohighlight">\(y\)</span> for a unit-change in <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
-<li><p>The meaning of the <em>intercept</em> estimate in terms of quantifying the value of <span class="math notranslate nohighlight">\(y\)</span> when <span class="math notranslate nohighlight">\(x = 0\)</span>.</p></li>
-<li><p>The meaning of the <em>variance</em> estimate and how this would typically be used more as a tool for <em>model comparison</em>, rather than directly interpreted.</p></li>
+<li><p>How to interpret some of the <code class="docutils literal notranslate"><span class="pre">R</span></code> output table from the <code class="docutils literal notranslate"><span class="pre">lm()</span></code> function, as well as how to extract some basic results from the model object.</p></li>
+<li><p>The meaning of the <em>slope</em> in terms of quantifying the change in <span class="math notranslate nohighlight">\(y\)</span> for a unit-change in <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
+<li><p>The meaning of the <em>intercept</em> in terms of quantifying the value of <span class="math notranslate nohighlight">\(y\)</span> when <span class="math notranslate nohighlight">\(x = 0\)</span>.</p></li>
 <li><p>How the model fit can be visualised using some basic plots in <code class="docutils literal notranslate"><span class="pre">R</span></code>.</p></li>
 </ul>
 </aside>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="interceptfoot" role="note">
+<aside class="footnote brackets" id="equals-foot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>The <code class="docutils literal notranslate"><span class="pre">1</span></code> can also be used to fit an intercept-only model to the data. For instance, <code class="docutils literal notranslate"><span class="pre">mpg</span> <span class="pre">~</span> <span class="pre">1</span></code> would fit a model containing only the parameter <span class="math notranslate nohighlight">\(\beta_{0}\)</span>. In the absence of any predictors, this would simply be the <em>mean</em> of MPG.</p>
+<p>You may wonder, why not use the <code class="docutils literal notranslate"><span class="pre">=</span></code> symbol? The answer is that <code class="docutils literal notranslate"><span class="pre">=</span></code> already has a meaning in <code class="docutils literal notranslate"><span class="pre">R</span></code> for deifning named arguments within a function. For instance, we use <code class="docutils literal notranslate"><span class="pre">data=mtcars</span></code> as an argument inside <code class="docutils literal notranslate"><span class="pre">lm()</span></code>. So, another symbol is needed to prevent the parser from getting confused.</p>
+</aside>
+<aside class="footnote brackets" id="resstd-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>This is something of a misnomer, but is one of the quirks of <code class="docutils literal notranslate"><span class="pre">lm()</span></code> that has stuck around for many years.</p>
 </aside>
 </aside>
 </section>
@@ -751,7 +760,7 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-estimates">The Final Estimates</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-r-output-for-simple-regression">The <code class="docutils literal notranslate"><span class="pre">R</span></code> Output for Simple Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-regression-in-r">Simple Regression in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-the-estimates">Interpreting the Estimates</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-slope">The Slope</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-intercept">The Intercept</a></li>
