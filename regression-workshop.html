@@ -7482,7 +7482,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="PCHN63101-Regression-Workshop">PCHN63101 Regression Workshop<a class="anchor-link" href="#PCHN63101-Regression-Workshop">¶</a></h1><p>In the accompanying lesson to this workshop we explored both simple and multiple regression as core modelling tools in statistics. Indeed, regression is the foundation of <em>everything</em> we will be studying going forward. Once you understand regression, you understand the vast majority of applied statistics. Because of this, it is <em>essential</em> that you are as comfortable as possible with the regression framework, otherwise you will be lost going forward. In this workshop, the aim is to provide more concrete examples of many of the key concepts from the lesson. As with last week, demonstrating statistical theory within <code>R</code> allows you to gain more intuition, particularly as you can play around with the code and see the consequences. It can also help you gain a more detailed understanding of the mathematical notation by seeing it represented within code. Together, this should help solidify your understanding of many of the ideas behind regression, statistical models, estimation, visualisation and the <code>R</code> formula interface.</p>
+<h1 id="PCHN63101-Regression-Workshop">PCHN63101 Regression Workshop<a class="anchor-link" href="#PCHN63101-Regression-Workshop">¶</a></h1><p>In the accompanying lesson to this workshop we explored both simple and multiple regression as core modelling tools in statistics. Indeed, regression is the foundation of <em>everything</em> we will be studying going forward. Once you understand regression, you understand the vast majority of applied statistics. Because of this, it is <em>essential</em> that you are as comfortable as possible with the regression framework. In this workshop, the aim is to provide more concrete examples of many of the key concepts from the lesson. As with last week, demonstrating statistical theory within <code>R</code> allows you to gain more intuition, particularly as you can play around with the code and see the consequences. It can also help you gain a more detailed understanding of the mathematical notation by seeing it represented within code. Together, this should help solidify your understanding of many of the ideas behind regression, statistical models, estimation, visualisation and the <code>R</code> formula interface.</p>
 </div>
 </div>
 </div>
@@ -7570,7 +7570,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Maximum-Likelihood">Maximum Likelihood<a class="anchor-link" href="#Maximum-Likelihood">¶</a></h2><p>In the accompanying lesson, we discussed both <em>least-squares</em> and <em>maximum likelihood</em> as options for estimating regression models. Due to its simplicity and the availbility of closed-form solutions, least-squares is usually preferred. However, maximum likelihood is used more generally because it can be applied to situations where no closed-form solution exists. This is particularly true of models that that use a <em>different</em> distributions to the normal distribution. As such, maximum likelihood is an approach that will be more applicable in future. There is also no loss of generality, given that least-squares and (restricted) maximum likelihood produce the <em>same</em> estimates under normality. As such, if we want to make our lives easier, we can just ignore least-squares and use maximum likelihood for everything.</p>
+<h2 id="Maximum-Likelihood">Maximum Likelihood<a class="anchor-link" href="#Maximum-Likelihood">¶</a></h2><p>In the accompanying lesson, we discussed both <em>least-squares</em> and <em>maximum likelihood</em> as options for estimating regression models. Due to its simplicity and the availbility of closed-form solutions, least-squares is usually preferred. However, maximum likelihood is used more generally because it can be applied to situations where no closed-form solution exists. This is particularly true of models that use a <em>different</em> distributions to the normal distribution. As such, maximum likelihood is an approach that will be more applicable in future. There is also no loss of generality, given that least-squares and (restricted) maximum likelihood produce the <em>same</em> estimates under normality. As such, if we want to make our lives easier, we can just ignore least-squares and use maximum likelihood for everything.</p>
 <p>Although possible to derive closed-form solutions using maximum likelihood, for situations where this is not possible we can make use of <em>iterative</em> maximum likelihood. Effectively, this involves getting the computer to search through hundreds or thousands of guesses for the parameters to try and find the "best" ones. This is effectively what you were doing in the example above. The only difference was that we were using the least-squares criteria for defining "best" rather than the probability-based likelihood criteria. So, let us start by saving the least-squares estimates so we can compare.</p>
 </div>
 </div>
@@ -7692,10 +7692,6 @@ MLE estimates:
 37.28513 -5.344472 2.949163
 
 OLS estimates:
-37.28513 -5.344472 3.045882MLE estimates:
-37.28513 -5.344472 2.949163
-
-OLS estimates:
 37.28513 -5.344472 3.045882</pre>
 </div>
 </div>
@@ -7733,7 +7729,7 @@ OLS estimates:
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <div class="alert alert-block alert-danger">
-<b>IMPORTANT</b> Remember that iterative maximum likelihood is <i>not</i> needed for regression problems. We just used it above for demonstration purposes. The closed-form solutions that can be derived from the likelihood principle end up being <i>identical</i> to those from least-squares, so the methods converge. As such, we can conceptualise regressions problems as using <i>either</i> estimation approach, as they both result in the same equations and the same quantities, just derived from different perspectives.
+<b>IMPORTANT</b> Remember that iterative maximum likelihood is <i>not</i> needed for regression problems. We just used it above for demonstration purposes. The closed-form solutions that can be derived from the likelihood principle end up being <i>identical</i> to those from least-squares, so the methods converge.
 </div>
 </div>
 </div>
@@ -8064,7 +8060,7 @@ Volvo 142E          22.427495 22.427495
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Note that if we wanted to simulated predicted values from a model in <code>R</code>, we do not have to construct our own mean function. Instead, we can use the built-in <code>predict()</code> function. This takes as arguments a model and a <em>new</em> data frame containing the values of the predictors we want to use for the simulation. Just be aware that these predictors must be named <em>identically</em> to the originals in order for this to work.</p>
+<p>Note that if we wanted to simulate predicted values from a model in <code>R</code>, we do not have to construct our own mean function. Instead, we can use the built-in <code>predict()</code> function. This takes as arguments a model and a <em>new</em> data frame containing the values of the predictors we want to use for the simulation. Just be aware that these predictors must be named <em>identically</em> to the originals in order for this to work.</p>
 </div>
 </div>
 </div>
@@ -8075,7 +8071,7 @@ Volvo 142E          22.427495 22.427495
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Predictive-Accuracy">Predictive Accuracy<a class="anchor-link" href="#Predictive-Accuracy">¶</a></h3><p>Another thing we can do is simulate some data based on this model and see whether it looks similar to the data we have measured. This simulated data will capture the <em>general pattern</em> in the data (the systematic variance) as well as the <em>spread</em> around the regression line (the random error variance). In the example below, we use the <code>seq()</code> function to generate a range of $x$-values from 1 to 6. We then replicate this range 3 times, so that we will simulate 3 value of $y$ for each value of $x$ (to give us some vertical spread). We then simulate each $y$-value using the mean and variance functions. The result of the simulation is plotted, with the true data in the plot further below.</p>
+<h3 id="Predictive-Accuracy">Predictive Accuracy<a class="anchor-link" href="#Predictive-Accuracy">¶</a></h3><p>Another thing we can do is simulate some data based on this model and see whether it looks similar to the data we have measured. This simulated data will capture the <em>general pattern</em> in the data (the systematic variance) as well as the <em>spread</em> around the regression line (the random error variance). In the example below, we use the <code>seq()</code> function to generate a range of $x$-values from 1 to 6. We then replicate this range 3 times, so that we will simulate 3 values of $y$ for each value of $x$ (to give us some vertical spread). We then simulate each $y$-value using the mean and variance functions. The result of the simulation is plotted, with the true data in the plot further below.</p>
 </div>
 </div>
 </div>
