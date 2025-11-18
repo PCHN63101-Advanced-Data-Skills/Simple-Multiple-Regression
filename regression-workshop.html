@@ -447,7 +447,7 @@
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> Try changing the values of <code>beta.0</code> and <code>beta.1</code> in the code above. Can you find the OLS estimates by making the error sum-of-squares as small as possible? You can move the line up and down by changing <code>beta.0</code> and then adjust its angle using <code>beta.1</code>.
+<b>ACTIVITY 1</b> Try changing the values of <code>beta.0</code> and <code>beta.1</code> in the code above. Can you find the OLS estimates by making the error sum-of-squares as small as possible? You can move the line up and down by changing <code>beta.0</code> and then adjust its angle using <code>beta.1</code>.
 </div></section>
 <section id="maximum-likelihood">
 <h2>Maximum Likelihood<a class="headerlink" href="#maximum-likelihood" title="Link to this heading">#</a></h2>
@@ -472,7 +472,7 @@
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> How close were you to finding the OLS estimates in the example earlier? Try inserting the OLS estimates into that code and see how close the true minimum error sum-of-squares was to the value you managed to get. 
+<b>ACTIVITY 2</b> How close were you to finding the OLS estimates in the example earlier? Try inserting the OLS estimates into that code and see how close the true minimum error sum-of-squares was to the value you managed to get. 
 <p><i>TIP</i> If you are <i>very</i> close, you may need to adjust the printing precision of the error sums-of-squares as the differences may be hidden deep in the demimal places. About 15 decimal places is generally the tolerance you can use for accurate numbers.</p>
 </div><p>In the field of numeric computing, methods that search around to find the “best” parameters are known as <em>optimisation</em> algorithms. To gain a bit more intuition about this, we will have a brief look at optimisation within the context of maximum likelihood. In practice, you would never need to implement this type of approach yourself, but it can be helpful to see it when learning. Within <code class="docutils literal notranslate"><span class="pre">R</span></code>, the functions <code class="docutils literal notranslate"><span class="pre">nlm()</span></code> can be used for optimisation (<code class="docutils literal notranslate"><span class="pre">n</span></code>on<code class="docutils literal notranslate"><span class="pre">l</span></code>inear <code class="docutils literal notranslate"><span class="pre">m</span></code>inimisation). This function needs some starting guesses for the parameters, so in the example below we set <code class="docutils literal notranslate"><span class="pre">beta.0</span> <span class="pre">&lt;-</span> <span class="pre">mean(y)</span></code>, <code class="docutils literal notranslate"><span class="pre">beta.1</span> <span class="pre">&lt;-</span> <span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">sigma</span> <span class="pre">&lt;-</span> <span class="pre">sd(y)</span></code>. As the name implies, this function <em>minimises</em>, so we need to return the <em>negative</em> log-likelihood.</p>
 <div class="cell docutils container">
@@ -526,7 +526,7 @@ OLS estimates:
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> Try changing the starting values in <code>init.params</code>. What does this do to the number of iterations required? Can you break the estimation and get the algorithm to converge on very different parameter estimates? What does this tell you about the sensitivity of optimisation to its starting point?
+<b>ACTIVITY 3</b> Try changing the starting values in <code>init.params</code>. What does this do to the number of iterations required? Can you break the estimation and get the algorithm to converge on very different parameter estimates? What does this tell you about the sensitivity of optimisation to its starting point?
 </div><p>As we can see above, and as explained in the lesson, the variance estimation from maximum likelihood is <em>biased</em> as it does not implement Bessel’s correction. Restricted maximum likelihood (REML) is therefore the preferred option in practice. However, this is more complex to demonstrate and so we will not discuss it in any more detail.</p>
 <div class="alert alert-block alert-danger"> 
 <b>IMPORTANT</b> Remember that iterative maximum likelihood is <i>not</i> needed for regression problems. We just used it above for demonstration purposes. The closed-form solutions that can be derived from the likelihood principle end up being <i>identical</i> to those from least-squares, so the methods converge.
@@ -597,7 +597,7 @@ y_{i} \sim \mathcal{N}\left(\beta_{0} + \beta_{1}x_{i}, \sigma^{2}\right)
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> Focus on the plot of errors above. Why is the mean of the errors 0? Why is the data evenly scattered above and below 0? Why does this scattering appear constant for all values of <code>x</code>?
+<b>ACTIVITY 4</b> Focus on the plot of errors above. Why is the mean of the errors 0? Why is the data evenly scattered above and below 0? Why does this scattering appear constant for all values of <code>x</code>?
 </div></section>
 <section id="regression-as-a-mean-and-variance-function">
 <h2>Regression as a Mean and Variance Function<a class="headerlink" href="#regression-as-a-mean-and-variance-function" title="Link to this heading">#</a></h2>
@@ -691,7 +691,7 @@ Volvo 142E          22.427495 22.427495
 </div>
 <p>Each one of these points can be conceptualised as the mean of the normal distribution running up the <span class="math notranslate nohighlight">\(y\)</span>-axis, for each value of <code class="docutils literal notranslate"><span class="pre">wt</span></code>. From this perspective, the mean function <em>is</em> our model of the data. It captures the non-random systematic patterns we can see. This is conceptualised in terms of the <em>expected value</em> of a particular probability distribution which, in this example, changes depending upon the value of the predictor variable. This change in the expected values is given <em>precisely</em> by the regression line. Indeed, we can think of the regression line as a representation of how the mean of the normal distribution changes for different values of the predictor variable.</p>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> As well as just predicting values for the current measurements of <code>wt</code>, our mean function allows us to predict values of <code>mpg</code> from <i>any</i> values of <code>wt</code>. Can you use the <code>seq()</code> function to generate an even spread of <code>wt</code> values between 1 and 6? Can you then use the mean function to generate predictions that fill the gap between 4 and 5 we see in the actual data?
+<b>ACTIVITY 5</b> As well as just predicting values for the current measurements of <code>wt</code>, our mean function allows us to predict values of <code>mpg</code> from <i>any</i> values of <code>wt</code>. Can you use the <code>seq()</code> function to generate an even spread of <code>wt</code> values between 1 and 6? Can you then use the mean function to generate predictions that fill the gap between 4 and 5 we see in the actual data?
 </div><p>Note that if we wanted to simulate predicted values from a model in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we do not have to construct our own mean function. Instead, we can use the built-in <code class="docutils literal notranslate"><span class="pre">predict()</span></code> function. This takes as arguments a model and a <em>new</em> data frame containing the values of the predictors we want to use for the simulation. Just be aware that these predictors must be named <em>identically</em> to the originals in order for this to work.</p>
 <section id="predictive-accuracy">
 <h3>Predictive Accuracy<a class="headerlink" href="#predictive-accuracy" title="Link to this heading">#</a></h3>
@@ -728,7 +728,7 @@ Volvo 142E          22.427495 22.427495
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> Have a play around with the values of <code>n.x</code> and <code>n.reps</code> in the code above. These control how many values of <code>wt</code> are included in the simulations, as well as how many cars at each value of <code>wt</code> we measure.
+<b>ACTIVITY 6</b> Have a play around with the values of <code>n.x</code> and <code>n.reps</code> in the code above. These control how many values of <code>wt</code> are included in the simulations, as well as how many cars at each value of <code>wt</code> we measure.
 </div><p>Notice that this simulation does <em>not</em> reflect the fact that, in the real data, at both lower and higher values of <code class="docutils literal notranslate"><span class="pre">wt</span></code>, the measures of <code class="docutils literal notranslate"><span class="pre">mpg</span></code> lie <em>above</em> the regression line. So while this simulation matches some elements of the data, it does not match all of them. Indeed, as we will see in future weeks, a <em>curved</em> line may be a better fit here than a <em>straight</em> line. We can see this as the curved yellow line in the plot below. We will discuss this type of visualisation in more detail a little later on the unit, so do not worry about it for now. Just make sure it is clear that the simulated data is based on assuming the straight-line fit is accurate. The simulation is what our model says the data-generating process is, but we need to be sure that this agrees with what we can <em>actually</em> see.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1058,7 +1058,7 @@ F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> Have a play around with all the numeric graphical parameters (e.g. <code>size</code>, <code>pch</code>, <code>stroke</code>, <code>base_size</code> etc.) and the colour parameters (e.g. <code>fill</code> and <code>colour</code>) to change how the plot is displayed. This should give you a good sense of the flexibility of the visualisation. You could try changing <code>theme_bw</code> to something else as well (you can search online for <code>ggplot2 themes</code>).
+<b>ACTIVITY 7</b> Have a play around with all the numeric graphical parameters (e.g. <code>size</code>, <code>pch</code>, <code>stroke</code>, <code>base_size</code> etc.) and the colour parameters (e.g. <code>fill</code> and <code>colour</code>) to change how the plot is displayed. This should give you a good sense of the flexibility of the visualisation. You could try changing <code>theme_bw</code> to something else as well (you can search online for <code>ggplot2 themes</code>).
 </div></section>
 <section id="multiple-regression-and-ggplot2">
 <h3>Multiple Regression and <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code><a class="headerlink" href="#multiple-regression-and-ggplot2" title="Link to this heading">#</a></h3>
@@ -1125,7 +1125,7 @@ F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> Can you use the pattern here to create the added variable plot for <code>disp</code>? 
+<b>ACTIVITY 8</b> Can you use the pattern here to create the added variable plot for <code>disp</code>? 
 </div></section>
 <section id="visualising-the-regression-plane">
 <h3>Visualising the Regression Plane<a class="headerlink" href="#visualising-the-regression-plane" title="Link to this heading">#</a></h3>
@@ -1163,7 +1163,7 @@ F-statistic: 94.42 on 1 and 31 DF,  p-value: 6.332e-11
 </div>
 </div>
 <div class="alert alert-block alert-info"> 
-<b>ACTIVITY</b> Try changing the values of <code>theta</code> and <code>phi</code> to change the perspective of the visualisation. You can also change the value of <code>pch</code> to change the symbol used for the data points (refer to a website such as <a href="https://www.r-bloggers.com/2021/06/r-plot-pch-symbols-different-point-shapes-in-r/">this</a> to see all the symbols available), change the value of <code>cex</code> to adjust the symbol size and change the colour of the points to whatever you like. You could also try replacing the variables and labels with other options from <code>mtcars</code>, to see how this visualisation can be easily adpated.
+<b>ACTIVITY 9</b> Try changing the values of <code>theta</code> and <code>phi</code> to change the perspective of the visualisation. You can also change the value of <code>pch</code> to change the symbol used for the data points (refer to a website such as <a href="https://www.r-bloggers.com/2021/06/r-plot-pch-symbols-different-point-shapes-in-r/">this</a> to see all the symbols available), change the value of <code>cex</code> to adjust the symbol size and change the colour of the points to whatever you like. You could also try replacing the variables and labels with other options from <code>mtcars</code>, to see how this visualisation can be easily adpated.
 </div></section>
 </section>
 <section id="summary">
